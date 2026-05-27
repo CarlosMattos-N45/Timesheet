@@ -3,46 +3,46 @@ checkpoint: null
 complexity: M
 created_at: "2026-05-27 15:52:02"
 criteria:
-    - done: false
+    - done: true
       test: docker compose -f docker-compose.dev.yml config
       text: docker compose -f docker-compose.dev.yml config retorna 0 com servico mailhog
-    - done: false
+    - done: true
       test: make smtp-up
       text: make smtp-up sobe mailhog e fica healthy em <=30s
-    - done: false
+    - done: true
       test: make smtp-down
       text: make smtp-down derruba mailhog e remove volume
-    - done: false
+    - done: true
       test: make help
       text: make help lista smtp-up smtp-down smtp-status data-dir
-    - done: false
+    - done: true
       test: grep -E TIMESHEET_DB_URL apps/api/.env.example
       text: TIMESHEET_DB_URL presente no .env.example com driver aiosqlite
-    - done: false
+    - done: true
       test: grep -E TIMESHEET_KEK_PATH apps/api/.env.example
       text: TIMESHEET_KEK_PATH presente no .env.example apontando para data/key.kek
-    - done: false
+    - done: true
       test: grep -E TIMESHEET_SMTP apps/api/.env.example
       text: TIMESHEET_SMTP_HOST e TIMESHEET_SMTP_PORT presentes no .env.example
-    - done: false
+    - done: true
       test: git check-ignore -q data/x
       text: data/ ignorada pelo git
-    - done: false
+    - done: true
       test: grep -E mailhog/mailhog:v1.0.1 docker-compose.dev.yml
       text: Imagem mailhog pinada por tag v1.0.1 sem latest
-    - done: false
+    - done: true
       test: grep -E timesheet-mailhog-data docker-compose.dev.yml
       text: Volume nomeado timesheet-mailhog-data declarado no compose
-    - done: false
+    - done: true
       test: grep -E healthcheck docker-compose.dev.yml
       text: Healthcheck do mailhog declarado com interval/retries
-    - done: false
+    - done: true
       test: grep -E max.*30 Makefile
       text: Loop de espera no smtp-up tem limite maximo de tentativas
-    - done: false
+    - done: true
       test: n45 49aefa26 --bee531 --b79b13 --a6a0ee claude
       text: RUNBOOK Infraestrutura existe com frontmatter start/stop programaticos e secao Servicos
-    - done: false
+    - done: true
       test: make smoke
       text: Phase 1 smoke continua passando sem regressao
 deps: []
@@ -52,10 +52,10 @@ n45_version: 0.2.0
 persona: devops
 phase: Phase 2 — Dados
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tests: make smtp-up && make smtp-down
 title: 'Infra Phase 2: docker-compose.dev.yml (Mailhog) + Makefile smtp-* + .env.example DB/KEK + RUNBOOK Infraestrutura'
-updated_at: "2026-05-27 15:52:02"
+updated_at: "2026-05-27 16:46:19"
 ---
 ## Contexto
 

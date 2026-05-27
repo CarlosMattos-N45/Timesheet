@@ -3,45 +3,45 @@ checkpoint: null
 complexity: M
 created_at: "2026-05-27 16:04:18"
 criteria:
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test Timesheet.Agent.sln --filter FullyQualifiedName~Migration_creates_all_three_tables
       text: MigrateAsync cria as 3 tabelas + EFMigrationsHistory
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test Timesheet.Agent.sln --filter FullyQualifiedName~MarcacaoLocal_roundtrip
       text: MarcacaoLocal round-trip persistir e consultar via SingleAsync
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test Timesheet.Agent.sln --filter FullyQualifiedName~MarcacaoLocal_duplicate_id_rejected
       text: MarcacaoLocal duplicado por Id lanca DbUpdateException
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test Timesheet.Agent.sln --filter FullyQualifiedName~EstadoJornadaAtual_singleton_rejects_id_other_than_1
       text: EstadoJornadaAtual com Id!=1 violado pelo CHECK singleton
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test Timesheet.Agent.sln --filter FullyQualifiedName~ConfiguracaoLocal_singleton_rejects_id_other_than_1
       text: ConfiguracaoLocal com Id!=1 violado pelo CHECK singleton
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test Timesheet.Agent.sln --filter FullyQualifiedName~Pending_queue_ordered_by_criado_em
       text: Fila pendente ordenada por CriadoEm asc
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test Timesheet.Agent.sln --filter FullyQualifiedName~Index_on_sincronizada_and_proxima_tentativa_exists
       text: Indice composto Sincronizada+ProximaTentativaEm existe na MarcacaoLocal
-    - done: false
+    - done: true
       test: grep -E EntityFrameworkCore.Sqlite apps/agent/src/Timesheet.Agent.Infra.Db/Timesheet.Agent.Infra.Db.csproj
       text: Microsoft.EntityFrameworkCore.Sqlite declarado em Infra.Db.csproj
-    - done: false
+    - done: true
       test: powershell -NoProfile -Command "if (-not (Test-Path apps/agent/src/Timesheet.Agent.Infra.Db/Migrations/AgentDbContextModelSnapshot.cs)) { exit 1 }"
       text: Pasta Migrations existe com snapshot do model
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet build Timesheet.Agent.sln
       text: dotnet build sem warnings (TreatWarningsAsErrors true)
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet format Timesheet.Agent.sln --verify-no-changes
       text: dotnet format verify-no-changes
-    - done: false
+    - done: true
       text: Testes passando com cobertura >= 70% (camadas Domain + Infra excluindo UI)
-    - done: false
+    - done: true
       test: make agent-smoke
       text: make agent-smoke continua passando
-    - done: false
+    - done: true
       test: make smoke
       text: make smoke (full) continua passando
 deps:
@@ -52,10 +52,10 @@ n45_version: 0.2.0
 persona: dba
 phase: Phase 2 — Dados
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tests: cd apps/agent && dotnet test Timesheet.Agent.sln
 title: 'EF Core Agente: 3 POCOs no Domain + AgentDbContext + design-time factory + migration Initial + tests'
-updated_at: "2026-05-27 16:04:18"
+updated_at: "2026-05-27 17:10:28"
 ---
 ## Contexto
 

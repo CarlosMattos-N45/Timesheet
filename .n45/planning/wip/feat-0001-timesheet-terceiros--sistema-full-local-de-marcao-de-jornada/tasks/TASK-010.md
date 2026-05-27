@@ -3,48 +3,48 @@ checkpoint: null
 complexity: G
 created_at: "2026-05-27 16:02:00"
 criteria:
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_models.py -k test_all_11_tables_in_metadata
       text: Base.metadata.tables contem as 11 tabelas do schema
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_models.py -k test_terceiro_roundtrip
       text: Terceiro round-trip persistir e recuperar via select
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_models.py -k test_terceiro_check_constraint
       text: CHECK de horarios cronologicos rejeita ordem invalida via ORM
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_models.py -k test_jornada_marcacoes_relationship
       text: Jornada.marcacoes relationship carrega marcacoes via selectinload
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_models.py -k test_marcacao_tipo_check_constraint
       text: Marcacao.tipo CHECK rejeita valor fora do enum via ORM
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_models.py -k test_atividade_one_to_one_with_jornada
       text: Atividade 1:1 com Jornada (UNIQUE jornada_id) via relationship
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_models.py -k test_smtp_config_singleton_check
       text: SmtpConfig CHECK singleton (id=1) rejeita id=2
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_models.py -k test_privacy_acceptance_singleton
       text: PrivacyAcceptance singleton round-trip
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_models.py -k test_refresh_token_cascade_on_terceiro_delete
       text: RefreshToken cascade delete quando Terceiro e removido
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_models.py -k test_alembic_env_uses_base_metadata
       text: alembic env.py importa Base e seta target_metadata=Base.metadata
-    - done: false
+    - done: true
       test: cd apps/api && alembic upgrade head && alembic check
       text: alembic check apos upgrade nao reporta divergencia (ORM 1:1 com migration)
-    - done: false
+    - done: true
       test: cd apps/api && ruff check .
       text: ruff check sem warnings
-    - done: false
+    - done: true
       test: cd apps/api && mypy --strict app
       text: mypy --strict app sem erros
-    - done: false
+    - done: true
       text: Testes passando com cobertura >= 80%
-    - done: false
+    - done: true
       test: make smoke
       text: make smoke Phase 1 continua passando
 deps:
@@ -56,14 +56,14 @@ n45_version: 0.2.0
 persona: backend
 phase: Phase 2 — Dados
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
-    green: false
-    red: false
-    refactor: false
+    green: true
+    red: true
+    refactor: true
 tests: cd apps/api && pytest tests/test_models.py
 title: 'ORM SQLAlchemy 2.x: Base + 11 modelos em slices por dominio + alembic env conectado'
-updated_at: "2026-05-27 16:02:00"
+updated_at: "2026-05-27 17:22:55"
 ---
 ## Contexto
 

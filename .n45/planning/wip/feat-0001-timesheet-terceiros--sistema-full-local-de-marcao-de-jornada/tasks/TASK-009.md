@@ -3,48 +3,48 @@ checkpoint: null
 complexity: M
 created_at: "2026-05-27 15:58:55"
 criteria:
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_crypto.py -k test_ensure_kek_generates_new_file_when_absent
       text: ensure_kek gera novo arquivo KEK de 32 bytes quando ausente
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_crypto.py -k test_ensure_kek_idempotent_when_file_exists
       text: ensure_kek e idempotente quando arquivo ja existe
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_crypto.py -k test_ensure_kek_file_permissions_restricted
       text: Arquivo KEK em POSIX tem permissoes 0o600
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_crypto.py -k test_ensure_kek_refuses_plain_fallback
       text: ensure_kek recusa fallback em nao-Windows sem TIMESHEET_ALLOW_PLAIN_KEK
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_crypto.py -k test_derive_subkey_deterministic_per_context
       text: derive_subkey e deterministico para o mesmo contexto
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_crypto.py -k test_derive_subkey_isolated_between_contexts
       text: derive_subkey produz chaves distintas para contextos diferentes (db vs smtp)
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_crypto.py -k test_aes_gcm_roundtrip
       text: aes_gcm encrypt+decrypt faz round-trip preservando plaintext
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_crypto.py -k test_aes_gcm_uses_fresh_nonce_per_call
       text: aes_gcm gera nonce CSPRNG distinto por chamada (resultados diferentes para mesmo plaintext)
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_crypto.py -k test_aes_gcm_rejects_wrong_key
       text: aes_gcm_decrypt levanta InvalidTag com chave errada
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_crypto.py -k test_format_db_cipher_key_is_hex64
       text: format_db_cipher_key retorna 64 chars hex
-    - done: false
+    - done: true
       test: grep -E cryptography apps/api/pyproject.toml
       text: cryptography 43 declarado em pyproject.toml
-    - done: false
+    - done: true
       test: cd apps/api && ruff check .
       text: ruff check sem warnings
-    - done: false
+    - done: true
       test: cd apps/api && mypy --strict app
       text: mypy --strict app sem erros
-    - done: false
+    - done: true
       text: Testes passando com cobertura >= 80%
-    - done: false
+    - done: true
       test: make smoke
       text: make smoke Phase 1 continua passando
 deps:
@@ -56,14 +56,14 @@ n45_version: 0.2.0
 persona: backend
 phase: Phase 2 — Dados
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
-    green: false
-    red: false
-    refactor: false
+    green: true
+    red: true
+    refactor: true
 tests: cd apps/api && pytest tests/test_crypto.py
 title: 'Crypto module: KEK ensure (DPAPI/fallback) + HKDF-Expand subkeys (db, smtp) + AES-GCM helpers'
-updated_at: "2026-05-27 15:58:55"
+updated_at: "2026-05-27 17:22:41"
 ---
 ## Contexto
 

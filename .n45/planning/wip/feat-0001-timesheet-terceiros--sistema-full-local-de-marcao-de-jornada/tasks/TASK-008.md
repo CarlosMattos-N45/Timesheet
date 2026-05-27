@@ -3,39 +3,39 @@ checkpoint: null
 complexity: M
 created_at: "2026-05-27 15:56:41"
 criteria:
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_db.py -k test_session_executes_select_1
       text: Sessao async executa SELECT 1 com resultado 1
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_db.py -k test_pragma_foreign_keys_is_on
       text: PRAGMA foreign_keys=ON em toda sessao nova
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_db.py -k test_pragma_journal_mode_is_wal
       text: PRAGMA journal_mode=WAL aplicado no primeiro connect
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_db.py -k test_get_session_dependency_yields_and_closes
       text: get_session() yields AsyncSession ativa e fecha apos uso
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_db.py -k test_dbcheck_endpoint_only_in_dev
       text: GET /api/v1/_dbcheck retorna 200 quando TIMESHEET_DEV=true
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_db.py -k test_dbcheck_endpoint_absent_in_prod
       text: GET /api/v1/_dbcheck retorna 404 quando TIMESHEET_DEV=false
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_db.py -k test_invalid_cipher_key_rejected_at_startup
       text: TIMESHEET_DB_CIPHER_KEY com valor nao-hex64 falha no Settings() com ValidationError
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_db.py -k test_valid_cipher_key_accepted
       text: TIMESHEET_DB_CIPHER_KEY com 64 chars hex e aceito pelo Settings()
-    - done: false
+    - done: true
       test: cd apps/api && ruff check .
       text: ruff check sem warnings
-    - done: false
+    - done: true
       test: cd apps/api && mypy --strict app
       text: mypy --strict app sem erros
-    - done: false
+    - done: true
       text: Testes passando com cobertura >= 80%
-    - done: false
+    - done: true
       test: make smoke
       text: make smoke Phase 1 continua passando
 deps:
@@ -46,14 +46,14 @@ n45_version: 0.2.0
 persona: backend
 phase: Phase 2 — Dados
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
-    green: false
-    red: false
-    refactor: false
+    green: true
+    red: true
+    refactor: true
 tests: cd apps/api && pytest tests/test_db.py
 title: SQLAlchemy 2.x async engine + sessionmaker + get_session DI + PRAGMAs WAL/FK + suporte SQLCipher opcional
-updated_at: "2026-05-27 15:56:41"
+updated_at: "2026-05-27 17:09:58"
 ---
 ## Contexto
 

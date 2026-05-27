@@ -44,7 +44,7 @@ phases:
           status: done
           title: 'Smoke verifier: Makefile com make smoke validando api/health + web dev + agent build'
     - name: Phase 2 — Dados
-      status: pending
+      status: done
       tasks: []
     - name: Phase 3 — Backend por Domínio
       status: pending
@@ -65,6 +65,6 @@ phases:
       status: pending
       tasks: []
 status: in-progress
-updated_at: "2026-05-27 15:31:30"
+updated_at: "2026-05-27 17:42:58"
 ---
 

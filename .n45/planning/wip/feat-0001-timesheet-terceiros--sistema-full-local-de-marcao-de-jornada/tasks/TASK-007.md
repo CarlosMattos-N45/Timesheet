@@ -3,45 +3,45 @@ checkpoint: null
 complexity: M
 created_at: "2026-05-27 15:54:52"
 criteria:
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_migration_0001.py -k test_upgrade_creates_all_11_tables
       text: alembic upgrade head cria todas as 11 tabelas do schema
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_migration_0001.py -k test_downgrade_to_base_removes_all_domain_tables
       text: alembic downgrade base remove todas as tabelas de dominio
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_migration_0001.py -k test_terceiro_horario_check_constraint
       text: CHECK de horarios cronologicos em terceiro impede ordem invalida
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_migration_0001.py -k test_marcacao_idempotency_key_unique
       text: UNIQUE de marcacao.idempotency_key impede duplicata
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_migration_0001.py -k test_marcacao_jornada_tipo_unique
       text: UNIQUE de marcacao (jornada_id, tipo) impede duplicata
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_migration_0001.py -k test_jornada_status_check
       text: CHECK de jornada.status rejeita valor fora do enum
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_migration_0001.py -k test_idempotency_key_length_check
       text: CHECK de marcacao.idempotency_key length=36 rejeita string menor
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_migration_0001.py -k test_cascade_delete_terceiro
       text: CASCADE delete em terceiro remove jornadas, marcacoes e dependentes
-    - done: false
+    - done: true
       test: cd apps/api && alembic history
       text: alembic history mostra apenas 0001_initial
-    - done: false
+    - done: true
       test: grep -E sqlalchemy.*2.0 apps/api/pyproject.toml
       text: sqlalchemy alembic aiosqlite presentes em pyproject.toml
-    - done: false
+    - done: true
       test: cd apps/api && ruff check .
       text: ruff check sem warnings
-    - done: false
+    - done: true
       test: cd apps/api && mypy --strict app
       text: mypy --strict app sem erros
-    - done: false
+    - done: true
       text: Testes passando com cobertura >= 80%
-    - done: false
+    - done: true
       test: make smoke
       text: make smoke Phase 1 continua passando
 deps:
@@ -52,10 +52,10 @@ n45_version: 0.2.0
 persona: dba
 phase: Phase 2 — Dados
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tests: cd apps/api && pytest tests/test_migration_0001.py
 title: Alembic setup + migration 0001_initial com as 11 tabelas do schema
-updated_at: "2026-05-27 15:54:52"
+updated_at: "2026-05-27 17:09:48"
 ---
 ## Contexto
 
