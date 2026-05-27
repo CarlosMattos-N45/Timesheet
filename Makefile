@@ -1,4 +1,4 @@
-.PHONY: help smoke api-smoke web-smoke agent-smoke api-dev api-test api-lint web-dev web-build web-test web-lint agent-build agent-test agent-format
+.PHONY: help smoke api-smoke web-smoke agent-smoke api-dev api-test api-lint web-dev web-build web-test web-lint agent-build agent-test agent-format smtp-up smtp-down smtp-status data-dir
 
 API_DIR := apps/api
 WEB_DIR := apps/web
@@ -21,6 +21,10 @@ help:
 	@echo   agent-build   - compila a solution do agente .NET
 	@echo   agent-test    - executa testes do agente .NET
 	@echo   agent-format  - verifica formatacao do agente .NET
+	@echo   smtp-up       - sobe Mailhog (SMTP fake) via docker compose
+	@echo   smtp-down     - derruba Mailhog
+	@echo   smtp-status   - estado do servico Mailhog
+	@echo   data-dir      - cria diretorio data/ local (SQLite + key.kek dev)
 
 smoke: api-smoke web-smoke agent-smoke
 	@echo "[SMOKE OK] api + web + agent ok"
@@ -63,3 +67,16 @@ agent-test:
 
 agent-format:
 	cd $(AGENT_DIR) && dotnet format Timesheet.Agent.sln --verify-no-changes
+
+data-dir:
+	@powershell -NoProfile -Command "if (-not (Test-Path data)) { New-Item -ItemType Directory data | Out-Null }"
+
+smtp-up:
+	docker compose -f docker-compose.dev.yml up -d mailhog
+	@powershell -NoProfile -Command "$$max = 30; for ($$i = 1; $$i -le $$max; $$i++) { $$state = (docker inspect -f '{{.State.Health.Status}}' timesheet-mailhog 2>$$null); if ($$state -eq 'healthy') { Write-Host '[mailhog] healthy'; exit 0 }; Start-Sleep -Seconds 1 }; Write-Error '[mailhog] nao ficou healthy em 30s'; exit 1"
+
+smtp-down:
+	docker compose -f docker-compose.dev.yml down -v
+
+smtp-status:
+	docker compose -f docker-compose.dev.yml ps mailhog

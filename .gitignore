@@ -35,6 +35,9 @@ TestResults/
 *.sqlite-wal
 *.sqlite-shm
 
+# Dados locais de desenvolvimento (SQLite, key.kek, PDFs gerados)
+data/
+
 # IDE
 .idea/
 .vscode/
