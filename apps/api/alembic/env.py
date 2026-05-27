@@ -6,6 +6,8 @@ from logging.config import fileConfig
 from sqlalchemy import engine_from_config, event, pool
 
 from alembic import context
+from app import models  # noqa: F401 — registra modelos no Base.metadata
+from app.core.base import Base
 
 config = context.config
 
@@ -20,9 +22,7 @@ def _resolve_sync_url() -> str:
     return raw.replace("sqlite+aiosqlite:", "sqlite:")
 
 
-# ORM metadata ainda nao existe na TASK-007 (sera adicionada na TASK-010).
-# autogenerate fica desativado nesta task; migrations sao escritas manualmente.
-target_metadata = None
+target_metadata = Base.metadata
 
 
 def run_migrations_offline() -> None:
