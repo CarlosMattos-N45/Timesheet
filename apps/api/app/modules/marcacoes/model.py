@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from sqlalchemy import CheckConstraint, ForeignKey, Index, Integer, Text, UniqueConstraint
+from sqlalchemy import CheckConstraint, ForeignKey, Index, Integer, Text, UniqueConstraint, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.base import Base
@@ -40,7 +40,7 @@ class Marcacao(Base):
     horario_registrado: Mapped[str] = mapped_column(Text, nullable=False)
     horario_efetivo: Mapped[str | None] = mapped_column(Text, nullable=True)
     origem: Mapped[str] = mapped_column(Text, nullable=False)
-    status: Mapped[str] = mapped_column(Text, nullable=False, server_default="CONFIRMADA")
+    status: Mapped[str] = mapped_column(Text, nullable=False, server_default=text("'CONFIRMADA'"))
     confirmado_pelo_usuario: Mapped[int] = mapped_column(
         Integer, nullable=False, server_default="0"
     )
