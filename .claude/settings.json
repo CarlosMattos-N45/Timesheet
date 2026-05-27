@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(*/n45 *)",
+      "PowerShell(*/n45 *)",
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "NotebookEdit(./**)",
+      "Bash(*)",
+      "PowerShell(*)"
+    ],
+    "deny": [
+      "Edit(.n45/docs/**)",
+      "Edit(.n45/planning/**)",
+      "Write(.n45/docs/**)",
+      "Write(.n45/planning/**)",
+      "NotebookEdit(.n45/docs/**)",
+      "NotebookEdit(.n45/planning/**)"
+    ]
+  }
+}
