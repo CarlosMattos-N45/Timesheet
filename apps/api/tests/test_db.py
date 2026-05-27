@@ -66,9 +66,7 @@ async def test_get_session_dependency_yields_and_closes(db_path: Path) -> None:
 
 
 @pytest.mark.asyncio
-async def test_dbcheck_endpoint_only_in_dev(
-    db_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+async def test_dbcheck_endpoint_only_in_dev(db_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("TIMESHEET_DEV", "true")
     from app.core import config
     from app.main import create_app

@@ -28,9 +28,18 @@ def test_upgrade_creates_all_11_tables(alembic_cfg: Config) -> None:
         ).fetchall()
     names = {r[0] for r in rows}
     expected = {
-        "alembic_version", "terceiro", "jornada", "marcacao", "atividade",
-        "justificativa", "log_auditoria", "historico_envio_relatorio",
-        "refresh_token", "relatorio_gerado", "smtp_config", "privacy_acceptance",
+        "alembic_version",
+        "terceiro",
+        "jornada",
+        "marcacao",
+        "atividade",
+        "justificativa",
+        "log_auditoria",
+        "historico_envio_relatorio",
+        "refresh_token",
+        "relatorio_gerado",
+        "smtp_config",
+        "privacy_acceptance",
     }
     assert expected.issubset(names), f"Faltando: {expected - names}"
 

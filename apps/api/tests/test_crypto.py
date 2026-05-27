@@ -53,9 +53,7 @@ def test_ensure_kek_file_permissions_restricted(
     assert mode == 0o600, f"Permissao esperada 0o600, obtida 0o{mode:o}"
 
 
-def test_ensure_kek_refuses_plain_fallback(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_ensure_kek_refuses_plain_fallback(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     if sys.platform == "win32":
         pytest.skip("Fallback so se aplica fora do Windows")
     monkeypatch.delenv("TIMESHEET_ALLOW_PLAIN_KEK", raising=False)
@@ -98,9 +96,7 @@ def test_aes_gcm_roundtrip(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> N
     assert recovered == plaintext
 
 
-def test_aes_gcm_uses_fresh_nonce_per_call(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_aes_gcm_uses_fresh_nonce_per_call(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     if sys.platform != "win32":
         monkeypatch.setenv("TIMESHEET_ALLOW_PLAIN_KEK", "1")
     kek = ensure_kek(tmp_path / "k.kek")
@@ -113,9 +109,7 @@ def test_aes_gcm_uses_fresh_nonce_per_call(
     assert aes_gcm_decrypt(subkey, c2) == pt
 
 
-def test_aes_gcm_rejects_wrong_key(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_aes_gcm_rejects_wrong_key(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     if sys.platform != "win32":
         monkeypatch.setenv("TIMESHEET_ALLOW_PLAIN_KEK", "1")
     kek = ensure_kek(tmp_path / "k.kek")
@@ -126,9 +120,7 @@ def test_aes_gcm_rejects_wrong_key(
         aes_gcm_decrypt(subkey_wrong, encrypted)
 
 
-def test_format_db_cipher_key_is_hex64(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_format_db_cipher_key_is_hex64(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     if sys.platform != "win32":
         monkeypatch.setenv("TIMESHEET_ALLOW_PLAIN_KEK", "1")
     kek = ensure_kek(tmp_path / "k.kek")
@@ -193,9 +185,7 @@ def test_dpapi_unprotect_raises_runtime_error_when_win32crypt_absent(
         crypto_mod._dpapi_unprotect(b"x" * 32)
 
 
-def test_posix_read_kek_plain_allowed(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_posix_read_kek_plain_allowed(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Cobre _read_kek no caminho nao-Windows com TIMESHEET_ALLOW_PLAIN_KEK=1."""
     import app.core.crypto as crypto_mod
 
@@ -222,9 +212,7 @@ def test_posix_read_kek_refuses_without_flag(
         crypto_mod._read_kek(path)
 
 
-def test_posix_write_kek_with_flag(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_posix_write_kek_with_flag(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Cobre _write_kek no caminho nao-Windows com TIMESHEET_ALLOW_PLAIN_KEK=1."""
     import app.core.crypto as crypto_mod
 

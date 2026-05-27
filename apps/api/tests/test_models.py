@@ -33,6 +33,7 @@ async def session(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):  # type: ign
     db_file = tmp_path / "models.sqlite"
     monkeypatch.setenv("TIMESHEET_DB_URL", f"sqlite+aiosqlite:///{db_file}")
     from app.core import config
+
     config.settings = config.Settings()  # type: ignore[call-arg]
     db_mod._engine = None
     db_mod._sessionmaker = None
@@ -52,9 +53,17 @@ def _now() -> str:
 @pytest.mark.asyncio
 async def test_all_11_tables_in_metadata() -> None:
     expected = {
-        "terceiro", "jornada", "marcacao", "atividade", "justificativa",
-        "log_auditoria", "historico_envio_relatorio", "refresh_token",
-        "relatorio_gerado", "smtp_config", "privacy_acceptance",
+        "terceiro",
+        "jornada",
+        "marcacao",
+        "atividade",
+        "justificativa",
+        "log_auditoria",
+        "historico_envio_relatorio",
+        "refresh_token",
+        "relatorio_gerado",
+        "smtp_config",
+        "privacy_acceptance",
     }
     assert expected.issubset(set(Base.metadata.tables.keys()))
 
@@ -62,11 +71,19 @@ async def test_all_11_tables_in_metadata() -> None:
 @pytest.mark.asyncio
 async def test_terceiro_roundtrip(session: AsyncSession) -> None:
     t = Terceiro(
-        id=str(uuid4()), nome="Maria", empresa_nome="ACME", empresa_cnpj="00000000000191",
-        horario_inicio_jornada="09:00:00", horario_saida_almoco="12:00:00",
-        horario_retorno_almoco="13:00:00", horario_fim_jornada="18:00:00",
-        trabalha_fim_de_semana=0, email_contato="m@a.com", senha_hash="hash",
-        criado_em=_now(), atualizado_em=_now(),
+        id=str(uuid4()),
+        nome="Maria",
+        empresa_nome="ACME",
+        empresa_cnpj="00000000000191",
+        horario_inicio_jornada="09:00:00",
+        horario_saida_almoco="12:00:00",
+        horario_retorno_almoco="13:00:00",
+        horario_fim_jornada="18:00:00",
+        trabalha_fim_de_semana=0,
+        email_contato="m@a.com",
+        senha_hash="hash",
+        criado_em=_now(),
+        atualizado_em=_now(),
     )
     session.add(t)
     await session.commit()
@@ -78,12 +95,19 @@ async def test_terceiro_roundtrip(session: AsyncSession) -> None:
 @pytest.mark.asyncio
 async def test_terceiro_check_constraint(session: AsyncSession) -> None:
     t = Terceiro(
-        id=str(uuid4()), nome="X", empresa_nome="Y", empresa_cnpj="00000000000191",
+        id=str(uuid4()),
+        nome="X",
+        empresa_nome="Y",
+        empresa_cnpj="00000000000191",
         horario_inicio_jornada="12:00:00",  # depois do almoco - viola CHECK
         horario_saida_almoco="11:00:00",
-        horario_retorno_almoco="13:00:00", horario_fim_jornada="18:00:00",
-        trabalha_fim_de_semana=0, email_contato="z@z.com", senha_hash="h",
-        criado_em=_now(), atualizado_em=_now(),
+        horario_retorno_almoco="13:00:00",
+        horario_fim_jornada="18:00:00",
+        trabalha_fim_de_semana=0,
+        email_contato="z@z.com",
+        senha_hash="h",
+        criado_em=_now(),
+        atualizado_em=_now(),
     )
     session.add(t)
     with pytest.raises(IntegrityError):
@@ -93,24 +117,40 @@ async def test_terceiro_check_constraint(session: AsyncSession) -> None:
 @pytest.mark.asyncio
 async def test_jornada_marcacoes_relationship(session: AsyncSession) -> None:
     t = Terceiro(
-        id="t1", nome="Maria", empresa_nome="ACME", empresa_cnpj="00000000000191",
-        horario_inicio_jornada="09:00:00", horario_saida_almoco="12:00:00",
-        horario_retorno_almoco="13:00:00", horario_fim_jornada="18:00:00",
-        trabalha_fim_de_semana=0, email_contato="m@a.com", senha_hash="h",
-        criado_em=_now(), atualizado_em=_now(),
+        id="t1",
+        nome="Maria",
+        empresa_nome="ACME",
+        empresa_cnpj="00000000000191",
+        horario_inicio_jornada="09:00:00",
+        horario_saida_almoco="12:00:00",
+        horario_retorno_almoco="13:00:00",
+        horario_fim_jornada="18:00:00",
+        trabalha_fim_de_semana=0,
+        email_contato="m@a.com",
+        senha_hash="h",
+        criado_em=_now(),
+        atualizado_em=_now(),
     )
     j = Jornada(
         id="j1", terceiro_id="t1", data="2026-05-27", status="EM_ANDAMENTO", criada_em=_now()
     )
     m1 = Marcacao(
-        id="m1", jornada_id="j1", tipo="INICIO_JORNADA",
-        horario_registrado=_now(), origem="AGENTE_AUTOMATICO",
-        idempotency_key="11111111-1111-1111-1111-111111111111", criada_em=_now(),
+        id="m1",
+        jornada_id="j1",
+        tipo="INICIO_JORNADA",
+        horario_registrado=_now(),
+        origem="AGENTE_AUTOMATICO",
+        idempotency_key="11111111-1111-1111-1111-111111111111",
+        criada_em=_now(),
     )
     m2 = Marcacao(
-        id="m2", jornada_id="j1", tipo="FIM_JORNADA",
-        horario_registrado=_now(), origem="AGENTE_AUTOMATICO",
-        idempotency_key="22222222-2222-2222-2222-222222222222", criada_em=_now(),
+        id="m2",
+        jornada_id="j1",
+        tipo="FIM_JORNADA",
+        horario_registrado=_now(),
+        origem="AGENTE_AUTOMATICO",
+        idempotency_key="22222222-2222-2222-2222-222222222222",
+        criada_em=_now(),
     )
     session.add_all([t, j, m1, m2])
     await session.commit()
@@ -126,11 +166,19 @@ async def test_jornada_marcacoes_relationship(session: AsyncSession) -> None:
 @pytest.mark.asyncio
 async def test_marcacao_tipo_check_constraint(session: AsyncSession) -> None:
     t = Terceiro(
-        id="t1", nome="Maria", empresa_nome="ACME", empresa_cnpj="00000000000191",
-        horario_inicio_jornada="09:00:00", horario_saida_almoco="12:00:00",
-        horario_retorno_almoco="13:00:00", horario_fim_jornada="18:00:00",
-        trabalha_fim_de_semana=0, email_contato="m@a.com", senha_hash="h",
-        criado_em=_now(), atualizado_em=_now(),
+        id="t1",
+        nome="Maria",
+        empresa_nome="ACME",
+        empresa_cnpj="00000000000191",
+        horario_inicio_jornada="09:00:00",
+        horario_saida_almoco="12:00:00",
+        horario_retorno_almoco="13:00:00",
+        horario_fim_jornada="18:00:00",
+        trabalha_fim_de_semana=0,
+        email_contato="m@a.com",
+        senha_hash="h",
+        criado_em=_now(),
+        atualizado_em=_now(),
     )
     j = Jornada(
         id="j1", terceiro_id="t1", data="2026-05-27", status="EM_ANDAMENTO", criada_em=_now()
@@ -138,9 +186,13 @@ async def test_marcacao_tipo_check_constraint(session: AsyncSession) -> None:
     session.add_all([t, j])
     await session.commit()
     m = Marcacao(
-        id="m_bad", jornada_id="j1", tipo="TIPO_INVALIDO",  # nao existe
-        horario_registrado=_now(), origem="AGENTE_AUTOMATICO",
-        idempotency_key="33333333-3333-3333-3333-333333333333", criada_em=_now(),
+        id="m_bad",
+        jornada_id="j1",
+        tipo="TIPO_INVALIDO",  # nao existe
+        horario_registrado=_now(),
+        origem="AGENTE_AUTOMATICO",
+        idempotency_key="33333333-3333-3333-3333-333333333333",
+        criada_em=_now(),
     )
     session.add(m)
     with pytest.raises(IntegrityError):
@@ -150,11 +202,19 @@ async def test_marcacao_tipo_check_constraint(session: AsyncSession) -> None:
 @pytest.mark.asyncio
 async def test_atividade_one_to_one_with_jornada(session: AsyncSession) -> None:
     t = Terceiro(
-        id="t1", nome="X", empresa_nome="Y", empresa_cnpj="00000000000191",
-        horario_inicio_jornada="09:00:00", horario_saida_almoco="12:00:00",
-        horario_retorno_almoco="13:00:00", horario_fim_jornada="18:00:00",
-        trabalha_fim_de_semana=0, email_contato="m@a.com", senha_hash="h",
-        criado_em=_now(), atualizado_em=_now(),
+        id="t1",
+        nome="X",
+        empresa_nome="Y",
+        empresa_cnpj="00000000000191",
+        horario_inicio_jornada="09:00:00",
+        horario_saida_almoco="12:00:00",
+        horario_retorno_almoco="13:00:00",
+        horario_fim_jornada="18:00:00",
+        trabalha_fim_de_semana=0,
+        email_contato="m@a.com",
+        senha_hash="h",
+        criado_em=_now(),
+        atualizado_em=_now(),
     )
     j = Jornada(id="j1", terceiro_id="t1", data="2026-05-27", status="FECHADA", criada_em=_now())
     a = Atividade(id="a1", jornada_id="j1", descricao="trabalhei dez horas", registrada_em=_now())
@@ -173,8 +233,13 @@ async def test_atividade_one_to_one_with_jornada(session: AsyncSession) -> None:
 async def test_smtp_config_singleton_check(session: AsyncSession) -> None:
     cfg = SmtpConfig(
         id=2,  # viola CHECK id=1
-        host="smtp.example.com", port=587, username_enc="ENC1", password_enc="ENC2",
-        use_starttls=1, from_address="noreply@example.com", atualizado_em=_now(),
+        host="smtp.example.com",
+        port=587,
+        username_enc="ENC1",
+        password_enc="ENC2",
+        use_starttls=1,
+        from_address="noreply@example.com",
+        atualizado_em=_now(),
     )
     session.add(cfg)
     with pytest.raises(IntegrityError):
@@ -193,15 +258,26 @@ async def test_privacy_acceptance_singleton(session: AsyncSession) -> None:
 @pytest.mark.asyncio
 async def test_refresh_token_cascade_on_terceiro_delete(session: AsyncSession) -> None:
     t = Terceiro(
-        id="t1", nome="X", empresa_nome="Y", empresa_cnpj="00000000000191",
-        horario_inicio_jornada="09:00:00", horario_saida_almoco="12:00:00",
-        horario_retorno_almoco="13:00:00", horario_fim_jornada="18:00:00",
-        trabalha_fim_de_semana=0, email_contato="m@a.com", senha_hash="h",
-        criado_em=_now(), atualizado_em=_now(),
+        id="t1",
+        nome="X",
+        empresa_nome="Y",
+        empresa_cnpj="00000000000191",
+        horario_inicio_jornada="09:00:00",
+        horario_saida_almoco="12:00:00",
+        horario_retorno_almoco="13:00:00",
+        horario_fim_jornada="18:00:00",
+        trabalha_fim_de_semana=0,
+        email_contato="m@a.com",
+        senha_hash="h",
+        criado_em=_now(),
+        atualizado_em=_now(),
     )
     rt = RefreshToken(
-        id="rt1", terceiro_id="t1", token_hash="hashvalue",
-        expira_em=_now(), criado_em=_now(),
+        id="rt1",
+        terceiro_id="t1",
+        token_hash="hashvalue",
+        expira_em=_now(),
+        criado_em=_now(),
     )
     session.add_all([t, rt])
     await session.commit()

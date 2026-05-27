@@ -102,16 +102,12 @@ def _read_kek(path: Path) -> bytes:
         except RuntimeError:
             # Fallback path for dev on Windows without pywin32 installed.
             if os.environ.get("TIMESHEET_ALLOW_PLAIN_KEK") == "1":
-                logger.warning(
-                    "PLAIN_KEK_FALLBACK ativo — lendo KEK em claro (dev only)"
-                )
+                logger.warning("PLAIN_KEK_FALLBACK ativo — lendo KEK em claro (dev only)")
                 return blob
             raise
     # Non-Windows path
     if os.environ.get("TIMESHEET_ALLOW_PLAIN_KEK") != "1":
-        raise RuntimeError(
-            "DPAPI indisponivel: defina TIMESHEET_ALLOW_PLAIN_KEK=1 apenas em dev"
-        )
+        raise RuntimeError("DPAPI indisponivel: defina TIMESHEET_ALLOW_PLAIN_KEK=1 apenas em dev")
     return blob
 
 
@@ -124,16 +120,12 @@ def _write_kek(path: Path, kek: bytes) -> None:
         except RuntimeError:
             if os.environ.get("TIMESHEET_ALLOW_PLAIN_KEK") != "1":
                 raise
-            logger.warning(
-                "PLAIN_KEK_FALLBACK ativo — escrevendo KEK em claro (dev only)"
-            )
+            logger.warning("PLAIN_KEK_FALLBACK ativo — escrevendo KEK em claro (dev only)")
             path.write_bytes(kek)
             return
     # Non-Windows path
     if os.environ.get("TIMESHEET_ALLOW_PLAIN_KEK") != "1":
-        raise RuntimeError(
-            "DPAPI ausente: configure TIMESHEET_ALLOW_PLAIN_KEK=1 apenas em dev"
-        )
+        raise RuntimeError("DPAPI ausente: configure TIMESHEET_ALLOW_PLAIN_KEK=1 apenas em dev")
     path.write_bytes(kek)
     _restrict_permissions(path)
 

@@ -14,6 +14,7 @@ def _reload_app() -> object:
     if main_mod is not None:
         importlib.reload(main_mod)
     import app.main as main  # noqa: PLC0415
+
     return main.app
 
 
