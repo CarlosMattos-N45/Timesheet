@@ -2,10 +2,10 @@
 created_at: "2026-05-27 12:00:55"
 id: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
 n45_version: 0.2.0
-status: proposed
+status: accepted
 title: TimeSheet Terceiros — Sistema Full-Local de Marcação de Jornada
 type: feat
-updated_at: "2026-05-27 12:11:17"
+updated_at: "2026-05-27 14:13:55"
 ---
 ## 1. Visão Geral
 
