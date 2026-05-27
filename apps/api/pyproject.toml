@@ -8,6 +8,9 @@ dependencies = [
   "pydantic==2.9.*",
   "pydantic-settings==2.6.*",
   "structlog==24.4.*",
+  "sqlalchemy==2.0.*",
+  "alembic==1.13.*",
+  "aiosqlite==0.20.*",
 ]
 
 [project.optional-dependencies]
