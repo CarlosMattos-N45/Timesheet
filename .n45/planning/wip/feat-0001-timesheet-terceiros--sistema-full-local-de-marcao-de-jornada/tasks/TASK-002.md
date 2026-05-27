@@ -33,15 +33,16 @@ n45_version: 0.2.0
 persona: backend
 phase: Phase 1 — Scaffold Mínimo
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
     green: false
     red: false
     refactor: false
 tests: pytest apps/api/tests
 title: Backend FastAPI scaffold em /apps/api com GET /api/v1/health
-updated_at: "2026-05-27 14:09:45"
+updated_at: "2026-05-27 15:06:51"
 ---
+
 ## Contexto
 
 Backend Python do TimeSheet Terceiros: FastAPI single-worker rodando local em `127.0.0.1:8765` (porta configurável via env var). Phase 1 entrega o esqueleto mínimo que sobe e responde a um health check — sem persistência (Phase 2), sem auth (Phase 3), sem domínio (Phase 3).

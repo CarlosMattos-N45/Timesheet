@@ -28,14 +28,15 @@ n45_version: 0.2.0
 persona: backend
 phase: Phase 1 — Scaffold Mínimo
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
     green: false
     red: false
     refactor: false
 title: 'Monorepo: .gitignore, Makefile mínimo, README e estrutura de pastas'
-updated_at: "2026-05-27 14:08:27"
+updated_at: "2026-05-27 15:07:10"
 ---
+
 ## Contexto
 
 Projeto greenfield: monorepo Windows-native que abriga Backend Python (FastAPI), Web SPA (React) e Agente Desktop (.NET 8). Não há arquivos pré-existentes — esta task é a primeira escrita.

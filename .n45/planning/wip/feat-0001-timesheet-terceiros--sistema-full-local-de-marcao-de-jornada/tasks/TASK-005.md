@@ -3,25 +3,25 @@ checkpoint: null
 complexity: M
 created_at: "2026-05-27 14:13:34"
 criteria:
-    - done: false
+    - done: true
       test: make api-smoke
       text: App sobe e healthcheck responde 200
-    - done: false
+    - done: true
       test: make web-smoke
       text: Web build de producao passa sem erros
-    - done: false
+    - done: true
       test: make agent-smoke
       text: Agent build e dotnet test passam
-    - done: false
+    - done: true
       test: make smoke
       text: make smoke executa os 3 verifiers em sequencia e imprime [SMOKE OK]
-    - done: false
+    - done: true
       test: grep -E 'status.*ok' scripts/api_smoke.ps1
       text: Script api_smoke.ps1 valida body JSON com status=ok e version=0.1.0
-    - done: false
+    - done: true
       test: grep -E 'maxAttempts' scripts/api_smoke.ps1
       text: Loop de espera no api_smoke.ps1 tem contador maximo (sem while true)
-    - done: false
+    - done: true
       test: make help
       text: make help lista smoke api-smoke web-smoke agent-smoke
 deps:
@@ -33,14 +33,14 @@ n45_version: 0.2.0
 persona: backend
 phase: Phase 1 — Scaffold Mínimo
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
-    green: false
+    green: true
     red: false
     refactor: false
 tests: make smoke
 title: 'Smoke verifier: Makefile com make smoke validando api/health + web build + agent build'
-updated_at: "2026-05-27 14:13:34"
+updated_at: "2026-05-27 15:25:55"
 ---
 ## Contexto
 

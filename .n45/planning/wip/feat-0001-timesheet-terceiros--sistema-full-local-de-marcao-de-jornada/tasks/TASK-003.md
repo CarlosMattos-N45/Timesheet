@@ -30,15 +30,16 @@ n45_version: 0.2.0
 persona: frontend
 phase: Phase 1 — Scaffold Mínimo
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
     green: false
     red: false
     refactor: false
 tests: cd apps/web && npm test -- --run
 title: Frontend React+Vite+TS+MUI scaffold em /apps/web com pagina inicial
-updated_at: "2026-05-27 14:11:00"
+updated_at: "2026-05-27 15:06:52"
 ---
+
 ## Contexto
 
 Frontend Web SPA do TimeSheet Terceiros: React 18 + TypeScript + Vite + Material UI v5, servido localmente pelo Backend Python a partir de `/apps/api/app/static/` em produção (Phase 6 — empacotamento copia o build para lá). Em desenvolvimento, roda via `vite dev` em porta separada (default `5173`).

@@ -32,15 +32,16 @@ n45_version: 0.2.0
 persona: backend
 phase: Phase 1 — Scaffold Mínimo
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
     green: false
     red: false
     refactor: false
 tests: cd apps/agent && dotnet test Timesheet.Agent.sln
 title: Agente .NET 8 solution scaffold em /apps/agent com 6 projetos + xUnit
-updated_at: "2026-05-27 14:12:29"
+updated_at: "2026-05-27 15:06:53"
 ---
+
 ## Contexto
 
 Agente Desktop do TimeSheet Terceiros: aplicação Windows-native em .NET 8 (LTS) composta por um Windows Service (`Timesheet.Agent.Service`) e uma UI WPF + tray (`Timesheet.Agent.Ui`) que se comunicam via named pipes IPC. O agente coleta automaticamente as 4 marcações diárias, sincroniza com o Backend (`/apps/api`) via HTTP local, e mostra diálogos modais ao usuário.
