@@ -41,14 +41,14 @@ n45_version: 0.2.0
 persona: frontend
 phase: Phase 4 — Frontend por Feature
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
     green: false
     red: true
     refactor: false
 tests: cd apps/web && npm test -- --run src/pages/Privacidade/PrivacidadePage.test.tsx
 title: 'Privacidade: pagina /privacidade one-time (RF-012) com checkbox de aceite e POST /aceitar; invalida cache para PrivacyGuard redirecionar'
-updated_at: "2026-05-28 17:08:10"
+updated_at: "2026-05-28 17:10:41"
 ---
 
 ## Contexto

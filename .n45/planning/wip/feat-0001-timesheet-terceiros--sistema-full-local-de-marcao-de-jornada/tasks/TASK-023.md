@@ -50,19 +50,16 @@ n45_version: 0.2.0
 persona: frontend
 phase: Phase 4 — Frontend por Feature
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
     green: false
     red: true
     refactor: false
 tests: cd apps/web && npm test -- --run src/pages/Jornadas/JornadasPage.test.tsx src/lib/format/horario.test.ts
 title: 'Jornadas - Lista mensal (RF-007.1): DataGrid + DatePicker (mes), chips de status, badge PENDENTE, baixar/enviar PDF (TASK-018), helpers format/horario, jornadasKeys + relatoriosKeys factories'
-updated_at: "2026-05-28 13:30:36"
-worktree:
-    base_sha: 4322b5e75dde3e6501c193d809631f12a065fa49
-    branch: worktree-agent-258021f517ff6919
-    path: .n45\worktree\agent-258021f517ff6919
+updated_at: "2026-05-28 17:10:41"
 ---
+
 ## Contexto
 
 Implementar a página `/jornadas` (RF-007.1) — lista mensal de jornadas do Terceiro autenticado. Slice: componente + página + 2 sub-componentes + hook TanStack Query + zod schema do filtro de mês + substituição do stub em `routes.tsx`.
