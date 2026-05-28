@@ -3,43 +3,43 @@ checkpoint: null
 complexity: P
 created_at: "2026-05-28 09:42:46"
 criteria:
-    - done: false
+    - done: true
       test: pytest -k test_ready_returns_200_when_db_and_scheduler_up
       text: GET /api/v1/ready sem auth com banco up + scheduler running retorna 200 {status:ready}
-    - done: false
+    - done: true
       test: pytest -k test_ready_no_auth_required
       text: GET /ready não exige Bearer (status_code != 401 != 403)
-    - done: false
+    - done: true
       test: pytest -k test_ready_returns_503_when_scheduler_disabled
       text: GET /ready com TIMESHEET_SCHEDULER_ENABLED=false (scheduler não iniciado) retorna 503 {status:not-ready}
-    - done: false
+    - done: true
       test: pytest -k test_ready_returns_503_when_db_unreachable
       text: GET /ready com banco inacessível (URL inválida) retorna 503 sem expor detalhe do erro
-    - done: false
+    - done: true
       test: pytest -k test_config_returns_settings_snapshot
       text: GET /api/v1/config retorna {port, version, timezone:'America/Sao_Paulo', dev_mode} sem auth
-    - done: false
+    - done: true
       test: pytest -k test_config_no_auth_required
       text: GET /config não exige auth
-    - done: false
+    - done: true
       test: pytest -k test_all_expected_endpoints_registered
       text: Todos os endpoints esperados (sistema, auth, terceiros, privacidade, smtp, marcacoes, jornadas, atividades, auditoria, relatorios) estão registrados em app.routes
-    - done: false
+    - done: true
       test: pytest -k test_full_signup_login_flow
       text: Fluxo completo cadastro -> login -> /me -> /privacidade -> /health -> /config funciona end-to-end
-    - done: false
+    - done: true
       test: pytest -k test_security_headers_present_on_all_endpoints
       text: Security headers (X-Content-Type-Options:nosniff, X-Frame-Options:DENY, CSP) presentes em todos endpoints
-    - done: false
+    - done: true
       test: pytest -k test_invalid_host_blocked_on_all_endpoints
       text: Host header invalido bloqueia /health e /auth/login com 400 INVALID_HOST
-    - done: false
+    - done: true
       test: pytest -k test_error_shape_consistent_across_endpoints
       text: Shape de erro {code, message, details:list} consistente em 401, 422, 404 de endpoints diferentes
-    - done: false
+    - done: true
       test: grep -E 'include_router|limiter.limit' apps/api/app/main.py
       text: main.py registra os 10 routers na ordem canonica e aplica rate limit em /auth/login e /auth/refresh
-    - done: false
+    - done: true
       test: pytest tests/ -v
       text: Suite completa passa apos wiring final (todos os modulos integrados)
 deps:
@@ -56,14 +56,14 @@ n45_version: 0.2.0
 persona: backend
 phase: Phase 3 — Backend por Domínio
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
-    green: false
-    red: false
-    refactor: false
+    green: true
+    red: true
+    refactor: true
 tests: pytest tests/test_ready_endpoint.py tests/test_config_endpoint.py tests/test_smoke_integration.py -v
 title: 'Wiring final + /ready + /config: registra todos routers em main.py, /api/v1/ready (db+scheduler check), /config, smoke integrado'
-updated_at: "2026-05-28 09:42:46"
+updated_at: "2026-05-28 12:20:36"
 ---
 ## Contexto
 
