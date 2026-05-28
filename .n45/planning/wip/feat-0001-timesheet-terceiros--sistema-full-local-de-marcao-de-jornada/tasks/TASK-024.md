@@ -3,41 +3,41 @@ checkpoint: null
 complexity: M
 created_at: "2026-05-28 12:47:20"
 criteria:
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/pages/JornadaDetalhe/JornadaDetalhePage.test.tsx -t "breadcrumb"
       text: Mount /jornadas/j1 com FECHADA renderiza breadcrumb 27/05/2026, chip FECHADA, 4 TimePickers rotulados e total 08:00
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/pages/JornadaDetalhe/JornadaDetalhePage.test.tsx -t "PENDENTE"
       text: Status PENDENTE exibe banner Esta jornada possui marcacoes pendentes. Ajuste os horarios sinalizados. e TimePickers ficam disabled
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/pages/JornadaDetalhe/JornadaDetalhePage.test.tsx -t "Salvar alteracoes"
       text: 'Editar horario abre modal de justificativa; <5 chars desabilita Confirmar; ao confirmar com motivo valido, PUT /jornadas/j1 inclui o motivo e o array marcacoes apenas com tipos alterados (ex: INICIO_JORNADA)'
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/pages/JornadaDetalhe/JornadaDetalhePage.test.tsx -t "VALIDATION_ERROR"
       text: 422 VALIDATION_ERROR no PUT exibe alert dentro do modal com o message exato do backend (passthrough)
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/pages/JornadaDetalhe/JornadaDetalhePage.test.tsx -t "POST /jornadas/j1/atividade"
       text: Editar atividade e clicar Salvar atividade chama POST /jornadas/j1/atividade com descricao igual ao novo texto
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/pages/JornadaDetalhe/JornadaDetalhePage.test.tsx -t "Historico de auditoria"
       text: Expandir Accordion Historico de auditoria carrega GET /auditoria?entidade=Jornada&entidade_id=j1 lazy (so apos expandir)
-    - done: false
+    - done: true
       text: Total diario eh recalculado em tempo real conforme TimePickers mudam usando calculaTotalDiario (segundos) e formatTotal
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/lib/format/horario.test.ts -t "calculaTotalDiario"
       text: calculaTotalDiario com inicio 09:00, saida 12:00, retorno 13:00, fim 18:00 retorna 28800
-    - done: false
+    - done: true
       text: atividade com <10 chars desabilita botao Salvar atividade
-    - done: false
+    - done: true
       text: 'accessibility: TimePickers com aria-label, Accordion com aria-expanded controlado, Chip status com role=status'
-    - done: false
+    - done: true
       test: grep -E "<JornadaDetalhePage ?/>" apps/web/src/routes.tsx
       text: routes.tsx substitui JornadaDetalhePageStub por JornadaDetalhePage real
-    - done: false
+    - done: true
       text: ESLint passa sem warnings e tsc strict 0 erros
-    - done: false
+    - done: true
       text: Testes passando com cobertura >= 80%
-    - done: false
+    - done: true
       text: make smoke continua passando
 deps:
     - TASK-020
@@ -48,18 +48,14 @@ n45_version: 0.2.0
 persona: frontend
 phase: Phase 4 — Frontend por Feature
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
-    green: false
-    red: false
-    refactor: false
+    green: true
+    red: true
+    refactor: true
 tests: cd apps/web && npm test -- --run src/pages/JornadaDetalhe/JornadaDetalhePage.test.tsx
 title: 'Jornada Detalhe (RF-007.2 + RF-007.4 + RF-010): edicao de horarios com modal de justificativa, atividade inline, accordion auditoria lazy, banner PENDENTE'
-updated_at: "2026-05-28 17:11:30"
-worktree:
-    base_sha: 97c5df6c408d6d906ae705d6822af000c61c8f1d
-    branch: worktree-agent-0099e733654af41c
-    path: .n45\worktree\agent-0099e733654af41c
+updated_at: "2026-05-28 17:55:19"
 ---
 ## Contexto
 

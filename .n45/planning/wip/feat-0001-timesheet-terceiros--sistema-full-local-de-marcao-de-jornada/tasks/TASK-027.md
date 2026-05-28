@@ -3,50 +3,50 @@ checkpoint: null
 complexity: M
 created_at: "2026-05-28 12:56:49"
 criteria:
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/pages/Relatorios/RelatoriosPage.test.tsx -t "default = mes anterior"
       text: Mount /relatorios em 2026-05-27 default mes anterior 2026-04 chama GET /api/v1/relatorios/2026-04/meta e /historico
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/pages/Relatorios/RelatoriosPage.test.tsx -t "PDF desatualizado"
       text: meta.invalidado_em diferente de null exibe alert warning com texto exato PDF desatualizado e botao Atualizar relatorio
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/pages/Relatorios/RelatoriosPage.test.tsx -t "Nenhuma jornada registrada"
       text: 404 do getRelatorioMeta exibe Alert texto exato Nenhuma jornada registrada para este mes. Nao e possivel gerar o relatorio. e oculta iframe
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/pages/Relatorios/RelatoriosPage.test.tsx -t "FALHA exibe chip"
       text: historico com FALHA renderiza chip vermelho FALHA + tooltip com erro_mensagem completo (truncado a 60 chars no display)
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/pages/Relatorios/RelatoriosPage.test.tsx -t "Configurar SMTP navega"
       text: Botao Configurar SMTP navega para /configuracoes/smtp
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/pages/Configuracoes/SmtpConfigPage.test.tsx -t "preenche o form"
       text: Mount /configuracoes/smtp com config existente preenche o form (host porta username use_starttls from_address) sem password
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/pages/Configuracoes/SmtpConfigPage.test.tsx -t "Nenhuma configuracao"
       text: 404 do GET /smtp exibe alert info Nenhuma configuracao salva ainda. com form vazio
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/pages/Configuracoes/SmtpConfigPage.test.tsx -t "Configuracao SMTP salva"
       text: PUT /smtp 200 envia body com password digitado e emite toast Configuracao SMTP salva.
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/pages/Configuracoes/SmtpConfigPage.test.tsx -t "testada com sucesso"
       text: POST /smtp/test 200 emite toast Conexao SMTP testada com sucesso.
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/pages/Configuracoes/SmtpConfigPage.test.tsx -t "SMTP_TEST_FAILED"
       text: POST /smtp/test 400 SMTP_TEST_FAILED exibe alert com a mensagem do backend (passthrough; ex Conexao recusada)
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/pages/Configuracoes/SmtpConfigPage.test.tsx -t "SMTP_NOT_CONFIGURED"
       text: POST /smtp/test 422 SMTP_NOT_CONFIGURED exibe alert texto exato SMTP nao configurado. Salve antes de testar.
-    - done: false
+    - done: true
       test: grep -E "from \"@/components/EnviarRelatorioDialog\"" apps/web/src/pages/Jornadas/JornadasPage.tsx
       text: EnviarRelatorioDialog movido para src/components/ e JornadasPage importa de @/components/EnviarRelatorioDialog (TASK-023 testes continuam verdes)
-    - done: false
+    - done: true
       test: grep -E "<RelatoriosPage ?/>|<SmtpConfigPage ?/>" apps/web/src/routes.tsx
       text: routes.tsx substitui RelatoriosPageStub por RelatoriosPage e SmtpConfigPageStub por SmtpConfigPage
-    - done: false
+    - done: true
       text: ESLint passa sem warnings e tsc strict 0 erros
-    - done: false
+    - done: true
       text: Testes passando com cobertura >= 80%
-    - done: false
+    - done: true
       text: make smoke continua passando
 deps:
     - TASK-020
@@ -58,18 +58,14 @@ n45_version: 0.2.0
 persona: frontend
 phase: Phase 4 — Frontend por Feature
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
-    green: false
-    red: false
-    refactor: false
+    green: true
+    red: true
+    refactor: true
 tests: cd apps/web && npm test -- --run src/pages/Relatorios/RelatoriosPage.test.tsx src/pages/Configuracoes/SmtpConfigPage.test.tsx
 title: 'Relatorios + SMTP Config (RF-008): /relatorios com iframe PDF, badge invalidado_em (PDF desatualizado), historico de envios, regenerar; /configuracoes/smtp com get/put/test; move EnviarRelatorioDialog para components'
-updated_at: "2026-05-28 17:11:33"
-worktree:
-    base_sha: 97c5df6c408d6d906ae705d6822af000c61c8f1d
-    branch: worktree-agent-31f8867382b3b372
-    path: .n45\worktree\agent-31f8867382b3b372
+updated_at: "2026-05-28 17:56:10"
 ---
 ## Contexto
 
