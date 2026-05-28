@@ -3,38 +3,38 @@ checkpoint: null
 complexity: G
 created_at: "2026-05-28 12:37:21"
 criteria:
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/auth/AuthContext.test.tsx -t "login persiste tokens"
       text: POST /auth/login persiste tokens no sessionStorage e atualiza isAuthenticated
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/api/client.test.ts -t "injeta Authorization Bearer"
       text: 'Request interceptor injeta Authorization: Bearer com access_token do sessionStorage'
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/api/client.test.ts -t "em 401 chama /auth/refresh"
       text: Response 401 dispara POST /auth/refresh, atualiza tokens e refaz o request original
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/api/client.test.ts -t "em refresh falhando"
       text: Refresh falhando limpa sessionStorage e propaga 401
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/routes/ProtectedRoute.test.tsx -t "redireciona para /login"
       text: ProtectedRoute redireciona para /login quando isAuthenticated=false
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/lib/saudacao.test.ts
       text: saudacaoPorHora retorna Bom dia para 0..11, Boa tarde 12..17, Boa noite 18..23 (valores exatos)
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/lib/errors.test.ts
       text: parseApiError extrai code message e fields com strip do prefixo body.
-    - done: false
+    - done: true
       test: 'grep -E "path: \"/(login|privacidade|jornadas|cadastro|relatorios|configuracoes/smtp)" apps/web/src/routes.tsx'
       text: Routes registra TODAS as 9 rotas /login /privacidade /jornadas /jornadas/:id /jornadas/manual /cadastro /cadastro/senha /relatorios /configuracoes/smtp
-    - done: false
+    - done: true
       text: ESLint passa sem warnings e tsc strict 0 erros
-    - done: false
+    - done: true
       test: cd apps/web && npm run build
       text: vite build gera dist sem erros
-    - done: false
+    - done: true
       text: Testes passando com cobertura >= 80%
-    - done: false
+    - done: true
       text: make smoke continua passando
 deps: []
 id: TASK-020
@@ -43,18 +43,14 @@ n45_version: 0.2.0
 persona: frontend
 phase: Phase 4 — Frontend por Feature
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
-    green: false
-    red: false
-    refactor: false
+    green: true
+    red: true
+    refactor: true
 tests: cd apps/web && npm test -- --run
 title: 'Fundação Frontend: Axios + JWT interceptor, AuthContext, QueryClient, Router central com guards, AppLayout, types do contrato, helpers'
-updated_at: "2026-05-28 12:59:25"
-worktree:
-    base_sha: 3dcb357d7f6f302e01eccace094f6b15dd040bc1
-    branch: worktree-agent-225c7a002bbd569f
-    path: .n45\worktree\agent-225c7a002bbd569f
+updated_at: "2026-05-28 13:24:58"
 ---
 ## Contexto
 
