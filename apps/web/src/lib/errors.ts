@@ -1,4 +1,3 @@
-import { AxiosError } from "axios";
 import type { ApiErrorBody } from "@/types/contracts";
 
 export interface ParsedApiError {
@@ -9,8 +8,17 @@ export interface ParsedApiError {
 
 const FIELD_PREFIX = /^body\./;
 
+interface AxiosLike {
+  isAxiosError: boolean;
+  response?: { data?: unknown };
+}
+
+function isAxiosLike(err: unknown): err is AxiosLike {
+  return typeof err === "object" && err !== null && (err as AxiosLike).isAxiosError === true;
+}
+
 export function parseApiError(err: unknown): ParsedApiError {
-  if (err instanceof AxiosError) {
+  if (isAxiosLike(err)) {
     const body = err.response?.data as ApiErrorBody | undefined;
     if (body && typeof body === "object" && "code" in body) {
       const fields: Record<string, string> = {};

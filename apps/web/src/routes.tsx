@@ -2,8 +2,8 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import { ProtectedRoute } from "@/routes/ProtectedRoute";
 import { PrivacyGuard } from "@/routes/PrivacyGuard";
 import { AppLayout } from "@/components/AppLayout";
+import { LoginPage } from "@/pages/Login/LoginPage";
 import {
-  LoginPageStub,
   PrivacidadePageStub,
   JornadasPageStub,
   JornadaDetalhePageStub,
@@ -16,7 +16,7 @@ import {
 
 export const router = createBrowserRouter([
   { path: "/", element: <Navigate to="/jornadas" replace /> },
-  { path: "/login", element: <LoginPageStub /> },
+  { path: "/login", element: <LoginPage /> },
   {
     element: <ProtectedRoute />,
     children: [
