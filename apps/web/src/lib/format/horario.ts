@@ -30,3 +30,29 @@ export function formatDiaSemana(yyyymmdd: string): string {
   const d = dayjs(yyyymmdd).day(); // 0..6
   return DIAS_SEMANA[d] ?? "—";
 }
+
+/**
+ * Calcula o total diário em segundos.
+ * total = (fim - inicio) - (retornoAlmoco - saidaAlmoco)
+ * Retorna null se inicio ou fim não informados ou se fim <= inicio.
+ */
+export function calculaTotalDiario(
+  inicio: string | null,
+  saidaAlmoco: string | null,
+  retornoAlmoco: string | null,
+  fim: string | null
+): number | null {
+  if (!inicio || !fim) return null;
+  const ini = dayjs(inicio).valueOf();
+  const f = dayjs(fim).valueOf();
+  if (Number.isNaN(ini) || Number.isNaN(f) || f <= ini) return null;
+  let totalMs = f - ini;
+  if (saidaAlmoco && retornoAlmoco) {
+    const sa = dayjs(saidaAlmoco).valueOf();
+    const ra = dayjs(retornoAlmoco).valueOf();
+    if (!Number.isNaN(sa) && !Number.isNaN(ra) && ra > sa) {
+      totalMs -= ra - sa;
+    }
+  }
+  return Math.floor(totalMs / 1000);
+}

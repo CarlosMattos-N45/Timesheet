@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { formatHoraBR, formatTotal, formatData, formatDiaSemana } from "@/lib/format/horario";
+import { formatHoraBR, formatTotal, formatData, formatDiaSemana, calculaTotalDiario } from "@/lib/format/horario";
 
 describe("format/horario", () => {
   describe("formatHoraBR", () => {
@@ -25,5 +25,33 @@ describe("format/horario", () => {
   describe("formatDiaSemana", () => {
     it("'2026-05-27' (quarta) → 'Qua'", () => expect(formatDiaSemana("2026-05-27")).toBe("Qua"));
     it("'2026-05-30' (sábado) → 'Sab'", () => expect(formatDiaSemana("2026-05-30")).toBe("Sab"));
+  });
+  describe("calculaTotalDiario", () => {
+    it("inicio 09:00, saida 12:00, retorno 13:00, fim 18:00 → 28800", () => {
+      // 09:00 = 2026-05-27T09:00:00 local (BRT = UTC-3) → UTC T12:00
+      // saida 12:00 BRT → UTC T15:00
+      // retorno 13:00 BRT → UTC T16:00
+      // fim 18:00 BRT → UTC T21:00
+      // total = (21 - 12) - (16 - 15) = 9h - 1h = 8h = 28800s
+      expect(calculaTotalDiario(
+        "2026-05-27T12:00:00Z",
+        "2026-05-27T15:00:00Z",
+        "2026-05-27T16:00:00Z",
+        "2026-05-27T21:00:00Z"
+      )).toBe(28800);
+    });
+    it("null inicio → null", () => {
+      expect(calculaTotalDiario(null, null, null, "2026-05-27T21:00:00Z")).toBeNull();
+    });
+    it("null fim → null", () => {
+      expect(calculaTotalDiario("2026-05-27T12:00:00Z", null, null, null)).toBeNull();
+    });
+    it("fim <= inicio → null", () => {
+      expect(calculaTotalDiario("2026-05-27T21:00:00Z", null, null, "2026-05-27T12:00:00Z")).toBeNull();
+    });
+    it("sem almoço → (fim - inicio)", () => {
+      // 12:00 → 21:00 = 9h = 32400s
+      expect(calculaTotalDiario("2026-05-27T12:00:00Z", null, null, "2026-05-27T21:00:00Z")).toBe(32400);
+    });
   });
 });
