@@ -3,46 +3,46 @@ checkpoint: null
 complexity: G
 created_at: "2026-05-28 09:19:57"
 criteria:
-    - done: false
+    - done: true
       test: pytest -k test_hash_and_verify_password_roundtrip or test_verify_password_returns_false_for_wrong_password or test_hash_password_uses_argon2id
       text: hash_password produz Argon2id e verify_password retorna True para senha correta, False para errada
-    - done: false
+    - done: true
       test: pytest -k test_create_access_token_contains_required_claims or test_decode_expired_token_raises
       text: create_access_token contém claims sub/exp/iat/jti/type=access e decode rejeita expirado com DomainError(code=UNAUTHORIZED)
-    - done: false
+    - done: true
       test: pytest -k test_create_refresh_token_persists_in_db or test_rotate_refresh_token_revokes_old_and_issues_new
       text: create_refresh_token persiste RefreshToken(token_hash=sha256(jwt)) e rotate revoga antigo + emite novo par
-    - done: false
+    - done: true
       test: pytest -k test_reuse_of_revoked_token_revokes_full_chain
       text: Reuso de refresh token revogado revoga toda a cadeia do terceiro
-    - done: false
+    - done: true
       test: pytest -k test_validation_error_returns_padronizado or test_domain_error_serializes_padronizado
       text: RequestValidationError retorna 422 com shape {code:VALIDATION_ERROR,message,details:[{field,issue}]} e DomainError serializa com http_status correto
-    - done: false
+    - done: true
       test: pytest -k test_response_has_security_headers
       text: Toda resposta contem X-Content-Type-Options:nosniff, X-Frame-Options:DENY e CSP com default-src self + script-src self + style-src self unsafe-inline
-    - done: false
+    - done: true
       test: pytest -k test_invalid_host_rejected or test_valid_host_localhost_passes
       text: Host header diferente de 127.0.0.1/localhost retorna 400 com code=INVALID_HOST; localhost passa 200
-    - done: false
+    - done: true
       test: pytest -k test_log_audit_inserts_row or test_log_audit_rejects_invalid_entidade or test_log_audit_accepts_null_antes_and_motivo
       text: log_audit insere LogAuditoria com antes_json/depois_json serializado, motivo nullable, criado_em ISO8601 UTC e sem commit; entidade fora de Jornada/Marcacao/Terceiro/Atividade levanta ValueError
-    - done: false
+    - done: true
       test: pytest -k test_redact_sensitive_fields_in_log_output
       text: Logger structlog redacta campos sensíveis (senha, password_enc, token_hash) substituindo por [REDACTED]
-    - done: false
+    - done: true
       test: pytest -k test_rate_limit_login_5_per_minute
       text: POST /api/v1/auth/_smoke_login 6 vezes em <1min retorna 429 na 6a com code=RATE_LIMITED
-    - done: false
+    - done: true
       test: pytest -k test_current_terceiro_valid_token or test_current_terceiro_missing_header or test_current_terceiro_expired_token
       text: CurrentTerceiroDep com Bearer valido retorna Terceiro ORM; sem header retorna 401; token expirado retorna 401 — todos com shape padronizado
-    - done: false
+    - done: true
       test: pytest --cov=app/core --cov-fail-under=80
       text: Suite completa passa com cobertura >= 80% no app/core/
-    - done: false
+    - done: true
       test: grep -E 'router_dev|dev_mode' apps/api/app/main.py
       text: Fundacao registra apenas as rotas smoke em dev (auth/_smoke_login + _auth_smoke nao expostas em prod)
-    - done: false
+    - done: true
       test: grep -E 'min_length=8' apps/api/app/modules/sistema/router.py
       text: Pydantic forca senha min_length=8 nas entradas do dominio (validador documentado em _SmokeLoginBody)
 deps: []
@@ -52,14 +52,14 @@ n45_version: 0.2.0
 persona: backend
 phase: Phase 3 — Backend por Domínio
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
-    green: false
-    red: false
-    refactor: false
+    green: true
+    red: true
+    refactor: true
 tests: pytest tests/test_security_password.py tests/test_security_jwt.py tests/test_errors_handler.py tests/test_security_middleware.py tests/test_audit.py tests/test_logging_redact.py tests/test_rate_limit.py tests/test_deps_current_terceiro.py -v
 title: 'Fundação Backend: errors padronizados, security (Argon2id + JWT rotation), middleware (CSP/Host/headers), rate limit slowapi, structlog redact, audit log helper, deps central'
-updated_at: "2026-05-28 09:19:57"
+updated_at: "2026-05-28 10:02:51"
 ---
 ## Contexto
 
