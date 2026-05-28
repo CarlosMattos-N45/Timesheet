@@ -3,64 +3,64 @@ checkpoint: null
 complexity: G
 created_at: "2026-05-28 09:35:58"
 criteria:
-    - done: false
+    - done: true
       test: pytest -k test_list_jornadas_returns_month_with_totals
       text: GET /api/v1/jornadas?mes=2026-05 retorna JornadasMesResponse com total_horas_mes_s somando jornadas completas e tem_marcacao_pendente true se EXISTS marcacao.status=PENDENTE
-    - done: false
+    - done: true
       test: pytest -k test_list_jornadas_empty_returns_zero_total
       text: GET /jornadas?mes=YYYY-MM sem jornadas retorna total=0 e jornadas=[]
-    - done: false
+    - done: true
       test: pytest -k test_list_jornadas_invalid_mes_returns_422
       text: GET /jornadas?mes=invalid retorna 422
-    - done: false
+    - done: true
       test: pytest -k test_get_jornada_detalhe
       text: GET /api/v1/jornadas/{id} carrega marcacoes (4) + atividade + justificativas + total_horas_apuradas_s eager-loaded
-    - done: false
+    - done: true
       test: pytest -k test_put_jornada_ajusta_marcacoes_cria_justif_e_audit
       text: PUT /api/v1/jornadas/{id} valido atualiza marcacoes (origem=AJUSTE_WEB), status=AJUSTADA_MANUALMENTE, cria Justificativa e LogAuditoria(entidade=Jornada)
-    - done: false
+    - done: true
       test: pytest -k test_put_jornada_motivo_short_returns_422
       text: PUT /jornadas com motivo<5 retorna 422
-    - done: false
+    - done: true
       test: pytest -k test_get_jornada_inexistente_returns_404
       text: GET /jornadas/{id} inexistente retorna 404
-    - done: false
+    - done: true
       test: pytest -k test_post_jornada_manual_creates_all
       text: POST /api/v1/jornadas/manual valido em dia sem jornada cria Jornada(AJUSTADA_MANUALMENTE) + 4 Marcacoes(AJUSTE_WEB) + 1 Atividade + 1 Justificativa + 1 LogAuditoria(Jornada)
-    - done: false
+    - done: true
       test: pytest -k test_post_jornada_manual_in_existing_day_returns_409
       text: POST /jornadas/manual em dia ja com jornada retorna 409 CONFLICT
-    - done: false
+    - done: true
       test: pytest -k test_post_jornada_manual_rejects_only_3_marcacoes
       text: POST /jornadas/manual com 3 marcacoes retorna 422
-    - done: false
+    - done: true
       test: pytest -k test_post_jornada_manual_rejects_short_atividade
       text: POST /jornadas/manual com atividade<10 chars retorna 422
-    - done: false
+    - done: true
       test: pytest -k test_post_jornada_manual_rejects_non_chronological
       text: POST /jornadas/manual com horarios fora de ordem cronologica retorna 422
-    - done: false
+    - done: true
       test: pytest -k test_post_atividade_creates_and_audits
       text: POST /api/v1/jornadas/{id}/atividade em jornada sem atividade cria Atividade + LogAuditoria(entidade=Atividade, antes_json=null)
-    - done: false
+    - done: true
       test: pytest -k test_post_atividade_updates_existing
       text: POST /atividade em jornada com atividade existente atualiza descricao + atualizado_em e cria 2 LogAuditoria (a 2a com antes_json populado)
-    - done: false
+    - done: true
       test: pytest -k test_post_atividade_short_returns_422
       text: POST /atividade com descricao<10 retorna 422
-    - done: false
+    - done: true
       test: pytest -k test_get_auditoria_filters_and_orders_desc
       text: GET /api/v1/auditoria?entidade=Jornada&entidade_id=<id> retorna lista ordenada por criado_em DESC
-    - done: false
+    - done: true
       test: pytest -k test_get_auditoria_invalid_entidade_returns_422
       text: GET /auditoria com entidade fora de {Jornada,Marcacao,Terceiro,Atividade} retorna 422
-    - done: false
+    - done: true
       test: pytest -k test_get_auditoria_requires_auth
       text: GET /auditoria sem auth retorna 401
-    - done: false
+    - done: true
       test: pytest --cov=app/modules/jornadas --cov=app/modules/atividades --cov=app/modules/justificativas --cov=app/modules/auditoria --cov-fail-under=80
       text: Cobertura >= 80% em apps/api/app/modules/{jornadas,atividades,justificativas,auditoria}
-    - done: false
+    - done: true
       test: grep -E '^class (Jornada|Atividade|Justificativa|Auditoria)Repository' apps/api/app/modules/jornadas/repository.py apps/api/app/modules/atividades/repository.py apps/api/app/modules/justificativas/repository.py apps/api/app/modules/auditoria/repository.py
       text: 'Repository pattern: JornadaRepository, AtividadeRepository, JustificativaRepository, AuditoriaRepository definidos como classes Python'
 deps:
@@ -72,14 +72,14 @@ n45_version: 0.2.0
 persona: backend
 phase: Phase 3 — Backend por Domínio
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
-    green: false
-    red: false
-    refactor: false
+    green: true
+    red: true
+    refactor: true
 tests: pytest tests/test_jornadas_list.py tests/test_jornadas_detail_and_put.py tests/test_jornadas_manual.py tests/test_atividade.py tests/test_auditoria_get.py -v
 title: 'Jornadas + Atividades + Justificativas + Auditoria: GET mês/detalhe, PUT (ajuste+audit+justif), POST manual (4 marcações AJUSTE_WEB), POST atividade (upsert+audit), GET /auditoria'
-updated_at: "2026-05-28 09:35:58"
+updated_at: "2026-05-28 11:20:41"
 ---
 ## Contexto
 
