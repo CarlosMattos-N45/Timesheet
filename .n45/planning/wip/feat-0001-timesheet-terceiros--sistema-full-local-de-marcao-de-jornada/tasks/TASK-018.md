@@ -3,49 +3,49 @@ checkpoint: null
 complexity: G
 created_at: "2026-05-28 09:40:13"
 criteria:
-    - done: false
+    - done: true
       test: pytest -k test_gerar_pdf_cria_arquivo_e_relatorio_gerado
       text: gerar_pdf gera bytes PDF (inicia com %PDF) e persiste RelatorioGerado(mes_referencia, caminho_arquivo, gerado_em, invalidado_em=null)
-    - done: false
+    - done: true
       test: pytest -k test_gerar_pdf_sem_jornadas_levanta_no_data
       text: gerar_pdf de mês sem jornadas levanta DomainError code=NO_DATA http_status=422
-    - done: false
+    - done: true
       test: pytest -k test_invalidacao_seta_invalidado_em_ao_mutar_jornada
       text: Mutação em Jornada/Marcacao/Atividade do mês X dispara after_flush listener e seta relatorio_gerado(mes=X).invalidado_em
-    - done: false
+    - done: true
       test: pytest -k test_get_relatorio_returns_pdf
       text: GET /api/v1/relatorios/{mes} retorna FileResponse application/pdf com body iniciando em %PDF (gera on-demand se ausente ou invalidado)
-    - done: false
+    - done: true
       test: pytest -k test_get_relatorio_meta
       text: GET /relatorios/{mes}/meta retorna {mes_referencia,caminho_arquivo,gerado_em,invalidado_em} apos geração
-    - done: false
+    - done: true
       test: pytest -k test_post_enviar_sem_smtp_returns_422
       text: POST /relatorios/{mes}/enviar sem SmtpConfig retorna 422 code=SMTP_NOT_CONFIGURED
-    - done: false
+    - done: true
       test: pytest -k test_post_enviar_success_with_mailhog
       text: POST /relatorios/{mes}/enviar com SMTP configurado (Mailhog) retorna 202 status=SUCESSO e cria HistoricoEnvioRelatorio(SUCESSO) (ou skip se Mailhog ausente)
-    - done: false
+    - done: true
       test: pytest -k test_post_enviar_failure_records_historico_falha
       text: POST /relatorios/{mes}/enviar com host inalcancavel retorna 500 code=SMTP_SEND_FAILED e cria HistoricoEnvioRelatorio(FALHA, erro_mensagem)
-    - done: false
+    - done: true
       test: pytest -k test_get_historico_orders_desc
       text: GET /relatorios/{mes}/historico retorna lista ordenada enviado_em DESC
-    - done: false
+    - done: true
       test: pytest -k test_scheduler_jobs_registered_when_enabled
       text: build_scheduler com TIMESHEET_SCHEDULER_ENABLED=true registra jobs relatorios_mensal (cron dia 1 00:00 BRT) e relatorios_purge (cron domingo 02:00)
-    - done: false
+    - done: true
       test: pytest -k test_scheduler_disabled_when_flag_false
       text: build_scheduler com TIMESHEET_SCHEDULER_ENABLED=false NAO registra jobs
-    - done: false
+    - done: true
       test: pytest -k test_purge_remove_arquivos_e_relatorios_antigos
       text: purge_old_pdfs remove RelatorioGerado com gerado_em > 24 meses + arquivo físico; preserva recentes
-    - done: false
+    - done: true
       test: pytest --cov=app/modules/relatorios --cov-fail-under=80
       text: Cobertura >= 80% em apps/api/app/modules/relatorios
-    - done: false
+    - done: true
       test: grep -E 'wait_for.*timeout=120|smtp_timeout' apps/api/app/modules/relatorios/pdf.py apps/api/app/modules/relatorios/smtp_send.py
       text: WeasyPrint chamado via asyncio.wait_for(timeout=120) e SMTP via timeout=30 (settings.smtp_timeout)
-    - done: false
+    - done: true
       test: grep -E '^class (Relatorio|HistoricoEnvio)Repository' apps/api/app/modules/relatorios/repository.py
       text: 'Repository pattern: RelatorioRepository e HistoricoEnvioRepository definidos como classes'
 deps:
@@ -58,14 +58,14 @@ n45_version: 0.2.0
 persona: backend
 phase: Phase 3 — Backend por Domínio
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
-    green: false
-    red: false
-    refactor: false
+    green: true
+    red: true
+    refactor: true
 tests: pytest tests/test_relatorios_pdf.py tests/test_relatorios_endpoints.py tests/test_scheduler.py -v
 title: 'Relatorios + APScheduler + PDF WeasyPrint + SMTP send: GET/POST endpoints, cron mensal/purge, invalidação via after_flush, retry 3x backoff'
-updated_at: "2026-05-28 09:40:13"
+updated_at: "2026-05-28 12:04:35"
 ---
 ## Contexto
 
