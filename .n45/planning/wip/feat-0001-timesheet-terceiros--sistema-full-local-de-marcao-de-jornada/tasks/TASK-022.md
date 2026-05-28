@@ -48,12 +48,9 @@ tdd:
     refactor: false
 tests: cd apps/web && npm test -- --run src/pages/Privacidade/PrivacidadePage.test.tsx
 title: 'Privacidade: pagina /privacidade one-time (RF-012) com checkbox de aceite e POST /aceitar; invalida cache para PrivacyGuard redirecionar'
-updated_at: "2026-05-28 13:30:23"
-worktree:
-    base_sha: 4322b5e75dde3e6501c193d809631f12a065fa49
-    branch: worktree-agent-f8944c2dca99aa96
-    path: .n45\worktree\agent-f8944c2dca99aa96
+updated_at: "2026-05-28 17:08:10"
 ---
+
 ## Contexto
 
 Implementar a página `/privacidade` (RF-012 + LGPD art. 7, VI) — modal/tela one-time exibida no primeiro acesso autenticado. Slice: componente + página + integração com `GET /api/v1/privacidade` (status) e `POST /api/v1/privacidade/aceitar` + substituição do stub em `routes.tsx`.
