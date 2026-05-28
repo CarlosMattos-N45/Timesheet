@@ -58,7 +58,10 @@ def create_app() -> FastAPI:
             },
         )
 
+    from app.modules.atividades.router import router as atividades_router
+    from app.modules.auditoria.router import router as auditoria_router
     from app.modules.auth.router import router as auth_router
+    from app.modules.jornadas.router import router as jornadas_router
     from app.modules.marcacoes.router import router as marcacoes_router
     from app.modules.privacidade.router import router as privacidade_router
     from app.modules.smtp.router import router as smtp_router
@@ -70,6 +73,9 @@ def create_app() -> FastAPI:
     app.include_router(privacidade_router)
     app.include_router(smtp_router)
     app.include_router(marcacoes_router)
+    app.include_router(jornadas_router)
+    app.include_router(atividades_router)
+    app.include_router(auditoria_router)
 
     # Apply rate limits to auth endpoints
     limiter = app.state.limiter
