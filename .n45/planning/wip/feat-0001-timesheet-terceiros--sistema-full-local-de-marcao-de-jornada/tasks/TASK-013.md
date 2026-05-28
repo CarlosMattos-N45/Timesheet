@@ -3,49 +3,49 @@ checkpoint: null
 complexity: G
 created_at: "2026-05-28 09:24:05"
 criteria:
-    - done: false
+    - done: true
       test: pytest -k test_post_terceiros_creates_first_terceiro or test_post_terceiros_second_call_returns_setup_already_done
       text: POST /api/v1/terceiros em banco vazio cria Terceiro (201, terceiro_id+criado_em, sem access_token) e segundo POST retorna 403 SETUP_ALREADY_DONE
-    - done: false
+    - done: true
       test: pytest -k test_post_terceiros_rejects_invalid_cnpj
       text: POST /terceiros com CNPJ digito verificador invalido retorna 422 com details.field=body.empresa_cnpj
-    - done: false
+    - done: true
       test: pytest -k test_post_terceiros_rejects_non_chronological_horarios
       text: POST /terceiros com horarios fora de ordem cronologica retorna 422
-    - done: false
+    - done: true
       test: pytest -k test_post_terceiros_rejects_mismatched_passwords
       text: POST /terceiros com senha != senha_confirmacao retorna 422 com field contendo senha_confirmacao
-    - done: false
+    - done: true
       test: pytest -k test_login_success_returns_token_pair or test_login_invalid_password or test_login_unknown_email
       text: POST /auth/login credenciais validas retorna {access_token,refresh_token,terceiro_id,expires_in=900}; senha errada retorna 401 com code=UNAUTHORIZED message E-mail ou senha invalidos
-    - done: false
+    - done: true
       test: pytest -k test_login_rate_limit_5_per_minute
       text: POST /auth/login 6 vezes em <60s retorna 429 RATE_LIMITED na 6a
-    - done: false
+    - done: true
       test: pytest -k test_refresh_returns_new_pair_and_revokes_old
       text: POST /auth/refresh com refresh valido retorna novo par e revoga o antigo (RefreshToken anterior fica com revogado_em populado, novo ativo)
-    - done: false
+    - done: true
       test: pytest -k test_refresh_reuse_revokes_full_chain
       text: Reuso de refresh ja revogado em /auth/refresh retorna 401 e marca TODOS RefreshToken do terceiro como revogados
-    - done: false
+    - done: true
       test: pytest -k test_logout_revokes_current_refresh
       text: POST /auth/logout autenticado revoga o RefreshToken passado no body (204)
-    - done: false
+    - done: true
       test: pytest -k test_get_me_returns_terceiro_without_senha_hash or test_get_me_without_auth_401
       text: GET /terceiros/me autenticado retorna TerceiroResponse sem senha_hash; sem auth retorna 401
-    - done: false
+    - done: true
       test: pytest -k test_put_me_updates_and_creates_audit_log
       text: PUT /terceiros/me atualiza Terceiro, persiste atualizado_em novo, e insere 1 LogAuditoria com entidade=Terceiro autor=email do terceiro
-    - done: false
+    - done: true
       test: pytest -k test_put_me_senha_revokes_all_refresh_tokens
       text: PUT /terceiros/me/senha senha atual correta + nova >=8 chars retorna 204 e revoga TODOS RefreshToken do terceiro na mesma transacao
-    - done: false
+    - done: true
       test: pytest -k test_put_me_senha_with_wrong_current_returns_401
       text: PUT /terceiros/me/senha com senha atual errada retorna 401 code=UNAUTHORIZED message=Senha atual incorreta
-    - done: false
+    - done: true
       test: pytest --cov=app/modules/auth --cov=app/modules/terceiros --cov-fail-under=80
       text: Cobertura >= 80% em apps/api/app/modules/auth e apps/api/app/modules/terceiros
-    - done: false
+    - done: true
       test: grep -E '^class (Terceiro|Auth)Repository' apps/api/app/modules/terceiros/repository.py apps/api/app/modules/auth/repository.py
       text: 'Repository pattern: classes TerceiroRepository e AuthRepository definidas em repository.py (nao modulo de funcoes)'
 deps:
@@ -56,14 +56,14 @@ n45_version: 0.2.0
 persona: backend
 phase: Phase 3 — Backend por Domínio
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
-    green: false
-    red: false
-    refactor: false
+    green: true
+    red: true
+    refactor: true
 tests: pytest tests/test_terceiros_post.py tests/test_auth_login.py tests/test_auth_refresh_logout.py tests/test_terceiros_me.py -v
 title: 'Auth + Terceiros: POST /terceiros (single-tenant guard), /auth/login (rate-limit 5/min), /auth/refresh (rotation + chain revoke), /auth/logout, GET/PUT /terceiros/me, PUT /me/senha (revoga refresh tokens)'
-updated_at: "2026-05-28 09:24:05"
+updated_at: "2026-05-28 10:30:37"
 ---
 ## Contexto
 
