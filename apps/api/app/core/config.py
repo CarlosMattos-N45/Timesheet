@@ -48,6 +48,22 @@ class Settings(BaseSettings):
         default="./data/key.kek",
         validation_alias=AliasChoices("TIMESHEET_KEK_PATH", "kek_path"),
     )
+    pdf_dir: str = Field(
+        default="./data/pdfs",
+        validation_alias=AliasChoices("TIMESHEET_PDF_DIR", "pdf_dir"),
+    )
+    scheduler_enabled: bool = Field(
+        default=True,
+        validation_alias=AliasChoices("TIMESHEET_SCHEDULER_ENABLED", "scheduler_enabled"),
+    )
+    scheduler_jobstore: str = Field(
+        default="./data/scheduler.sqlite",
+        validation_alias=AliasChoices("TIMESHEET_SCHEDULER_JOBSTORE", "scheduler_jobstore"),
+    )
+    smtp_timeout: int = Field(
+        default=30,
+        validation_alias=AliasChoices("TIMESHEET_SMTP_TIMEOUT", "smtp_timeout"),
+    )
 
     @field_validator("db_cipher_key")
     @classmethod

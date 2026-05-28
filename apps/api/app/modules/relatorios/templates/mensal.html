@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"/>
+<style>
+  body { font-family: sans-serif; font-size: 11px; }
+  h1 { font-size: 18px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+  th, td { border: 1px solid #ccc; padding: 4px 8px; text-align: left; }
+  th { background: #eee; }
+  .ajustada { background: #fff8e1; }
+  .totais { margin-top: 20px; font-weight: bold; }
+</style></head><body>
+<h1>Relatório Mensal — {{ mes_referencia }}</h1>
+<p><b>{{ terceiro.nome }}</b> · {{ terceiro.empresa_nome }} · CNPJ {{ terceiro.empresa_cnpj }}</p>
+<table>
+  <thead><tr>
+    <th>Data</th><th>Dia</th>
+    <th>Início</th><th>Saída Almoço</th><th>Retorno Almoço</th><th>Fim</th>
+    <th>Total</th><th>Status</th>
+  </tr></thead>
+  <tbody>
+  {% for j in jornadas %}
+    <tr class="{{ 'ajustada' if j.status == 'AJUSTADA_MANUALMENTE' else '' }}">
+      <td>{{ j.data }}</td>
+      <td>{{ j.dia_semana }}</td>
+      <td>{{ j.horarios.get('INICIO_JORNADA', '—') }}</td>
+      <td>{{ j.horarios.get('SAIDA_ALMOCO', '—') }}</td>
+      <td>{{ j.horarios.get('RETORNO_ALMOCO', '—') }}</td>
+      <td>{{ j.horarios.get('FIM_JORNADA', '—') }}</td>
+      <td>{{ j.total_str }}</td>
+      <td>{{ j.status }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<p class="totais">Total mensal: {{ total_mes_str }}</p>
+<h2>Atividades</h2>
+{% for j in jornadas %}{% if j.atividade %}
+<p><b>{{ j.data }}:</b> {{ j.atividade }}</p>
+{% endif %}{% endfor %}
+</body></html>

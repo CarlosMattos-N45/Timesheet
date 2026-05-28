@@ -28,7 +28,14 @@ async def _lifespan(app: FastAPI) -> AsyncIterator[None]:  # noqa: ARG001
     from app.core import crypto_state
 
     crypto_state.configure()
+    from app.modules.relatorios.invalidation import register_invalidation_listener
+
+    register_invalidation_listener()
+    from app.modules.relatorios.scheduler import start_scheduler, stop_scheduler
+
+    start_scheduler()
     yield
+    stop_scheduler()
     await dispose_engine()
 
 
@@ -64,6 +71,7 @@ def create_app() -> FastAPI:
     from app.modules.jornadas.router import router as jornadas_router
     from app.modules.marcacoes.router import router as marcacoes_router
     from app.modules.privacidade.router import router as privacidade_router
+    from app.modules.relatorios.router import router as relatorios_router
     from app.modules.smtp.router import router as smtp_router
     from app.modules.terceiros.router import router as terceiros_router
 
@@ -76,6 +84,7 @@ def create_app() -> FastAPI:
     app.include_router(jornadas_router)
     app.include_router(atividades_router)
     app.include_router(auditoria_router)
+    app.include_router(relatorios_router)
 
     # Apply rate limits to auth endpoints
     limiter = app.state.limiter
