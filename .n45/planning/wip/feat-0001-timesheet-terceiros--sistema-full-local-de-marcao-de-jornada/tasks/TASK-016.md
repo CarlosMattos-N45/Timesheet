@@ -54,15 +54,16 @@ n45_version: 0.2.0
 persona: backend
 phase: Phase 3 — Backend por Domínio
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
     green: false
     red: false
     refactor: false
 tests: pytest tests/test_marcacoes_post.py tests/test_marcacoes_put.py -v
 title: 'Marcacoes: POST/GET/PUT com idempotency, auto-criação de jornada, RN-012 (AJUSTE_WEB_WINS), weekend check, audit log no PUT'
-updated_at: "2026-05-28 09:31:12"
+updated_at: "2026-05-28 10:57:13"
 ---
+
 ## Contexto
 
 Esta task entrega o **slice vertical do domínio Marcações** — o coração do contrato Agente↔Backend. O Agente .NET envia `POST /api/v1/marcacoes` para cada uma das 4 marcações da jornada do dia (`INICIO_JORNADA`, `SAIDA_ALMOCO`, `RETORNO_ALMOCO`, `FIM_JORNADA`), com `idempotency_key` (UUID v4 = id local no Agente) para tolerar retries do Polly.

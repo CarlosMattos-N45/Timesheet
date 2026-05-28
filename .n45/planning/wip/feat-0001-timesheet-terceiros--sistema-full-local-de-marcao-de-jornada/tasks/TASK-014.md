@@ -39,15 +39,16 @@ n45_version: 0.2.0
 persona: backend
 phase: Phase 3 — Backend por Domínio
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
     green: false
     red: false
     refactor: false
 tests: pytest tests/test_privacidade.py -v
 title: 'Privacidade: GET /api/v1/privacidade + POST /aceitar (singleton, versão atual 1.0, idempotente, upsert em versão antiga)'
-updated_at: "2026-05-28 09:25:36"
+updated_at: "2026-05-28 10:57:05"
 ---
+
 ## Contexto
 
 Esta task entrega o **slice vertical do domínio Privacidade** — gerenciamento do aviso de privacidade one-time exigido por LGPD (RF-012). O domínio é singleton: a tabela `privacy_acceptance` tem `id=1` (CHECK constraint) e armazena `aceito_em` + `versao_aviso` (ex: `"1.0"` — permite re-exibição futura quando o texto muda).

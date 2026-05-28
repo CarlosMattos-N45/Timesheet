@@ -48,15 +48,16 @@ n45_version: 0.2.0
 persona: backend
 phase: Phase 3 — Backend por Domínio
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
     green: false
     red: false
     refactor: false
 tests: pytest tests/test_smtp.py -v
 title: 'SMTP Config: GET/PUT /api/v1/smtp + POST /test, AES-GCM em username_enc/password_enc, crypto_state.SUBKEY_SMTP global no lifespan'
-updated_at: "2026-05-28 09:27:52"
+updated_at: "2026-05-28 10:57:09"
 ---
+
 ## Contexto
 
 Esta task entrega o **slice vertical do domínio SMTP Config** — gerenciamento da configuração SMTP que será consumida pela TASK-018 (Relatórios) para enviar o PDF mensal por e-mail.
