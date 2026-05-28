@@ -65,7 +65,11 @@ tdd:
     refactor: false
 tests: cd apps/web && npm test -- --run src/pages/Relatorios/RelatoriosPage.test.tsx src/pages/Configuracoes/SmtpConfigPage.test.tsx
 title: 'Relatorios + SMTP Config (RF-008): /relatorios com iframe PDF, badge invalidado_em (PDF desatualizado), historico de envios, regenerar; /configuracoes/smtp com get/put/test; move EnviarRelatorioDialog para components'
-updated_at: "2026-05-28 12:56:49"
+updated_at: "2026-05-28 17:11:33"
+worktree:
+    base_sha: 97c5df6c408d6d906ae705d6822af000c61c8f1d
+    branch: worktree-agent-31f8867382b3b372
+    path: .n45\worktree\agent-31f8867382b3b372
 ---
 ## Contexto
 

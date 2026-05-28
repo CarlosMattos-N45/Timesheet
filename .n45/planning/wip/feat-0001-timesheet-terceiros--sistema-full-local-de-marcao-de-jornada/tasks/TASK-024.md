@@ -55,7 +55,11 @@ tdd:
     refactor: false
 tests: cd apps/web && npm test -- --run src/pages/JornadaDetalhe/JornadaDetalhePage.test.tsx
 title: 'Jornada Detalhe (RF-007.2 + RF-007.4 + RF-010): edicao de horarios com modal de justificativa, atividade inline, accordion auditoria lazy, banner PENDENTE'
-updated_at: "2026-05-28 12:47:20"
+updated_at: "2026-05-28 17:11:30"
+worktree:
+    base_sha: 97c5df6c408d6d906ae705d6822af000c61c8f1d
+    branch: worktree-agent-0099e733654af41c
+    path: .n45\worktree\agent-0099e733654af41c
 ---
 ## Contexto
 
