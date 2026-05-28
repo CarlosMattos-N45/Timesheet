@@ -1,11 +1,21 @@
-import { Container, Typography } from "@mui/material";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { RouterProvider } from "react-router-dom";
+import { AuthProvider } from "@/auth/AuthContext";
+import { router } from "@/routes";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { staleTime: 30_000, refetchOnWindowFocus: false, retry: 1 },
+    mutations: { retry: 0 },
+  },
+});
 
 export default function App() {
   return (
-    <Container maxWidth="md" sx={{ mt: 4 }}>
-      <Typography variant="h4" component="h1">
-        TimeSheet Terceiros
-      </Typography>
-    </Container>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }

@@ -1,24 +1,32 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
-import App from "./App";
+import { createMemoryRouter, RouterProvider } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ThemeProvider, createTheme } from "@mui/material";
+import { AuthProvider } from "@/auth/AuthContext";
+import { router as appRouter } from "@/routes";
 
-describe("App", () => {
-  it("renderiza o título do produto como heading h1", () => {
-    render(<App />);
-    const heading = screen.getByRole("heading", {
-      level: 1,
-      name: /TimeSheet Terceiros/i,
-    });
-    expect(heading).toBeInTheDocument();
-  });
+// O router de produção usa createBrowserRouter, incompatível com jsdom em testes.
+// Recriamos as routes com createMemoryRouter para testar o comportamento de roteamento.
+const testRouter = createMemoryRouter(appRouter.routes, { initialEntries: ["/login"] });
+const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+const theme = createTheme({ palette: { mode: "light" } });
 
-  it("usa Typography do MUI no heading", () => {
-    render(<App />);
-    const heading = screen.getByRole("heading", {
-      level: 1,
-      name: /TimeSheet Terceiros/i,
-    });
-    // MUI Typography variant=h4 aplica classe que começa com "MuiTypography"
-    expect(heading.className).toMatch(/MuiTypography/);
+function TestApp() {
+  return (
+    <ThemeProvider theme={theme}>
+      <QueryClientProvider client={qc}>
+        <AuthProvider>
+          <RouterProvider router={testRouter} />
+        </AuthProvider>
+      </QueryClientProvider>
+    </ThemeProvider>
+  );
+}
+
+describe("App (via routes)", () => {
+  it("renderiza a tela de Login (stub) na rota inicial /login", () => {
+    render(<TestApp />);
+    expect(screen.getByRole("heading", { name: /Login/i })).toBeInTheDocument();
   });
 });
