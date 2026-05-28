@@ -3,9 +3,7 @@ import { ProtectedRoute } from "@/routes/ProtectedRoute";
 import { PrivacyGuard } from "@/routes/PrivacyGuard";
 import { AppLayout } from "@/components/AppLayout";
 import { LoginPage } from "@/pages/Login/LoginPage";
-import {
-  JornadaManualPageStub,
-} from "@/routes/PageStubs";
+import { JornadaManualPage } from "@/pages/JornadaManual/JornadaManualPage";
 import { JornadaDetalhePage } from "@/pages/JornadaDetalhe/JornadaDetalhePage";
 import { CadastroPage } from "@/pages/Cadastro/CadastroPage";
 import { SenhaPage } from "@/pages/Cadastro/SenhaPage";
@@ -28,7 +26,7 @@ export const router = createBrowserRouter([
             element: <AppLayout />,
             children: [
               { path: "/jornadas", element: <JornadasPage /> },
-              { path: "/jornadas/manual", element: <JornadaManualPageStub /> },
+              { path: "/jornadas/manual", element: <JornadaManualPage /> },
               { path: "/jornadas/:id", element: <JornadaDetalhePage /> },
               { path: "/cadastro", element: <CadastroPage /> },
               { path: "/cadastro/senha", element: <SenhaPage /> },

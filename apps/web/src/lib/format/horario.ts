@@ -7,7 +7,17 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.locale("pt-br");
 
+export default dayjs;
+
 const TZ_BR = "America/Sao_Paulo";
+
+/**
+ * Converte data "YYYY-MM-DD" + horário "HH:MM" em ISO UTC string,
+ * interpretando o horário no fuso America/Sao_Paulo.
+ */
+export function horarioParaIsoUtc(data: string, horarioHHmm: string): string {
+  return dayjs.tz(`${data}T${horarioHHmm}:00`, TZ_BR).utc().toISOString();
+}
 
 export function formatHoraBR(isoUtc: string | null): string {
   if (!isoUtc) return "—";
