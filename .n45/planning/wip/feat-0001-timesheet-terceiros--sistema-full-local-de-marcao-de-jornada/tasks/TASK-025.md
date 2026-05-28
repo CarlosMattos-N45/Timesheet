@@ -49,7 +49,11 @@ tdd:
     refactor: false
 tests: cd apps/web && npm test -- --run src/pages/JornadaManual/JornadaManualPage.test.tsx
 title: 'Jornada Manual (RF-007.3): pagina /jornadas/manual com DatePicker (maxDate=today), 4 TimePickers cronologicos, atividade>=10, motivo>=5, preview de total, POST /jornadas/manual, navegacao para detalhe'
-updated_at: "2026-05-28 12:49:57"
+updated_at: "2026-05-28 17:56:43"
+worktree:
+    base_sha: 81a15722cd113b86fa309ef5e318bb255d02174b
+    branch: worktree-agent-475e4fba7c46665d
+    path: .n45\worktree\agent-475e4fba7c46665d
 ---
 ## Contexto
 
