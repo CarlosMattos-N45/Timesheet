@@ -108,6 +108,29 @@ describe("JornadasPage", () => {
     expect(window.location.pathname).toContain("/jornadas/abc-123");
   });
 
+  it("Baixar PDF habilitado com jornadas cria link e dispara click", async () => {
+    mock.onGet("/api/v1/jornadas").reply(200, {
+      mes_referencia: "2026-05",
+      total_horas_mes_s: 28800,
+      jornadas: [{
+        id: "j1", data: "2026-05-27", status: "FECHADA",
+        total_horas_apuradas_s: 28800, tem_marcacao_pendente: false,
+        horario_inicio: "2026-05-27T12:00:00+00:00",
+        horario_saida_almoco: "2026-05-27T15:00:00+00:00",
+        horario_retorno_almoco: "2026-05-27T16:00:00+00:00",
+        horario_fim: "2026-05-27T21:00:00+00:00",
+      }],
+    });
+    mock.onGet("/api/v1/terceiros/me").reply(200, { id: "u1", nome: "Maria", email_destinatario_relatorio: null });
+    const appendSpy = vi.spyOn(document.body, "appendChild");
+    renderWithProviders(<JornadasPage />, { route: "/jornadas" });
+    const btn = await screen.findByRole("button", { name: /Baixar PDF/i });
+    expect(btn).not.toBeDisabled();
+    await userEvent.click(btn);
+    expect(appendSpy).toHaveBeenCalled();
+    appendSpy.mockRestore();
+  });
+
   it("Baixar PDF desabilitado quando 0 jornadas, com tooltip 'Nenhuma jornada no mês'", async () => {
     mock.onGet("/api/v1/jornadas").reply(200, { mes_referencia: "2026-05", total_horas_mes_s: 0, jornadas: [] });
     mock.onGet("/api/v1/terceiros/me").reply(200, { id: "u1", nome: "Maria", email_destinatario_relatorio: null });
@@ -164,6 +187,9 @@ describe("JornadasPage", () => {
     await userEvent.click(await screen.findByRole("button", { name: /Enviar por e-mail/i }));
     await userEvent.click(screen.getByRole("button", { name: /^Enviar$/ }));
     expect(await screen.findByText(/SMTP não configurado\./i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Configurar agora/i })).toBeInTheDocument();
+    const configurarBtn = screen.getByRole("button", { name: /Configurar agora/i });
+    expect(configurarBtn).toBeInTheDocument();
+    await userEvent.click(configurarBtn);
+    expect(window.location.pathname).toBe("/configuracoes/smtp");
   });
 });

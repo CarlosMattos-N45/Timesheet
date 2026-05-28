@@ -25,6 +25,10 @@ export function formatData(yyyymmdd: string): string {
   return dayjs(yyyymmdd).format("DD/MM");
 }
 
+export function formatDataHoraBR(isoUtc: string): string {
+  return dayjs(isoUtc).tz(TZ_BR).format("DD/MM/YYYY HH:mm");
+}
+
 const DIAS_SEMANA = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab"] as const;
 export function formatDiaSemana(yyyymmdd: string): string {
   const d = dayjs(yyyymmdd).day(); // 0..6

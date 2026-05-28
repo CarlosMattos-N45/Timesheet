@@ -5,14 +5,14 @@ import { AppLayout } from "@/components/AppLayout";
 import { LoginPage } from "@/pages/Login/LoginPage";
 import {
   JornadaManualPageStub,
-  RelatoriosPageStub,
-  SmtpConfigPageStub,
 } from "@/routes/PageStubs";
 import { JornadaDetalhePage } from "@/pages/JornadaDetalhe/JornadaDetalhePage";
 import { CadastroPage } from "@/pages/Cadastro/CadastroPage";
 import { SenhaPage } from "@/pages/Cadastro/SenhaPage";
 import { PrivacidadePage } from "@/pages/Privacidade/PrivacidadePage";
 import { JornadasPage } from "@/pages/Jornadas/JornadasPage";
+import { RelatoriosPage } from "@/pages/Relatorios/RelatoriosPage";
+import { SmtpConfigPage } from "@/pages/Configuracoes/SmtpConfigPage";
 
 export const router = createBrowserRouter([
   { path: "/", element: <Navigate to="/jornadas" replace /> },
@@ -32,8 +32,8 @@ export const router = createBrowserRouter([
               { path: "/jornadas/:id", element: <JornadaDetalhePage /> },
               { path: "/cadastro", element: <CadastroPage /> },
               { path: "/cadastro/senha", element: <SenhaPage /> },
-              { path: "/relatorios", element: <RelatoriosPageStub /> },
-              { path: "/configuracoes/smtp", element: <SmtpConfigPageStub /> },
+              { path: "/relatorios", element: <RelatoriosPage /> },
+              { path: "/configuracoes/smtp", element: <SmtpConfigPage /> },
             ],
           },
         ],

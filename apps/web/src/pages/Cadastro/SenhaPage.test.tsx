@@ -66,4 +66,22 @@ describe("SenhaPage", () => {
     await userEvent.click(screen.getByRole("button", { name: /Cancelar/i }));
     expect(window.location.pathname).toBe("/cadastro");
   });
+
+  it("senha >= 14 chars exibe indicador Forte", async () => {
+    renderWithProviders(<SenhaPage />, { route: "/cadastro/senha" });
+    await userEvent.type(screen.getByLabelText(/^Nova senha$/i), "SenhaForte123456");
+    expect(await screen.findByText(/Forte/i)).toBeInTheDocument();
+  });
+
+  it("PUT 500 exibe mensagem generica do backend no alert", async () => {
+    mock.onPut("/api/v1/terceiros/me/senha").reply(500, {
+      code: "INTERNAL_ERROR", message: "Erro interno do servidor", details: [],
+    });
+    renderWithProviders(<SenhaPage />, { route: "/cadastro/senha" });
+    await userEvent.type(screen.getByLabelText(/Senha atual/i), "OldPass1");
+    await userEvent.type(screen.getByLabelText(/^Nova senha$/i), "NovaSenha123");
+    await userEvent.type(screen.getByLabelText(/Confirmar nova senha/i), "NovaSenha123");
+    await userEvent.click(screen.getByRole("button", { name: /^Salvar$/ }));
+    expect(await screen.findByText(/Erro interno do servidor/i)).toBeInTheDocument();
+  });
 });

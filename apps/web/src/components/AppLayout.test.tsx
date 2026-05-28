@@ -76,4 +76,40 @@ describe("AppLayout", () => {
     // Drawer fecha após o clique — navigation element becomes hidden
     expect(screen.queryByRole("navigation", { name: /menu principal/i, hidden: false })).not.toBeInTheDocument();
   });
+
+  it("clicar em 'Jornadas' no Drawer navega para /jornadas e fecha o drawer", async () => {
+    mock.onGet("/api/v1/terceiros/me").reply(200, TERCEIRO_MOCK);
+    renderWithProviders(<AppLayout><div>x</div></AppLayout>, { authState: AUTH_STATE });
+    await userEvent.click(screen.getByRole("button", { name: /abrir menu/i }));
+    await userEvent.click(screen.getByRole("button", { name: /^Jornadas$/i }));
+    expect(window.location.pathname).toBe("/jornadas");
+    expect(screen.queryByRole("navigation", { name: /menu principal/i, hidden: false })).not.toBeInTheDocument();
+  });
+
+  it("clicar em 'Nova jornada manual' navega para /jornadas/manual e fecha o drawer", async () => {
+    mock.onGet("/api/v1/terceiros/me").reply(200, TERCEIRO_MOCK);
+    renderWithProviders(<AppLayout><div>x</div></AppLayout>, { authState: AUTH_STATE });
+    await userEvent.click(screen.getByRole("button", { name: /abrir menu/i }));
+    await userEvent.click(screen.getByRole("button", { name: /nova jornada manual/i }));
+    expect(window.location.pathname).toBe("/jornadas/manual");
+    expect(screen.queryByRole("navigation", { name: /menu principal/i, hidden: false })).not.toBeInTheDocument();
+  });
+
+  it("clicar em 'Configurar SMTP' navega para /configuracoes/smtp e fecha o drawer", async () => {
+    mock.onGet("/api/v1/terceiros/me").reply(200, TERCEIRO_MOCK);
+    renderWithProviders(<AppLayout><div>x</div></AppLayout>, { authState: AUTH_STATE });
+    await userEvent.click(screen.getByRole("button", { name: /abrir menu/i }));
+    await userEvent.click(screen.getByRole("button", { name: /configurar smtp/i }));
+    expect(window.location.pathname).toBe("/configuracoes/smtp");
+    expect(screen.queryByRole("navigation", { name: /menu principal/i, hidden: false })).not.toBeInTheDocument();
+  });
+
+  it("clicar em 'Meu cadastro' navega para /cadastro e fecha o drawer", async () => {
+    mock.onGet("/api/v1/terceiros/me").reply(200, TERCEIRO_MOCK);
+    renderWithProviders(<AppLayout><div>x</div></AppLayout>, { authState: AUTH_STATE });
+    await userEvent.click(screen.getByRole("button", { name: /abrir menu/i }));
+    await userEvent.click(screen.getByRole("button", { name: /meu cadastro/i }));
+    expect(window.location.pathname).toBe("/cadastro");
+    expect(screen.queryByRole("navigation", { name: /menu principal/i, hidden: false })).not.toBeInTheDocument();
+  });
 });

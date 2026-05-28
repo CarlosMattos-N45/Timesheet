@@ -23,7 +23,7 @@ import { urlDownloadRelatorio } from "@/api/relatorios";
 import { terceirosKeys, getTerceiroMe } from "@/api/terceiros";
 import type { JornadaResumo } from "@/types/contracts";
 import { formatHoraBR, formatTotal, formatData, formatDiaSemana } from "@/lib/format/horario";
-import { EnviarRelatorioDialog } from "./EnviarRelatorioDialog";
+import { EnviarRelatorioDialog } from "@/components/EnviarRelatorioDialog";
 
 const STATUS_COLOR: Record<
   JornadaResumo["status"],
