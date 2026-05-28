@@ -23,7 +23,7 @@ async def test_openapi_disabled_without_dev_flag(monkeypatch: pytest.MonkeyPatch
     monkeypatch.delenv("TIMESHEET_DEV", raising=False)
     reloaded_app = _reload_app()
     transport = ASGITransport(app=reloaded_app)
-    async with AsyncClient(transport=transport, base_url="http://test") as client:
+    async with AsyncClient(transport=transport, base_url="http://127.0.0.1") as client:
         response = await client.get("/docs")
     assert response.status_code == 404
 
@@ -33,6 +33,6 @@ async def test_openapi_enabled_with_dev_flag(monkeypatch: pytest.MonkeyPatch) ->
     monkeypatch.setenv("TIMESHEET_DEV", "true")
     reloaded_app = _reload_app()
     transport = ASGITransport(app=reloaded_app)
-    async with AsyncClient(transport=transport, base_url="http://test") as client:
+    async with AsyncClient(transport=transport, base_url="http://127.0.0.1") as client:
         response = await client.get("/docs")
     assert response.status_code == 200

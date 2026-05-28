@@ -74,7 +74,7 @@ async def test_dbcheck_endpoint_only_in_dev(db_path: Path, monkeypatch: pytest.M
     config.settings = config.Settings()  # type: ignore[call-arg]
     app: FastAPI = create_app()
     transport = ASGITransport(app=app)
-    async with AsyncClient(transport=transport, base_url="http://t") as client:
+    async with AsyncClient(transport=transport, base_url="http://127.0.0.1") as client:
         r = await client.get("/api/v1/_dbcheck")
         assert r.status_code == 200
         assert r.json() == {"db": "ok", "result": 1}
@@ -91,7 +91,7 @@ async def test_dbcheck_endpoint_absent_in_prod(
     config.settings = config.Settings()  # type: ignore[call-arg]
     app = create_app()
     transport = ASGITransport(app=app)
-    async with AsyncClient(transport=transport, base_url="http://t") as client:
+    async with AsyncClient(transport=transport, base_url="http://127.0.0.1") as client:
         r = await client.get("/api/v1/_dbcheck")
         assert r.status_code == 404
 

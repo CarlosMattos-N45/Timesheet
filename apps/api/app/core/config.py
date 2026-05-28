@@ -29,6 +29,21 @@ class Settings(BaseSettings):
         default=None,
         validation_alias=AliasChoices("TIMESHEET_DB_CIPHER_KEY", "db_cipher_key"),
     )
+    jwt_secret: str = Field(
+        default="dev-only-jwt-secret-min-32-chars-aaaaaaaaaaa",
+        validation_alias=AliasChoices("TIMESHEET_JWT_SECRET", "jwt_secret"),
+    )
+    jwt_algorithm: str = Field(default="HS256")
+    access_token_ttl_seconds: int = Field(default=900)
+    refresh_token_ttl_seconds: int = Field(default=2592000)
+    rate_limit_login: str = Field(
+        default="5/minute",
+        validation_alias=AliasChoices("TIMESHEET_RATE_LIMIT_LOGIN", "rate_limit_login"),
+    )
+    rate_limit_refresh: str = Field(
+        default="10/minute",
+        validation_alias=AliasChoices("TIMESHEET_RATE_LIMIT_REFRESH", "rate_limit_refresh"),
+    )
 
     @field_validator("db_cipher_key")
     @classmethod
@@ -39,6 +54,13 @@ class Settings(BaseSettings):
             raise ValueError(
                 "TIMESHEET_DB_CIPHER_KEY deve ter exatamente 64 caracteres hex (256 bits)"
             )
+        return v
+
+    @field_validator("jwt_secret")
+    @classmethod
+    def _validate_jwt_secret(cls, v: str) -> str:
+        if len(v) < 32:
+            raise ValueError("TIMESHEET_JWT_SECRET deve ter pelo menos 32 caracteres")
         return v
 
     model_config = SettingsConfigDict(env_file=".env", populate_by_name=True)
