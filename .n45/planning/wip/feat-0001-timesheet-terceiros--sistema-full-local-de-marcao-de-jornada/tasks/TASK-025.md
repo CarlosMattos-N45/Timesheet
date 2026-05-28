@@ -3,34 +3,34 @@ checkpoint: null
 complexity: M
 created_at: "2026-05-28 12:49:57"
 criteria:
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/pages/JornadaManual/JornadaManualPage.test.tsx -t "heading h1"
       text: Mount /jornadas/manual renderiza heading h1 Nova Jornada Manual com botao Salvar desabilitado por padrao
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/pages/JornadaManual/JornadaManualPage.test.tsx -t "ISO UTC"
       text: Submit valido com data 2026-05-27 + 4 horarios + atividade>=10 + motivo>=5 chama POST /api/v1/jornadas/manual com data=2026-05-27, 4 marcacoes em ordem (INICIO_JORNADA, SAIDA_ALMOCO, RETORNO_ALMOCO, FIM_JORNADA), horario_efetivo em ISO UTC com offset (09:00 BRT vira T12:00:00, 18:00 vira T21:00:00), e navega para /jornadas/<id_novo>
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/pages/JornadaManual/JornadaManualPage.test.tsx -t "cronologica"
       text: 'Horarios fora de ordem (ex: inicio 14:00 + saida 12:00) exibem helper text exato Os horarios devem ser em ordem cronologica. e desabilitam Salvar'
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/pages/JornadaManual/JornadaManualPage.test.tsx -t "Minimo 10 caracteres"
       text: Atividade <10 chars exibe helper Minimo 10 caracteres e desabilita Salvar
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/pages/JornadaManual/JornadaManualPage.test.tsx -t "CONFLICT"
       text: 409 CONFLICT exibe alert texto exato Ja existe uma jornada para este dia. Abra-a para editar. + link/botao Voltar para Jornadas
-    - done: false
+    - done: true
       test: cd apps/web && npm test -- --run src/pages/JornadaManual/JornadaManualPage.test.tsx -t "Cancelar"
       text: Cancelar navega para /jornadas (window.location.pathname=/jornadas)
-    - done: false
+    - done: true
       text: DatePicker bloqueia datas futuras (maxDate=today)
-    - done: false
+    - done: true
       test: grep -E "<JornadaManualPage ?/>" apps/web/src/routes.tsx
       text: routes.tsx substitui JornadaManualPageStub por JornadaManualPage real
-    - done: false
+    - done: true
       text: ESLint passa sem warnings e tsc strict 0 erros
-    - done: false
+    - done: true
       text: Testes passando com cobertura >= 80%
-    - done: false
+    - done: true
       text: make smoke continua passando
 deps:
     - TASK-020
@@ -42,18 +42,14 @@ n45_version: 0.2.0
 persona: frontend
 phase: Phase 4 — Frontend por Feature
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
-    green: false
-    red: false
-    refactor: false
+    green: true
+    red: true
+    refactor: true
 tests: cd apps/web && npm test -- --run src/pages/JornadaManual/JornadaManualPage.test.tsx
 title: 'Jornada Manual (RF-007.3): pagina /jornadas/manual com DatePicker (maxDate=today), 4 TimePickers cronologicos, atividade>=10, motivo>=5, preview de total, POST /jornadas/manual, navegacao para detalhe'
-updated_at: "2026-05-28 17:56:43"
-worktree:
-    base_sha: 81a15722cd113b86fa309ef5e318bb255d02174b
-    branch: worktree-agent-475e4fba7c46665d
-    path: .n45\worktree\agent-475e4fba7c46665d
+updated_at: "2026-05-28 18:36:55"
 ---
 ## Contexto
 
