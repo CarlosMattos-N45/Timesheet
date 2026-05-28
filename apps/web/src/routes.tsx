@@ -5,7 +5,6 @@ import { AppLayout } from "@/components/AppLayout";
 import { LoginPage } from "@/pages/Login/LoginPage";
 import {
   PrivacidadePageStub,
-  JornadasPageStub,
   JornadaDetalhePageStub,
   JornadaManualPageStub,
   RelatoriosPageStub,
@@ -13,6 +12,7 @@ import {
 } from "@/routes/PageStubs";
 import { CadastroPage } from "@/pages/Cadastro/CadastroPage";
 import { SenhaPage } from "@/pages/Cadastro/SenhaPage";
+import { JornadasPage } from "@/pages/Jornadas/JornadasPage";
 
 export const router = createBrowserRouter([
   { path: "/", element: <Navigate to="/jornadas" replace /> },
@@ -27,7 +27,7 @@ export const router = createBrowserRouter([
           {
             element: <AppLayout />,
             children: [
-              { path: "/jornadas", element: <JornadasPageStub /> },
+              { path: "/jornadas", element: <JornadasPage /> },
               { path: "/jornadas/manual", element: <JornadaManualPageStub /> },
               { path: "/jornadas/:id", element: <JornadaDetalhePageStub /> },
               { path: "/cadastro", element: <CadastroPage /> },
