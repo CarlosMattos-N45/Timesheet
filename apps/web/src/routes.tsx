@@ -4,7 +4,6 @@ import { PrivacyGuard } from "@/routes/PrivacyGuard";
 import { AppLayout } from "@/components/AppLayout";
 import { LoginPage } from "@/pages/Login/LoginPage";
 import {
-  PrivacidadePageStub,
   JornadaDetalhePageStub,
   JornadaManualPageStub,
   RelatoriosPageStub,
@@ -12,6 +11,7 @@ import {
 } from "@/routes/PageStubs";
 import { CadastroPage } from "@/pages/Cadastro/CadastroPage";
 import { SenhaPage } from "@/pages/Cadastro/SenhaPage";
+import { PrivacidadePage } from "@/pages/Privacidade/PrivacidadePage";
 import { JornadasPage } from "@/pages/Jornadas/JornadasPage";
 
 export const router = createBrowserRouter([
@@ -23,7 +23,7 @@ export const router = createBrowserRouter([
       {
         element: <PrivacyGuard />,
         children: [
-          { path: "/privacidade", element: <PrivacidadePageStub /> },
+          { path: "/privacidade", element: <PrivacidadePage /> },
           {
             element: <AppLayout />,
             children: [

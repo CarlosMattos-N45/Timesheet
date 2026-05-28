@@ -38,7 +38,7 @@ export function renderWithProviders(
     if (terceiroId) sessionStorage.setItem(STORAGE.terceiroId, terceiroId);
     sessionStorage.setItem(STORAGE.expiresAt, String(Date.now() + 60_000));
   }
-  const qc = new QueryClient({
+  const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
   });
   const theme = createTheme({ palette: { mode: "light" } });
@@ -46,11 +46,11 @@ export function renderWithProviders(
     <ThemeProvider theme={theme}>
       <MemoryRouter initialEntries={[opts.route ?? "/"]}>
         <LocationSync />
-        <QueryClientProvider client={qc}>
+        <QueryClientProvider client={queryClient}>
           <AuthProvider>{children}</AuthProvider>
         </QueryClientProvider>
       </MemoryRouter>
     </ThemeProvider>
   );
-  return render(ui, { wrapper: Wrapper, ...rOpts });
+  return { ...render(ui, { wrapper: Wrapper, ...rOpts }), queryClient };
 }
