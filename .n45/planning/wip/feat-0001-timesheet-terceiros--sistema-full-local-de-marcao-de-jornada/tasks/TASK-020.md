@@ -50,7 +50,11 @@ tdd:
     refactor: false
 tests: cd apps/web && npm test -- --run
 title: 'Fundação Frontend: Axios + JWT interceptor, AuthContext, QueryClient, Router central com guards, AppLayout, types do contrato, helpers'
-updated_at: "2026-05-28 12:37:21"
+updated_at: "2026-05-28 12:59:25"
+worktree:
+    base_sha: 3dcb357d7f6f302e01eccace094f6b15dd040bc1
+    branch: worktree-agent-225c7a002bbd569f
+    path: .n45\worktree\agent-225c7a002bbd569f
 ---
 ## Contexto
 
