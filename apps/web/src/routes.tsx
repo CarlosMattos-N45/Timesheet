@@ -8,11 +8,11 @@ import {
   JornadasPageStub,
   JornadaDetalhePageStub,
   JornadaManualPageStub,
-  CadastroPageStub,
-  SenhaPageStub,
   RelatoriosPageStub,
   SmtpConfigPageStub,
 } from "@/routes/PageStubs";
+import { CadastroPage } from "@/pages/Cadastro/CadastroPage";
+import { SenhaPage } from "@/pages/Cadastro/SenhaPage";
 
 export const router = createBrowserRouter([
   { path: "/", element: <Navigate to="/jornadas" replace /> },
@@ -30,8 +30,8 @@ export const router = createBrowserRouter([
               { path: "/jornadas", element: <JornadasPageStub /> },
               { path: "/jornadas/manual", element: <JornadaManualPageStub /> },
               { path: "/jornadas/:id", element: <JornadaDetalhePageStub /> },
-              { path: "/cadastro", element: <CadastroPageStub /> },
-              { path: "/cadastro/senha", element: <SenhaPageStub /> },
+              { path: "/cadastro", element: <CadastroPage /> },
+              { path: "/cadastro/senha", element: <SenhaPage /> },
               { path: "/relatorios", element: <RelatoriosPageStub /> },
               { path: "/configuracoes/smtp", element: <SmtpConfigPageStub /> },
             ],

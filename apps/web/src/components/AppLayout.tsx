@@ -15,12 +15,9 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useQuery } from "@tanstack/react-query";
-import api from "@/api/client";
 import { useAuth } from "@/auth/AuthContext";
-import type { TerceiroResponse } from "@/types/contracts";
 import { saudacaoAgora } from "@/lib/saudacao";
-
-export const terceiroKeys = { me: ["terceiros", "me"] as const };
+import { terceirosKeys, getTerceiroMe } from "@/api/terceiros";
 
 export function AppLayout({ children }: { children?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -29,11 +26,8 @@ export function AppLayout({ children }: { children?: React.ReactNode }) {
   const location = useLocation();
 
   const { data: terceiro } = useQuery({
-    queryKey: terceiroKeys.me,
-    queryFn: async (): Promise<TerceiroResponse> => {
-      const r = await api.get<TerceiroResponse>("/api/v1/terceiros/me");
-      return r.data;
-    },
+    queryKey: terceirosKeys.me,
+    queryFn: getTerceiroMe,
     enabled: isAuthenticated,
     staleTime: 5 * 60_000,
   });
