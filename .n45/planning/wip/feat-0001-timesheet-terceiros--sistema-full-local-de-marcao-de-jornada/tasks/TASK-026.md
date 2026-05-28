@@ -59,11 +59,15 @@ roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
 status: pending
 tdd:
     green: false
-    red: false
+    red: true
     refactor: false
 tests: cd apps/web && npm test -- --run src/lib/cnpj.test.ts src/pages/Cadastro/CadastroPage.test.tsx src/pages/Cadastro/SenhaPage.test.tsx
 title: 'Cadastro + Senha (RF-007.5): /cadastro com PUT /terceiros/me + validacao CNPJ modulo 11 client-side; /cadastro/senha com PUT /senha 204 e logout forcado (revogacao de refresh tokens server-side)'
-updated_at: "2026-05-28 12:53:29"
+updated_at: "2026-05-28 13:30:32"
+worktree:
+    base_sha: 4322b5e75dde3e6501c193d809631f12a065fa49
+    branch: worktree-agent-608ff11e0c78412b
+    path: .n45\worktree\agent-608ff11e0c78412b
 ---
 ## Contexto
 

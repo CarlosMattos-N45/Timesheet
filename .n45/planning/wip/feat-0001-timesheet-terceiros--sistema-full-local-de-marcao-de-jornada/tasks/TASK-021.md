@@ -49,11 +49,15 @@ roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
 status: pending
 tdd:
     green: false
-    red: false
+    red: true
     refactor: false
 tests: cd apps/web && npm test -- --run src/pages/Login/LoginPage.test.tsx
 title: 'Login: pagina /login com saudacao contextual (RF-001), form RHF+Zod, integracao useAuth().login, erros 401/429/network, link ''Esqueci minha senha'' desabilitado'
-updated_at: "2026-05-28 12:39:11"
+updated_at: "2026-05-28 13:30:15"
+worktree:
+    base_sha: 4322b5e75dde3e6501c193d809631f12a065fa49
+    branch: worktree-agent-20365e98da71ffeb
+    path: .n45\worktree\agent-20365e98da71ffeb
 ---
 ## Contexto
 

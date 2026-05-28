@@ -53,11 +53,15 @@ roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
 status: pending
 tdd:
     green: false
-    red: false
+    red: true
     refactor: false
 tests: cd apps/web && npm test -- --run src/pages/Jornadas/JornadasPage.test.tsx src/lib/format/horario.test.ts
 title: 'Jornadas - Lista mensal (RF-007.1): DataGrid + DatePicker (mes), chips de status, badge PENDENTE, baixar/enviar PDF (TASK-018), helpers format/horario, jornadasKeys + relatoriosKeys factories'
-updated_at: "2026-05-28 12:44:11"
+updated_at: "2026-05-28 13:30:36"
+worktree:
+    base_sha: 4322b5e75dde3e6501c193d809631f12a065fa49
+    branch: worktree-agent-258021f517ff6919
+    path: .n45\worktree\agent-258021f517ff6919
 ---
 ## Contexto
 
