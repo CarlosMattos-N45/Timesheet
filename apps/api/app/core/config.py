@@ -44,6 +44,10 @@ class Settings(BaseSettings):
         default="10/minute",
         validation_alias=AliasChoices("TIMESHEET_RATE_LIMIT_REFRESH", "rate_limit_refresh"),
     )
+    kek_path: str = Field(
+        default="./data/key.kek",
+        validation_alias=AliasChoices("TIMESHEET_KEK_PATH", "kek_path"),
+    )
 
     @field_validator("db_cipher_key")
     @classmethod

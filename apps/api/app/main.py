@@ -25,6 +25,9 @@ from app.modules.sistema.router import router_dev as sistema_router_dev
 @asynccontextmanager
 async def _lifespan(app: FastAPI) -> AsyncIterator[None]:  # noqa: ARG001
     configure_logging()
+    from app.core import crypto_state
+
+    crypto_state.configure()
     yield
     await dispose_engine()
 
@@ -57,12 +60,14 @@ def create_app() -> FastAPI:
 
     from app.modules.auth.router import router as auth_router
     from app.modules.privacidade.router import router as privacidade_router
+    from app.modules.smtp.router import router as smtp_router
     from app.modules.terceiros.router import router as terceiros_router
 
     app.include_router(sistema_router)
     app.include_router(terceiros_router)
     app.include_router(auth_router)
     app.include_router(privacidade_router)
+    app.include_router(smtp_router)
 
     # Apply rate limits to auth endpoints
     limiter = app.state.limiter
