@@ -46,19 +46,16 @@ n45_version: 0.2.0
 persona: frontend
 phase: Phase 4 — Frontend por Feature
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
     green: false
     red: true
     refactor: false
 tests: cd apps/web && npm test -- --run src/pages/Login/LoginPage.test.tsx
 title: 'Login: pagina /login com saudacao contextual (RF-001), form RHF+Zod, integracao useAuth().login, erros 401/429/network, link ''Esqueci minha senha'' desabilitado'
-updated_at: "2026-05-28 13:30:15"
-worktree:
-    base_sha: 4322b5e75dde3e6501c193d809631f12a065fa49
-    branch: worktree-agent-20365e98da71ffeb
-    path: .n45\worktree\agent-20365e98da71ffeb
+updated_at: "2026-05-28 16:33:48"
 ---
+
 ## Contexto
 
 Implementar a página `/login` da Web SPA (RF-009 + RF-001 — saudação contextual). Slice vertical: componente + página + zod schema + integração com `useAuth().login()` + substituição do stub em `src/routes.tsx`. A página é a porta de entrada pós-instalação (o cadastro do Terceiro acontece no Agente Desktop; aqui só login).
