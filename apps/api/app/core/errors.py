@@ -51,8 +51,24 @@ def install_error_handlers(app: FastAPI) -> None:
     async def _validation_handler(_req: Request, exc: RequestValidationError) -> JSONResponse:
         details: list[dict[str, Any]] = []
         for err in exc.errors():
-            loc = ".".join(str(p) for p in err.get("loc", []) if p != "")
-            details.append({"field": loc, "issue": err.get("msg", "")})
+            # Check if the ValueError carries a structured dict with loc/msg
+            ctx_error = (err.get("ctx") or {}).get("error")
+            first_arg = ctx_error.args[0] if (ctx_error and ctx_error.args) else None
+            if isinstance(ctx_error, ValueError) and isinstance(first_arg, dict):
+                structured = first_arg
+                inner_loc = structured.get("loc") or ()
+                issue = structured.get("msg", "")
+                # Combine outer loc (e.g. "body") with inner loc fields
+                outer_parts = [str(p) for p in err.get("loc", []) if p not in ("", "body")]
+                inner_parts = [str(p) for p in inner_loc]
+                all_parts = outer_parts + inner_parts
+                prefix = "body." if all_parts else "body"
+                field = prefix + ".".join(all_parts) if all_parts else "body"
+                details.append({"field": field, "issue": issue})
+            else:
+                loc_parts = [str(p) for p in err.get("loc", []) if p != ""]
+                loc = ".".join(loc_parts)
+                details.append({"field": loc, "issue": err.get("msg", "")})
         return JSONResponse(
             status_code=422,
             content={

@@ -99,6 +99,7 @@ async def rotate_refresh_token(token: str, session: AsyncSession) -> dict[str, A
         )
     if rt.revogado_em is not None:
         await revoke_token_chain(sub, session)
+        await session.commit()
         raise DomainError(
             code="UNAUTHORIZED",
             message="Reuso de refresh token detectado — sessão revogada",

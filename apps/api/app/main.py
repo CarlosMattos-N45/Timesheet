@@ -55,7 +55,24 @@ def create_app() -> FastAPI:
             },
         )
 
+    from app.modules.auth.router import router as auth_router
+    from app.modules.terceiros.router import router as terceiros_router
+
     app.include_router(sistema_router)
+    app.include_router(terceiros_router)
+    app.include_router(auth_router)
+
+    # Apply rate limits to auth endpoints
+    limiter = app.state.limiter
+    for route in app.routes:
+        p = getattr(route, "path", "")
+        if p == "/api/v1/auth/login":
+            route.endpoint = limiter.limit(_config.settings.rate_limit_login)(route.endpoint)  # type: ignore[attr-defined]
+            route.dependant.call = route.endpoint  # type: ignore[attr-defined]
+        elif p == "/api/v1/auth/refresh":
+            route.endpoint = limiter.limit(_config.settings.rate_limit_refresh)(route.endpoint)  # type: ignore[attr-defined]
+            route.dependant.call = route.endpoint  # type: ignore[attr-defined]
+
     if _config.settings.dev_mode:
         app.include_router(sistema_router_dev)
         from app.modules.sistema.router import bind_smoke_rate_limit
