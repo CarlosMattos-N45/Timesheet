@@ -29,6 +29,7 @@
     <ProjectReference Include="..\Timesheet.Agent.Infra.Db\Timesheet.Agent.Infra.Db.csproj" />
     <ProjectReference Include="..\Timesheet.Agent.Ipc\Timesheet.Agent.Ipc.csproj" />
     <ProjectReference Include="..\Timesheet.Agent.Service\Timesheet.Agent.Service.csproj" />
+    <ProjectReference Include="..\Timesheet.Agent.Ui\Timesheet.Agent.Ui.csproj" />
   </ItemGroup>
 
 </Project>
