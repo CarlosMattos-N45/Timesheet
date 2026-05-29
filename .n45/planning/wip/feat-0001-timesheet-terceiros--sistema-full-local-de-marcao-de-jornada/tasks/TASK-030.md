@@ -1,5 +1,5 @@
 ---
-checkpoint: code-review
+checkpoint: null
 complexity: M
 created_at: "2026-05-29 09:27:21"
 criteria:
@@ -45,18 +45,14 @@ n45_version: 0.2.0
 persona: backend
 phase: Phase 5 — Agente Desktop
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
     green: true
     red: true
     refactor: true
 tests: cd apps/agent && dotnet test Timesheet.Agent.sln -c Debug --filter FullyQualifiedName~JourneyStateMachineTests
 title: 'Domain: máquina de estados de jornada pura (RF-003/004/005/006) com janelas de tolerância, antecipação/atraso, inatividade, retorno fora de janela, fim e auto-encerramento'
-updated_at: "2026-05-29 10:04:26"
-worktree:
-    base_sha: 446ecde37508c3cee0c57751bf65413574f6eed1
-    branch: worktree-agent-f1ff1a547f666304
-    path: .n45\worktree\agent-f1ff1a547f666304
+updated_at: "2026-05-29 10:19:34"
 ---
 ## Contexto
 
