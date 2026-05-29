@@ -3,19 +3,19 @@ checkpoint: null
 complexity: P
 created_at: "2026-05-29 12:35:44"
 criteria:
-    - done: false
+    - done: true
       test: cd apps/web && npx playwright test smoke
       text: Login pela UI com terceiro.e2e@example.com/SenhaE2E!2026 leva a /privacidade ou /jornadas
-    - done: false
+    - done: true
       text: Aceite de privacidade pela UI (checkbox + Continuar) leva a /jornadas com heading Jornadas visivel
-    - done: false
+    - done: true
       text: Criar jornada manual (data dia util, 08:00/12:00/13:00/17:00, atividade>=10, justificativa>=5) retorna 201 e redireciona para /jornadas/<uuid> com chip AJUSTADA_MANUALMENTE
-    - done: false
+    - done: true
       test: cd apps/web && npx playwright test smoke
       text: 'Na lista mensal a linha do dia criado exibe Total exatamente 08:00 (controle negativo: 07:00 fica red)'
-    - done: false
+    - done: true
       text: Smoke passa com banco e2e zerado antes (make web-e2e zera apps/api/data/e2e.sqlite); spec nao depende de jornada pre-existente
-    - done: false
+    - done: true
       text: Suite passando com webServer real (backend+frontend), sem mock de rede
 deps:
     - TASK-039
@@ -28,7 +28,11 @@ roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
 status: pending
 tests: cd apps/web && npx playwright test smoke
 title: 'Smoke Test E2E: caminho critico login -> aceitar privacidade -> criar jornada manual -> ver na lista mensal com Total correto'
-updated_at: "2026-05-29 12:35:44"
+updated_at: "2026-05-29 13:13:09"
+worktree:
+    base_sha: b1cf650e1d5b0bc60356d5ce15eab1b834bd46f5
+    branch: worktree-agent-aa89a8290cd22505
+    path: .n45\worktree\agent-aa89a8290cd22505
 ---
 ## Contexto
 
