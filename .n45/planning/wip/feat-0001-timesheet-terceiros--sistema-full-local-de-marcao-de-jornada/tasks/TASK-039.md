@@ -3,21 +3,21 @@ checkpoint: null
 complexity: G
 created_at: "2026-05-29 12:34:28"
 criteria:
-    - done: false
+    - done: true
       test: cd apps/web && npx playwright test --list
       text: npx playwright test --list sai 0 e reconhece playwright.config.ts
-    - done: false
+    - done: true
       text: webServer da config sobe backend (uvicorn 8765, TIMESHEET_DEV=true, TIMESHEET_DB_URL e2e) e frontend (vite 5173); baseURL = http://127.0.0.1:5173
-    - done: false
+    - done: true
       text: 'Seed e idempotente: 2a execucao com Terceiro existente trata 403 SETUP_ALREADY_DONE e sai 0 sem erro, mantendo 1 Terceiro'
-    - done: false
+    - done: true
       text: seed.mjs cria Terceiro com email_contato terceiro.e2e@example.com e CNPJ valido 11222333000181 retornando 201 na 1a execucao
-    - done: false
+    - done: true
       test: cd apps/web && npx playwright test infra
       text: infra.spec.ts asserta GET /api/v1/health = 200 com body status=ok e version string via webServer
-    - done: false
+    - done: true
       text: Makefile expoe web-e2e (zera apps/api/data/e2e.sqlite, sobe mailhog, roda playwright) e web-e2e-install (playwright install chromium)
-    - done: false
+    - done: true
       text: Suite passando (infra.spec verde com webServer real)
 deps: []
 id: TASK-039
@@ -26,10 +26,10 @@ n45_version: 0.2.0
 persona: qa
 phase: Phase 7 — E2E
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tests: cd apps/web && npx playwright test --list
 title: 'Setup E2E: Playwright install + config (webServer backend+web), seed idempotente do Terceiro, fixtures/global-setup, Makefile web-e2e'
-updated_at: "2026-05-29 12:34:28"
+updated_at: "2026-05-29 12:52:43"
 ---
 ## Contexto
 
