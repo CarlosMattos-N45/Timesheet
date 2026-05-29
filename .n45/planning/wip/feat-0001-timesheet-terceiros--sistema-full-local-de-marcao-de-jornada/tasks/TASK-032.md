@@ -3,27 +3,27 @@ checkpoint: null
 complexity: M
 created_at: "2026-05-29 09:29:47"
 criteria:
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Complete_resolves_pending_task_with_answer
       text: DialogCorrelator.Complete resolve a task pendente com o Answer recebido
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Timeout_resolves_with_TIMEOUT_answer
       text: Timeout resolve com DialogResponse Answer=TIMEOUT preservando o Id
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Complete_unknown_id_is_ignored
       text: Complete com Id desconhecido e ignorado sem excecao
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Complete_only_resolves_matching_id
       text: Complete resolve apenas a task do Id correspondente
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~SendAsync_writes_serialized_toast_to_channel
       text: IpcServer.SendAsync escreve no canal o ToastMessage serializado terminado em newline
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~SendDialogRequest_resolves_when_response_frame_arrives
       text: SendDialogRequestAsync resolve quando o frame DIALOG_RESPONSE correlacionado chega
-    - done: false
+    - done: true
       text: Solution compila e testes de Ipc passam
-    - done: false
+    - done: true
       text: Cobertura DialogCorrelator/IpcServer >= 70%
 deps:
     - TASK-028
@@ -33,14 +33,14 @@ n45_version: 0.2.0
 persona: backend
 phase: Phase 5 — Agente Desktop
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
-    green: false
-    red: false
-    refactor: false
+    green: true
+    red: true
+    refactor: true
 tests: cd apps/agent && dotnet test Timesheet.Agent.sln -c Debug --filter FullyQualifiedName~Ipc
 title: 'IPC named pipe: DialogCorrelator (correlação + timeout 60s), IpcServer/IpcClient sobre IDuplexChannel, NamedPipeChannel com ACL owner-only + IdentityGuard'
-updated_at: "2026-05-29 09:29:47"
+updated_at: "2026-05-29 10:11:23"
 ---
 ## Contexto
 

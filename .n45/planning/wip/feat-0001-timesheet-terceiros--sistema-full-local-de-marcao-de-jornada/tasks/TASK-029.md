@@ -39,14 +39,18 @@ n45_version: 0.2.0
 persona: backend
 phase: Phase 5 — Agente Desktop
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: blocked
 tdd:
     green: false
     red: false
     refactor: false
 tests: cd apps/agent && dotnet test Timesheet.Agent.sln -c Debug
 title: 'Infra HTTP: BackendClient (login/refresh/terceiros/marcacoes/health/ready) + Polly (circuit breaker + retry) + DpapiTokenStore + TokenManager'
-updated_at: "2026-05-29 09:25:34"
+updated_at: "2026-05-29 09:52:03"
+worktree:
+    base_sha: 446ecde37508c3cee0c57751bf65413574f6eed1
+    branch: worktree-agent-6ab937d4b344b65c
+    path: .n45\worktree\agent-6ab937d4b344b65c
 ---
 ## Contexto
 

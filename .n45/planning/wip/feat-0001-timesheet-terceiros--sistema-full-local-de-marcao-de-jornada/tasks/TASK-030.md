@@ -1,41 +1,41 @@
 ---
-checkpoint: null
+checkpoint: code-review
 complexity: M
 created_at: "2026-05-29 09:27:21"
 criteria:
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Login_dentro_da_janela_registra_automatico_sem_dialogo
       text: Login dentro da janela [h_ini+-30min] registra automatico sem dialogo nem atraso
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Login_em_atraso_registra_e_emite_toast_de_atraso
       text: Login em atraso registra T e expoe AtrasoMinutos=45
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Login_antecipado_exige_dialogo_com_fallback_h_ini
       text: Login antecipado exige CONFIRM_INICIO_ANTECIPADO com fallback=h_ini
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~ResolverInicioAntecipado_timeout_usa_h_ini
       text: ResolverInicioAntecipado TIMEOUT usa h_ini
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Login_em_fim_de_semana_sem_trabalho_nao_registra
       text: Login em fim de semana sem trabalhaFds nao registra
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Inatividade_na_janela_de_almoco_registra_saida
       text: Inatividade >=10min intersectando janela de almoco registra SAIDA_ALMOCO no inicio da inatividade
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Inatividade_fora_da_janela_nao_registra
       text: Inatividade fora da janela ou <10min nao registra
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Retorno_negado_gera_marcacao_pendente
       text: Retorno fora da janela exige CONFIRM_RETORNO_FORA_JANELA; negado gera marcacao PENDENTE
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Fim_timeout_reagenda_em_30min
       text: Fim com SIM e atividade>=10 fecha jornada com T_confirmacao; TIMEOUT reagenda em 30min
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~AutoEncerramento_apos_60min_inatividade_fecha_pendente
       text: Auto-encerramento >=60min inatividade pos-fim fecha PENDENTE no ultimo input; <60min nao age
-    - done: false
+    - done: true
       text: Solution compila e todos os testes da JourneyStateMachine passam
-    - done: false
+    - done: true
       text: Cobertura Domain >= 70%
 deps:
     - TASK-028
@@ -47,12 +47,16 @@ phase: Phase 5 — Agente Desktop
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
 status: pending
 tdd:
-    green: false
-    red: false
-    refactor: false
+    green: true
+    red: true
+    refactor: true
 tests: cd apps/agent && dotnet test Timesheet.Agent.sln -c Debug --filter FullyQualifiedName~JourneyStateMachineTests
 title: 'Domain: máquina de estados de jornada pura (RF-003/004/005/006) com janelas de tolerância, antecipação/atraso, inatividade, retorno fora de janela, fim e auto-encerramento'
-updated_at: "2026-05-29 09:27:21"
+updated_at: "2026-05-29 10:04:26"
+worktree:
+    base_sha: 446ecde37508c3cee0c57751bf65413574f6eed1
+    branch: worktree-agent-f1ff1a547f666304
+    path: .n45\worktree\agent-f1ff1a547f666304
 ---
 ## Contexto
 

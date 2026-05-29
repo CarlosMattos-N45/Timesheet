@@ -3,27 +3,27 @@ checkpoint: null
 complexity: M
 created_at: "2026-05-29 09:29:36"
 criteria:
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Idle_below_threshold_is_not_inactive
       text: Idle abaixo do limiar (30s) nao marca inativo
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Crossing_threshold_marks_inactive_and_records_start
       text: Cruzar o limiar marca inativo e registra InicioInatividade = agora - idleMs
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Continuous_inactivity_keeps_original_start_and_grows_duration
       text: Inatividade continua mantem o inicio original e cresce a duracao
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Return_to_activity_raises_event_with_window
       text: Retorno de atividade dispara OnRetornoDeInatividade com inicio e fim corretos
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~PrimeiroInputAposInatividade_true_once_then_false
       text: PrimeiroInputAposInatividade e true exatamente 1x e depois false
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Win32Provider_returns_nonnegative_idle
       text: Win32LastInputProvider.GetIdleMilliseconds retorna valor >= 0 sem excecao
-    - done: false
+    - done: true
       text: Solution compila e testes do InactivityTracker passam
-    - done: false
+    - done: true
       text: Cobertura do InactivityTracker (logica pura) >= 70%
 deps:
     - TASK-028
@@ -33,14 +33,14 @@ n45_version: 0.2.0
 persona: backend
 phase: Phase 5 — Agente Desktop
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
-    green: false
-    red: false
-    refactor: false
+    green: true
+    red: true
+    refactor: true
 tests: cd apps/agent && dotnet test Timesheet.Agent.sln -c Debug --filter FullyQualifiedName~InactivityTrackerTests
 title: 'Detecção de input: InactivityTracker (lógica pura) + Win32LastInputProvider (GetLastInputInfo P/Invoke) + SessionMonitor (SessionLogon)'
-updated_at: "2026-05-29 09:29:36"
+updated_at: "2026-05-29 10:10:40"
 ---
 ## Contexto
 
