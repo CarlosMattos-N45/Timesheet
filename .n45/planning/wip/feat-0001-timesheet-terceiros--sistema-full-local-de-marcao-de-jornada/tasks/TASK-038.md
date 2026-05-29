@@ -3,19 +3,19 @@ checkpoint: null
 complexity: G
 created_at: "2026-05-29 11:47:00"
 criteria:
-    - done: false
+    - done: true
       test: wix build apps/installer/Product.wxs apps/installer/Components.wxs -ext WixToolset.Util.wixext -ext WixToolset.UI.wixext -o dist/TimesheetTerceiros.msi
       text: wix build de Product.wxs + Components.wxs gera dist/TimesheetTerceiros.msi sem erro de validacao
-    - done: false
+    - done: true
       test: grep -E 'TimesheetBackend' apps/installer/Components.wxs
       text: Components.wxs registra os 2 Windows Services TimesheetBackend (porta configuravel via TIMESHEET_PORT default 8765) e TimesheetAgent via ServiceInstall/ServiceControl com Start=auto
-    - done: false
+    - done: true
       text: MSI provisiona dados em ProgramData/TimesheetTerceiros (key.kek, timesheet.sqlite, pdfs/, scheduler.sqlite) com ACL restrita na pasta pdfs via util:PermissionEx e define as env vars TIMESHEET_* do Service backend
-    - done: false
+    - done: true
       text: CustomAction WaitForServiceReady faz polling em /api/v1/ready com contador/timeout limitado e falha a instalacao se nao ficar ready
-    - done: false
+    - done: true
       text: make build encadeia build-backend + publish-agent + wix build; make setup prepara dev sem subir/parar app; make release assina com signtool quando SIGN_CERT presente
-    - done: false
+    - done: true
       text: RUNBOOK estendido preserva a secao Infraestrutura na integra e adiciona a secao Aplicacao (msiexec, 2 services, sc start/stop, ProgramData, healthchecks /health e /ready); verificacao pos-escrita re-le e confirma as duas secoes
 deps:
     - TASK-036
@@ -26,10 +26,10 @@ n45_version: 0.2.0
 persona: devops
 phase: Phase 6 — Empacotamento Windows (PyInstaller + WiX MSI)
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tests: wix build apps/installer/Product.wxs apps/installer/Components.wxs -ext WixToolset.Util.wixext -ext WixToolset.UI.wixext -o dist/TimesheetTerceiros.msi
 title: Instalador WiX MSI (2 Windows Services + dados ProgramData + ACLs + porta/JWT) + Makefile build/release + RUNBOOK Aplicacao
-updated_at: "2026-05-29 11:47:00"
+updated_at: "2026-05-29 12:18:10"
 ---
 ## Contexto
 
