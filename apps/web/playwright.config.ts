@@ -31,6 +31,9 @@ export default defineConfig({
         TIMESHEET_DEV: "true",
         TIMESHEET_DB_URL: E2E_DB,
         TIMESHEET_SCHEDULER_ENABLED: "true",
+        // Rate limit elevado em E2E para não bloquear specs que fazem múltiplos logins
+        TIMESHEET_RATE_LIMIT_LOGIN: "100/minute",
+        TIMESHEET_RATE_LIMIT_REFRESH: "200/minute",
       },
       url: "http://127.0.0.1:8765/api/v1/ready",
       reuseExistingServer: !process.env.CI,
