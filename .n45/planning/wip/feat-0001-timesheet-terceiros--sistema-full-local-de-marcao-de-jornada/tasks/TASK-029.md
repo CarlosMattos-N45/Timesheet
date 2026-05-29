@@ -1,36 +1,31 @@
 ---
 checkpoint: null
 complexity: M
-created_at: "2026-05-29 09:25:34"
+created_at: "2026-05-29 10:30:54"
 criteria:
     - done: false
-      test: cd apps/agent && dotnet test --filter FullyQualifiedName~LoginAsync_parses_tokens_on_200
-      text: LoginAsync parseia access_token/refresh_token/terceiro_id/expires_in no 200
+      test: cd apps/agent && dotnet test --filter FullyQualifiedName~LoginAsync
+      text: LoginAsync parseia tokens em 200 e lanca AuthException(code=UNAUTHORIZED) em 401
     - done: false
-      test: cd apps/agent && dotnet test --filter FullyQualifiedName~LoginAsync_throws_AuthException_on_401
-      text: LoginAsync lanca AuthException com Code=UNAUTHORIZED no 401
+      test: cd apps/agent && dotnet test --filter FullyQualifiedName~RefreshAsync_parses_rotated_tokens_on_200
+      text: RefreshAsync parseia tokens rotacionados em 200
     - done: false
-      test: cd apps/agent && dotnet test --filter FullyQualifiedName~PostMarcacao_returns_DiscardLocal_on_409_AjusteWebWins
-      text: 'PostMarcacaoAsync retorna DiscardLocal no 409 code=AJUSTE_WEB_WINS (RN-012 #1)'
+      test: cd apps/agent && dotnet test --filter FullyQualifiedName~CreateTerceiroAsync_throws_SetupAlreadyDone_on_403
+      text: CreateTerceiroAsync lanca AuthException(code=SETUP_ALREADY_DONE) em 403
     - done: false
-      test: cd apps/agent && dotnet test --filter FullyQualifiedName~PostMarcacao_returns_AlreadyExists_on_409_Conflict
-      text: PostMarcacaoAsync retorna AlreadyExists no 409 code=CONFLICT (idempotencia tratada como sucesso)
+      test: cd apps/agent && dotnet test --filter FullyQualifiedName~PostMarcacao_returns
+      text: PostMarcacaoAsync mapeia 409 AJUSTE_WEB_WINS->DiscardLocal, 409 CONFLICT->AlreadyExists, 422->Rejected
     - done: false
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~PostMarcacao_body_includes_idempotency_key_and_origem
-      text: Body do POST /marcacoes inclui idempotency_key e origem reais
+      text: PostMarcacaoAsync envia body com idempotency_key e origem
     - done: false
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~PostMarcacao_retries_on_503_then_succeeds
-      text: PostMarcacaoAsync com 503 3x seguido de 201 retorna Created (retry Polly)
+      text: Polly reabsorve 503 transientes (retorna Created apos 3x503+201) e retorna TransientFailure quando retry esgota
     - done: false
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~IsReadyAsync_false_on_503
-      text: IsReadyAsync retorna false no 503
+      text: IsHealthyAsync/IsReadyAsync retornam bool sem lancar (false em 503)
     - done: false
-      test: cd apps/agent && dotnet test --filter FullyQualifiedName~Protect_then_Unprotect_roundtrips
-      text: DpapiTokenStore.Protect/Unprotect faz round-trip do token (cifrado != claro)
-    - done: false
-      text: Solution compila e dotnet test passa
-    - done: false
-      text: Cobertura Infra.Http >= 70%
+      text: Testes passando com cobertura Infra.Http >= 70%
 deps:
     - TASK-028
 id: TASK-029
@@ -39,22 +34,20 @@ n45_version: 0.2.0
 persona: backend
 phase: Phase 5 — Agente Desktop
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: blocked
+status: pending
 tdd:
     green: false
     red: false
     refactor: false
-tests: cd apps/agent && dotnet test Timesheet.Agent.sln -c Debug
-title: 'Infra HTTP: BackendClient (login/refresh/terceiros/marcacoes/health/ready) + Polly (circuit breaker + retry) + DpapiTokenStore + TokenManager'
-updated_at: "2026-05-29 09:52:03"
-worktree:
-    base_sha: 446ecde37508c3cee0c57751bf65413574f6eed1
-    branch: worktree-agent-6ab937d4b344b65c
-    path: .n45\worktree\agent-6ab937d4b344b65c
+tests: cd apps/agent && dotnet test Timesheet.Agent.sln -c Debug --filter FullyQualifiedName~BackendClientTests
+title: 'Infra HTTP: BackendClient (login/refresh/terceiros/marcacoes/health/ready) + Polly (circuit breaker + retry)'
+updated_at: "2026-05-29 10:30:54"
 ---
 ## Contexto
 
-O Agente registra marcações localmente (SQLite, offline-first) e precisa sincronizá-las com o Backend FastAPI local (`http://127.0.0.1:8765`). Esta task implementa a **camada de Infra HTTP** do Agente (`Timesheet.Agent.Infra.Http`): cliente HTTP resiliente (Polly: circuit breaker + retry exponencial), gestão de tokens JWT protegidos por DPAPI, autenticação (login/refresh contra o Backend), criação do Terceiro no onboarding, e o POST de marcações com `idempotency_key` e tratamento de conflito (RN-012).
+O Agente registra marcações localmente (SQLite, offline-first) e precisa sincronizá-las com o Backend FastAPI local (`http://127.0.0.1:8765`). Esta task implementa a **camada HTTP resiliente** do Agente (`Timesheet.Agent.Infra.Http`): o cliente HTTP tipado (`BackendClient`) com Polly (circuit breaker + retry exponencial), os DTOs de request/response, o mapeamento de status HTTP → resultado de negócio, e o registro DI do `HttpClient` com as políticas Polly.
+
+Esta é a **primeira de duas tasks** que substituem a antiga TASK-029 (dividida por exceder o orçamento de arquivos). A **persistência/refresh de token** (`DpapiTokenStore` + `TokenManager`) fica na task seguinte (TASK-035), que depende desta. Aqui NÃO se implementa DPAPI nem refresh automático de token — o `BackendClient.PostMarcacaoAsync` recebe o access token já válido por parâmetro; quem gere a validade é o `TokenManager` da TASK-035.
 
 A Fundação (TASK-028) já forneceu: `IClock`, constantes `MarcacaoTipo`/`OrigemMarcacao`, os repositórios (`MarcacaoLocalRepository`, `ConfiguracaoLocalRepository`), e o método `AddAgentInfra`. Esta task consome esses elementos — nunca recria relógio nem repositório.
 
@@ -79,19 +72,21 @@ Casos de sucesso e erro. Os testes verificam exatamente isto. Para isolar de red
 | -------------- | ----------------------- |
 | `LoginAsync("maria@x.com","Senha123")` com handler devolvendo 200 `{access_token:"AT",refresh_token:"RT",terceiro_id:"u1",expires_in:900}` | retorna `AuthResult(AccessToken="AT", RefreshToken="RT", TerceiroId="u1", ExpiresIn=900)` |
 | `LoginAsync(...)` com handler 401 `{code:"UNAUTHORIZED"}` | lança `AuthException` com `Code=="UNAUTHORIZED"` |
-| `PostMarcacaoAsync(m)` handler 201 `MarcacaoResponse` | retorna `SyncOutcome.Created` |
-| `PostMarcacaoAsync(m)` handler 409 `{code:"AJUSTE_WEB_WINS"}` | retorna `SyncOutcome.DiscardLocal` (Agente descarta — RN-012 #1) |
-| `PostMarcacaoAsync(m)` handler 409 `{code:"CONFLICT"}` | retorna `SyncOutcome.AlreadyExists` (idempotência: já existe, tratado como sucesso) |
-| `PostMarcacaoAsync(m)` handler 422 `{code:"FIM_DE_SEMANA_NAO_PERMITIDO"}` | retorna `SyncOutcome.Rejected` (não reenfileira) |
-| `PostMarcacaoAsync(m)` handler 503 3× depois 201 | retorna `SyncOutcome.Created` (retry Polly reabsorveu falhas transientes) |
+| `RefreshAsync("RT")` com handler 200 `{access_token:"AT2",refresh_token:"RT2",expires_in:900}` | retorna `AuthResult(AccessToken="AT2", RefreshToken="RT2", TerceiroId=null, ExpiresIn=900)` |
+| `CreateTerceiroAsync(dto)` com handler 403 `{code:"SETUP_ALREADY_DONE"}` | lança `AuthException` com `Code=="SETUP_ALREADY_DONE"` |
+| `PostMarcacaoAsync(m,"AT")` handler 201 `MarcacaoResponse` | retorna `SyncOutcome.Created` |
+| `PostMarcacaoAsync(m,"AT")` handler 409 `{code:"AJUSTE_WEB_WINS"}` | retorna `SyncOutcome.DiscardLocal` (Agente descarta — RN-012 #1) |
+| `PostMarcacaoAsync(m,"AT")` handler 409 `{code:"CONFLICT"}` | retorna `SyncOutcome.AlreadyExists` (idempotência: já existe, tratado como sucesso) |
+| `PostMarcacaoAsync(m,"AT")` handler 422 `{code:"FIM_DE_SEMANA_NAO_PERMITIDO"}` | retorna `SyncOutcome.Rejected` (não reenfileira) |
+| `PostMarcacaoAsync(m,"AT")` body enviado | contém `idempotency_key` (= id local) e `origem` ("AGENTE_AUTOMATICO") |
+| `PostMarcacaoAsync(m,"AT")` handler 503 3× depois 201 | retorna `SyncOutcome.Created` (retry Polly reabsorveu falhas transientes) |
+| `PostMarcacaoAsync(m,"AT")` handler 503 5× (esgota retry) | retorna `SyncOutcome.TransientFailure` (host reenfileira) |
 | `IsHealthyAsync()` handler 200 `{status:"ok"}` | `true` |
 | `IsReadyAsync()` handler 503 | `false` |
-| `DpapiTokenStore.Protect("RT")` depois `Unprotect(blob)` | retorna `"RT"` (round-trip via ProtectedData.CurrentUser) |
-| `TokenManager.GetValidAccessTokenAsync()` com access expirado (`expira_em` < now) e refresh válido | chama `/auth/refresh`, persiste novos tokens DPAPI em `ConfiguracaoLocal`, retorna o novo access |
 
 ## TDD (red → green → refactor)
 
-**Testes a escrever antes da implementação** (`Timesheet.Agent.Tests/InfraHttp/`):
+**Testes a escrever antes da implementação** (`Timesheet.Agent.Tests/InfraHttp/BackendClientTests.cs`):
 
 ```csharp
 // FakeHttpMessageHandler: enfileira HttpResponseMessage; conta chamadas; permite assertar request body.
@@ -127,6 +122,26 @@ public async Task LoginAsync_throws_AuthException_on_401()
 }
 
 [Fact]
+public async Task RefreshAsync_parses_rotated_tokens_on_200()
+{
+    var h = new FakeHandler(new(new[] { Json(200, "{\"access_token\":\"AT2\",\"refresh_token\":\"RT2\",\"expires_in\":900}") }));
+    var sut = MakeClient(h);
+    var r = await sut.RefreshAsync("RT");
+    r.AccessToken.Should().Be("AT2");
+    r.RefreshToken.Should().Be("RT2");
+    r.ExpiresIn.Should().Be(900);
+}
+
+[Fact]
+public async Task CreateTerceiroAsync_throws_SetupAlreadyDone_on_403()
+{
+    var h = new FakeHandler(new(new[] { Json(403, "{\"code\":\"SETUP_ALREADY_DONE\"}") }));
+    var sut = MakeClient(h);
+    var act = async () => await sut.CreateTerceiroAsync(SampleTerceiro());
+    (await act.Should().ThrowAsync<AuthException>()).Which.Code.Should().Be("SETUP_ALREADY_DONE");
+}
+
+[Fact]
 public async Task PostMarcacao_returns_DiscardLocal_on_409_AjusteWebWins()
 {
     var h = new FakeHandler(new(new[] { Json(409, "{\"code\":\"AJUSTE_WEB_WINS\"}") }));
@@ -141,6 +156,14 @@ public async Task PostMarcacao_returns_AlreadyExists_on_409_Conflict()
     var h = new FakeHandler(new(new[] { Json(409, "{\"code\":\"CONFLICT\"}") }));
     var sut = MakeClient(h);
     (await sut.PostMarcacaoAsync(SampleMarcacao(), "AT")).Should().Be(SyncOutcome.AlreadyExists);
+}
+
+[Fact]
+public async Task PostMarcacao_returns_Rejected_on_422()
+{
+    var h = new FakeHandler(new(new[] { Json(422, "{\"code\":\"FIM_DE_SEMANA_NAO_PERMITIDO\"}") }));
+    var sut = MakeClient(h);
+    (await sut.PostMarcacaoAsync(SampleMarcacao(), "AT")).Should().Be(SyncOutcome.Rejected);
 }
 
 [Fact]
@@ -162,26 +185,24 @@ public async Task PostMarcacao_retries_on_503_then_succeeds()
 }
 
 [Fact]
+public async Task PostMarcacao_returns_TransientFailure_when_retries_exhausted()
+{
+    var h = new FakeHandler(new(new[] { Json(503,""), Json(503,""), Json(503,""), Json(503,""), Json(503,""), Json(503,"") }));
+    var sut = MakeClient(h, fastRetry: true);
+    (await sut.PostMarcacaoAsync(SampleMarcacao(), "AT")).Should().Be(SyncOutcome.TransientFailure);
+}
+
+[Fact]
 public async Task IsReadyAsync_false_on_503()
 {
     var h = new FakeHandler(new(new[] { Json(503, "") }));
     (await MakeClient(h).IsReadyAsync()).Should().BeFalse();
 }
-
-// Timesheet.Agent.Tests/InfraHttp/DpapiTokenStoreTests.cs  — só roda em Windows
-[Fact]
-public void Protect_then_Unprotect_roundtrips()
-{
-    var store = new DpapiTokenStore();
-    var blob = store.Protect("RT");
-    blob.Should().NotBe("RT"); // está cifrado
-    store.Unprotect(blob).Should().Be("RT");
-}
 ```
 
-> Retry com delays reais (1→2→4…s) tornaria os testes lentos: o construtor do client aceita uma policy de delays injetável; em teste passar delays de milissegundos (`fastRetry`). Em produção usar `AddAgentHttp` com os delays da Spec.
+> Retry com delays reais (1→2→4…s) tornaria os testes lentos: o construtor do client (ou o helper `MakeClient`) aceita uma policy de delays injetável; em teste passar delays de milissegundos (`fastRetry: true`). Em produção usar `AddAgentHttp` com os delays da Spec.
 
-**Refatoração:** após green, extrair `Json(status, body)` e `SampleMarcacao(...)` para `Timesheet.Agent.Tests/TestData.cs` (compartilhado com TASK-028 se já existir). Consolidar parsing de erro `{code,message}` num único `ApiError` record reutilizado por login e marcação.
+**Refatoração:** após green, extrair `Json(status, body)`, `SampleMarcacao(...)`, `SampleTerceiro()` e `MarcacaoRespJson` para `Timesheet.Agent.Tests/TestData.cs` (compartilhado com TASK-028 se já existir). Consolidar parsing de erro `{code,message}` num único `ApiError` record reutilizado por login, terceiro e marcação.
 
 ## O que Implementar
 
@@ -190,14 +211,15 @@ public void Protect_then_Unprotect_roundtrips()
 | Arquivo | Ação | Descrição |
 | ------- | ---- | --------- |
 | `apps/agent/src/Timesheet.Agent.Infra.Http/ApiError.cs` | Criar | Record `{Code, Message}` do formato de erro padronizado do Backend |
-| `apps/agent/src/Timesheet.Agent.Infra.Http/AuthException.cs` | Criar | Exceção com `Code` (do `ApiError`) |
+| `apps/agent/src/Timesheet.Agent.Infra.Http/AuthException.cs` | Criar | Exceção com `Code` (do `ApiError`) — usada por login/refresh/terceiro |
 | `apps/agent/src/Timesheet.Agent.Infra.Http/SyncOutcome.cs` | Criar | Enum: `Created, AlreadyExists, DiscardLocal, Rejected, TransientFailure` |
 | `apps/agent/src/Timesheet.Agent.Infra.Http/Dtos.cs` | Criar | `AuthResult`, `LoginRequestDto`, `RefreshRequestDto`, `PostMarcacaoDto`, `CreateTerceiroDto` (request body real) |
 | `apps/agent/src/Timesheet.Agent.Infra.Http/BackendClient.cs` | Criar | `IBackendClient` + impl: `LoginAsync`, `RefreshAsync`, `CreateTerceiroAsync`, `PostMarcacaoAsync`, `IsHealthyAsync`, `IsReadyAsync` |
-| `apps/agent/src/Timesheet.Agent.Infra.Http/DpapiTokenStore.cs` | Criar | `Protect(string)→base64 blob`, `Unprotect(base64)→string` via `ProtectedData` (CurrentUser) |
-| `apps/agent/src/Timesheet.Agent.Infra.Http/TokenManager.cs` | Criar | `GetValidAccessTokenAsync()` — lê ConfiguracaoLocal, refresca se expirado, persiste DPAPI |
-| `apps/agent/src/Timesheet.Agent.Infra.Http/AgentHttpExtensions.cs` | Criar | `AddAgentHttp(IServiceCollection, string baseUrl)` — registra `HttpClient` tipado com Polly (circuit breaker + retry) e os serviços |
-| `apps/agent/src/Timesheet.Agent.Infra.Http/Timesheet.Agent.Infra.Http.csproj` | Modificar | Add `Microsoft.Extensions.Http.Polly` 8.0.*, `System.Security.Cryptography.ProtectedData` 8.0.*, `Microsoft.Extensions.DependencyInjection.Abstractions` 8.0.*; ProjectReference para `Infra.Db` |
+| `apps/agent/src/Timesheet.Agent.Infra.Http/AgentHttpExtensions.cs` | Criar | `AddAgentHttp(IServiceCollection, string baseUrl)` — registra o `HttpClient` tipado de `IBackendClient` com Polly (circuit breaker + retry). NÃO registra TokenManager/DpapiTokenStore (TASK-035 estende este arquivo) |
+| `apps/agent/src/Timesheet.Agent.Infra.Http/Timesheet.Agent.Infra.Http.csproj` | Modificar | Add `Microsoft.Extensions.Http.Polly` 8.0.*, `Microsoft.Extensions.DependencyInjection.Abstractions` 8.0.*; ProjectReference para `Infra.Db` |
+| `apps/agent/src/Timesheet.Agent.Tests/InfraHttp/BackendClientTests.cs` | Criar | Testes acima (FakeHandler, login/refresh/terceiro/marcação/health/ready/retry) + helpers `Json`/`SampleMarcacao`/`SampleTerceiro` |
+
+> **Fronteira de arquivos:** esta task NÃO cria `DpapiTokenStore.cs` nem `TokenManager.cs` — eles são da TASK-035. O `AgentHttpExtensions.AddAgentHttp` registra apenas o `IBackendClient` + Polly; a TASK-035 (sequencial, depende desta) estende este mesmo arquivo para registrar `DpapiTokenStore` e `TokenManager`. Como a dependência é sequencial, não há conflito de merge.
 
 ### Detalhamento Técnico
 
@@ -221,11 +243,13 @@ Response 201: { "id","jornada_id","tipo","horario_registrado","horario_efetivo",
 Response 409: { "code": "AJUSTE_WEB_WINS" }  → SyncOutcome.DiscardLocal
 Response 409: { "code": "CONFLICT" }         → SyncOutcome.AlreadyExists (sucesso idempotente)
 Response 422: { "code": "FIM_DE_SEMANA_NAO_PERMITIDO" } → SyncOutcome.Rejected
-Response 401: token inválido/expirado → TokenManager refresca e refaz (1×)
+Response 401: token inválido/expirado → propagar AuthException(code="UNAUTHORIZED") (o TokenManager da TASK-035 trata refresh; aqui só propaga)
 ```
 
 Mapeamento de status → `SyncOutcome` no `PostMarcacaoAsync`:
 - 201 → `Created`; 409 `AJUSTE_WEB_WINS` → `DiscardLocal`; 409 `CONFLICT` → `AlreadyExists`; 422 → `Rejected`; 5xx/timeout após retries esgotados → `TransientFailure` (reenfileira).
+
+`PostMarcacaoAsync(MarcacaoLocal m, string accessToken, CancellationToken ct = default)` — esta é a assinatura consumida pelo Service host (TASK-033). Monta `PostMarcacaoDto` a partir do `MarcacaoLocal` (campos `Tipo`, `HorarioRegistrado`, `HorarioEfetivo`, `Origem`, `idempotency_key = m.Id`), adiciona header `Authorization: Bearer {accessToken}` ao request.
 
 2. **Contrato HTTP — `POST /api/v1/auth/login`** (consumido):
 
@@ -243,10 +267,12 @@ Response 401: { "code":"UNAUTHORIZED" } ; Response 429: rate limit (5/min)
 POST /api/v1/auth/refresh
 { "refresh_token": "RT" }
 Response 200: { "access_token","refresh_token","expires_in": 900 }   // rotation: RT antigo é invalidado
-Response 401: cadeia revogada → forçar novo login
+Response 401: cadeia revogada → forçar novo login (propaga AuthException code="UNAUTHORIZED")
 ```
 
-4. **Contrato HTTP — `POST /api/v1/terceiros`** (consumido no onboarding):
+`RefreshAsync(string refreshToken)` retorna `AuthResult` (com `TerceiroId=null`, pois o refresh não devolve esse campo).
+
+4. **Contrato HTTP — `POST /api/v1/terceiros`** (consumido no onboarding — TASK-034):
 
 ```
 POST /api/v1/terceiros
@@ -266,25 +292,27 @@ Content-Type: application/json
   "senha_confirmacao": "Senha123"
 }
 Response 201: { "terceiro_id", "criado_em" }
-Response 403: { "code":"SETUP_ALREADY_DONE" }  → onboarding já feito; abrir browser direto
+Response 403: { "code":"SETUP_ALREADY_DONE" }  → lança AuthException(code="SETUP_ALREADY_DONE"); onboarding já feito, abrir browser direto
 Response 422: { "code":"VALIDATION_ERROR", "details":[{"field":"empresa_cnpj","issue":"CNPJ inválido"}] }
 ```
 
-5. **Polly** — em `AddAgentHttp`: `AddPolicyHandler` com `WaitAndRetryAsync(5, attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt-1)))` (1,2,4,8,16s) e `CircuitBreakerAsync(5, TimeSpan.FromSeconds(60))`; `HttpClient.Timeout = TimeSpan.FromSeconds(10)`. Retry só em `HttpRequestException`, `TimeoutRejectedException` e status 5xx/`TransientHttpError` — nunca em 4xx (4xx é resposta de negócio, não falha transiente).
+`CreateTerceiroAsync(CreateTerceiroDto dto)` retorna `{terceiro_id, criado_em}` (record simples) no 201; lança `AuthException` com o `code` em 403/422.
 
-6. **`DpapiTokenStore`** — `ProtectedData.Protect(Encoding.UTF8.GetBytes(token), null, DataProtectionScope.CurrentUser)` → `Convert.ToBase64String`. `Unprotect` reverte. Guard: `[SupportedOSPlatform("windows")]`; teste de DPAPI marcado para rodar só em Windows (o CI do Agente é Windows).
+5. **Polly** — em `AddAgentHttp`: `AddPolicyHandler` com `WaitAndRetryAsync(5, attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt-1)))` (1,2,4,8,16s) e `CircuitBreakerAsync(5, TimeSpan.FromSeconds(60))`; `HttpClient.Timeout = TimeSpan.FromSeconds(10)`. Retry só em `HttpRequestException`, `TimeoutRejectedException` e status 5xx/`TransientHttpError` — nunca em 4xx (4xx é resposta de negócio, não falha transiente). Para testes, expor os delays como parâmetro injetável (ex.: `MakeClient(handler, fastRetry: true)` usa delays de milissegundos).
 
-7. **`TokenManager`** — recebe `ConfiguracaoLocalRepository`, `DpapiTokenStore`, `IBackendClient`, `IClock`. `GetValidAccessTokenAsync`: lê config; se `ExpiraEm` (parse) > `clock.NowUtc + 30s margem` retorna access desprotegido; senão chama `RefreshAsync`, protege e faz `UpsertAsync` dos novos tokens + novo `ExpiraEm`. Se refresh devolver 401 → propaga `AuthException(code="UNAUTHORIZED")` (Service host trata: pausa sync até novo login).
+6. **`BackendClient`** — recebe `HttpClient` (configurado por DI com base address `http://127.0.0.1:8765` e Polly). Usa `System.Text.Json` para serializar/desserializar. Parsing de erro `{code, message}` num único `ApiError` reutilizado. `IsHealthyAsync`/`IsReadyAsync` fazem GET sem auth e retornam bool (200 → true; qualquer outro/exceção → false), sem lançar.
 
 **Contrato com camadas adjacentes:**
 
 ```
 Produz para: Service host (TASK-033) — loop de sync
-  - IBackendClient.PostMarcacaoAsync → SyncOutcome; host decide: Created/AlreadyExists/DiscardLocal/Rejected ⇒ MarcarSincronizadaAsync; TransientFailure ⇒ RegistrarFalhaSyncAsync + backoff
-  - IBackendClient.IsHealthyAsync/IsReadyAsync → gate do loop (só drena fila se up)
-  - TokenManager.GetValidAccessTokenAsync → access token válido para o POST
+  - IBackendClient.PostMarcacaoAsync(MarcacaoLocal m, string accessToken, CancellationToken ct) → SyncOutcome
+    host decide: Created/AlreadyExists/DiscardLocal/Rejected ⇒ MarcarSincronizadaAsync; TransientFailure ⇒ RegistrarFalhaSyncAsync + backoff
+  - IBackendClient.IsHealthyAsync(CancellationToken ct) / IsReadyAsync(CancellationToken ct) → gate do loop (só drena fila se up)
 Produz para: WPF onboarding (TASK-034)
   - IBackendClient.CreateTerceiroAsync (201 / 403 SETUP_ALREADY_DONE / 422) e LoginAsync
+Produz para: TokenManager (TASK-035)
+  - IBackendClient.RefreshAsync(string refreshToken) → AuthResult (rotation) ; lança AuthException code="UNAUTHORIZED" se cadeia revogada
 Consome de: Backend FastAPI (Phase 3, done) — contratos HTTP literais acima
-Consome de: Fundação (TASK-028) — IClock, constantes, ConfiguracaoLocalRepository
+Consome de: Fundação (TASK-028) — MarcacaoLocal (entidade), constantes MarcacaoTipo/OrigemMarcacao
 ```

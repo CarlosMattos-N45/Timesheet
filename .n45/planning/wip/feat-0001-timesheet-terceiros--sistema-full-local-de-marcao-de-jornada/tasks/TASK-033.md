@@ -35,6 +35,7 @@ deps:
     - TASK-030
     - TASK-031
     - TASK-032
+    - TASK-035
 id: TASK-033
 linter: cd apps/agent && dotnet format Timesheet.Agent.sln --verify-no-changes
 n45_version: 0.2.0
@@ -48,7 +49,7 @@ tdd:
     refactor: false
 tests: cd apps/agent && dotnet test Timesheet.Agent.sln -c Debug --filter "FullyQualifiedName~SyncProcessorTests|FullyQualifiedName~DecisionApplierTests"
 title: 'Service host: SyncProcessor (drena fila RN-012 + backoff), DecisionApplier (decisão→marcação+estado), JourneyHostedService + SyncHostedService, Program.cs wiring + Serilog'
-updated_at: "2026-05-29 09:31:33"
+updated_at: "2026-05-29 10:33:44"
 ---
 ## Contexto
 
