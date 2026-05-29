@@ -3,21 +3,21 @@ checkpoint: null
 complexity: M
 created_at: "2026-05-29 12:37:39"
 criteria:
-    - done: false
+    - done: true
       text: 'Onboarding: login + aceite de privacidade em banco semeado sem jornadas leva a /jornadas exibindo Nenhuma jornada registrada para este mes e CTA Criar jornada manual'
-    - done: false
+    - done: true
       text: 'Dia normal: jornada manual 08:00/12:00/13:00/17:00 aparece na lista com Total exatamente 08:00 e chip AJUSTADA_MANUALMENTE'
-    - done: false
+    - done: true
       test: cd apps/web && npx playwright test ajuste-manual
       text: 'Ajuste manual: editar fim 17:00->18:00 + justificativa >=5 chars vira status AJUSTADA_MANUALMENTE com Total recalculado para 09:00 (controle negativo 08:00 fica red)'
-    - done: false
+    - done: true
       text: 'Ajuste manual: accordion Historico de auditoria expandido mostra entrada com autor terceiro.e2e@example.com'
-    - done: false
+    - done: true
       text: 'Envio de relatorio: SMTP configurado para Mailhog (localhost:1025, STARTTLS off) + enviar mostra snackbar Relatorio enviado e chip SUCESSO no historico'
-    - done: false
+    - done: true
       test: cd apps/web && npx playwright test envio-relatorio
       text: 'Envio de relatorio: GET http://localhost:8025/api/v2/messages retorna total>=1 apos envio (controle negativo total 0 fica red)'
-    - done: false
+    - done: true
       text: Todas as journey specs passam com webServer real + Mailhog up (make smtp-up); sem mock de rede
 deps:
     - TASK-039
@@ -28,10 +28,10 @@ n45_version: 0.2.0
 persona: qa
 phase: Phase 7 — E2E
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tests: cd apps/web && npx playwright test
 title: 'Jornadas Completas E2E: specs Onboarding, Dia normal, Ajuste manual e Envio de relatorio (Mailhog real)'
-updated_at: "2026-05-29 12:37:39"
+updated_at: "2026-05-29 16:30:16"
 ---
 ## Contexto
 
