@@ -3,30 +3,30 @@ checkpoint: null
 complexity: G
 created_at: "2026-05-29 09:23:56"
 criteria:
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~ClockTests
       text: FakeClock retorna instante fixo e SystemClock.NowLocal usa offset -03:00
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Constants_match_backend_contract
       text: Constantes MarcacaoTipo/OrigemMarcacao casam com o CHECK do banco e o Literal do backend (INICIO_JORNADA, AGENTE_AUTOMATICO, etc)
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~GetPendentes_returns_only_unsynced_ordered_by_criadoEm
       text: MarcacaoLocalRepository.GetPendentesOrdenadasAsync retorna apenas Sincronizada=false ordenadas por CriadoEm asc
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~MarcarSincronizada_removes_from_pendentes
       text: MarcarSincronizadaAsync remove a marcacao da fila de pendentes
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Upsert_twice_keeps_single_row
       text: ConfiguracaoLocalRepository.UpsertAsync chamado 2x mantem 1 unica linha (singleton Id=1)
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Serialize_toast_is_newline_terminated_json
       text: IpcSerializer.Serialize(ToastMessage) produz JSON terminado em newline contendo "type":"TOAST"
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Deserialize_dialog_response_roundtrips_answer
       text: IpcSerializer.Deserialize de DIALOG_RESPONSE retorna DialogResponse com Answer=SIM
-    - done: false
+    - done: true
       text: Solution compila e dotnet test passa (todos os testes verdes)
-    - done: false
+    - done: true
       text: Cobertura Domain+Infra >= 70%
 deps: []
 id: TASK-028
@@ -35,14 +35,14 @@ n45_version: 0.2.0
 persona: backend
 phase: Phase 5 — Agente Desktop
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
-    green: false
-    red: false
-    refactor: false
+    green: true
+    red: true
+    refactor: true
 tests: cd apps/agent && dotnet test Timesheet.Agent.sln -c Debug
 title: 'Fundação Agente: IClock + constantes de domínio, 3 repositórios concretos, contrato IPC + serializer, AddAgentInfra (DI)'
-updated_at: "2026-05-29 09:23:56"
+updated_at: "2026-05-29 09:49:33"
 ---
 ## Contexto
 
