@@ -25,14 +25,10 @@ n45_version: 0.2.0
 persona: qa
 phase: Phase 7 — E2E
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tests: cd apps/web && npx playwright test smoke
 title: 'Smoke Test E2E: caminho critico login -> aceitar privacidade -> criar jornada manual -> ver na lista mensal com Total correto'
-updated_at: "2026-05-29 13:13:09"
-worktree:
-    base_sha: b1cf650e1d5b0bc60356d5ce15eab1b834bd46f5
-    branch: worktree-agent-aa89a8290cd22505
-    path: .n45\worktree\agent-aa89a8290cd22505
+updated_at: "2026-05-29 14:08:52"
 ---
 ## Contexto
 
