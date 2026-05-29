@@ -56,7 +56,7 @@ phases:
       status: done
       tasks: []
     - name: Phase 6 — Empacotamento Windows (PyInstaller + WiX MSI)
-      status: pending
+      status: done
       tasks: []
     - name: Phase 7 — E2E
       status: pending
@@ -65,7 +65,7 @@ phases:
       status: pending
       tasks: []
 status: in-progress
-updated_at: "2026-05-29 12:18:00"
+updated_at: "2026-05-29 12:18:24"
 ---
 
 
