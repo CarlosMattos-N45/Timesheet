@@ -25,6 +25,11 @@ public static class AgentHttpExtensions
             .AddPolicyHandler(retryPolicy)
             .AddPolicyHandler(circuitBreakerPolicy);
 
+#pragma warning disable CA1416 // DpapiTokenStore é Windows-only; o agente só é implantado em Windows
+        services.AddSingleton<ITokenStore, DpapiTokenStore>();
+#pragma warning restore CA1416
+        services.AddScoped<TokenManager>();
+
         return services;
     }
 }
