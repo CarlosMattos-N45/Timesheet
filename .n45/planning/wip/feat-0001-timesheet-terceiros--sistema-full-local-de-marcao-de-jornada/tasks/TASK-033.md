@@ -3,31 +3,31 @@ checkpoint: null
 complexity: G
 created_at: "2026-05-29 09:31:33"
 criteria:
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Drains_pending_in_chronological_order_and_marks_synced
       text: Drena pendentes em ordem cronologica (CriadoEm asc) e marca Sincronizada=true
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~TransientFailure_keeps_pending_and_increments_attempts
       text: TransientFailure mantem pendente, incrementa TentativasSync e preenche ProximaTentativaEm
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~DiscardLocal_and_AlreadyExists_both_mark_synced
       text: DiscardLocal (AJUSTE_WEB venceu) e AlreadyExists (409 CONFLICT) ambos marcam sincronizada
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Does_not_post_when_backend_down
       text: Nao chama PostMarcacaoAsync quando backend down (IsHealthyAsync=false) e fila fica intacta
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~RegistrarAutomatico_inicio_enqueues_and_sets_state_em_jornada
       text: RegistrarAutomatico(INICIO_JORNADA) enfileira MarcacaoLocal com Id UUID v4 e seta estado EM_JORNADA
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~ExigeDialogo_does_not_enqueue
       text: ExigeDialogo nao enfileira marcacao (resolvido via IPC)
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Fechar_sets_state_fechada_and_enqueues_fim
       text: Fechar enfileira FIM_JORNADA e seta estado FECHADA
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet build Timesheet.Agent.sln -c Debug
       text: Solution compila, agent-build ok e testes de SyncProcessor/DecisionApplier passam
-    - done: false
+    - done: true
       text: Cobertura SyncProcessor+DecisionApplier >= 70%
 deps:
     - TASK-028
@@ -42,14 +42,14 @@ n45_version: 0.2.0
 persona: backend
 phase: Phase 5 — Agente Desktop
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
-    green: false
-    red: false
-    refactor: false
+    green: true
+    red: true
+    refactor: true
 tests: cd apps/agent && dotnet test Timesheet.Agent.sln -c Debug --filter "FullyQualifiedName~SyncProcessorTests|FullyQualifiedName~DecisionApplierTests"
 title: 'Service host: SyncProcessor (drena fila RN-012 + backoff), DecisionApplier (decisão→marcação+estado), JourneyHostedService + SyncHostedService, Program.cs wiring + Serilog'
-updated_at: "2026-05-29 10:33:44"
+updated_at: "2026-05-29 11:23:36"
 ---
 ## Contexto
 
