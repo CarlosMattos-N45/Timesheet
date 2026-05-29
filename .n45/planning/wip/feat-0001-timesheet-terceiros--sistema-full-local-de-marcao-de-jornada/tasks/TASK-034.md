@@ -3,34 +3,34 @@ checkpoint: null
 complexity: G
 created_at: "2026-05-29 09:33:12"
 criteria:
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Cnpj_validates_check_digits
       text: CnpjValidator valida digitos verificadores modulo 11, rejeita repetidos e comprimento != 14
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Cnpj_OnlyDigits_strips_mask
       text: CnpjValidator.OnlyDigits remove a mascara
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Horarios_fora_de_ordem_falham
       text: HorariosValidator aceita ordem cronologica e rejeita fora de ordem
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Password_curta_e_fraca
       text: PasswordStrength classifica <8 chars como Fraca e senha longa mista como nao-Fraca
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Wizard_passo3_invalido_quando_senhas_diferem
       text: WizardViewModel.Passo1Valido false com CNPJ ruim; Passo3Valido false com senhas diferentes
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Wizard_monta_request_com_cnpj_sem_mascara_e_horarios_formatados
       text: WizardViewModel.MontarRequest produz CreateTerceiroDto com CNPJ sem mascara e horarios HH:MM:SS
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Saudacao_por_faixa_horaria
       text: Saudacao.Para retorna Bom dia (0-11)/Boa tarde (12-17)/Boa noite (18-23)
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~DialogViewModel_timeout_resolve_com_TIMEOUT
       text: DialogViewModel sem interacao expira e resolve com Answer=TIMEOUT preservando o Id
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet build Timesheet.Agent.sln -c Debug
       text: Solution compila (agent-build) e testes de Ui passam
-    - done: false
+    - done: true
       text: Cobertura dos validadores+ViewModels (excluindo XAML/NotifyIcon) >= 70%
 deps:
     - TASK-029
@@ -41,14 +41,14 @@ n45_version: 0.2.0
 persona: frontend
 phase: Phase 5 — Agente Desktop
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
-    green: false
-    red: false
-    refactor: false
+    green: true
+    red: true
+    refactor: true
 tests: cd apps/agent && dotnet test Timesheet.Agent.sln -c Debug --filter FullyQualifiedName~Ui
 title: 'WPF UI: wizard de cadastro (RF-002, CNPJ módulo 11 + horários cronológicos), diálogos modais 60s (RF-003/005/006), toast saudação (RF-001), tray NotifyIcon, IpcClient + onboarding via BackendClient'
-updated_at: "2026-05-29 09:33:12"
+updated_at: "2026-05-29 11:07:18"
 ---
 ## Contexto
 

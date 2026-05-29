@@ -3,22 +3,22 @@ checkpoint: null
 complexity: M
 created_at: "2026-05-29 10:33:38"
 criteria:
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~Protect_then_Unprotect_roundtrips
       text: DpapiTokenStore.Protect produz blob cifrado != texto puro e Unprotect faz round-trip (Windows-only)
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~SalvarTokens_persists_encrypted_and_sets_expiry
       text: SalvarTokensAsync persiste tokens cifrados (!= texto puro) e ExpiraEm=now+ExpiresIn
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~GetValidAccessToken_returns_cached_when_not_expired
       text: GetValidAccessTokenAsync retorna access cacheado sem chamar RefreshAsync quando nao expirado
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~GetValidAccessToken_refreshes_when_expired
       text: GetValidAccessTokenAsync chama RefreshAsync 1x quando expirado e persiste tokens rotacionados + novo ExpiraEm
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~GetValidAccessToken_propagates_AuthException_when_refresh_revoked
       text: GetValidAccessTokenAsync propaga AuthException(code=UNAUTHORIZED) quando refresh revogado e quando nao ha config persistida; nao persiste tokens
-    - done: false
+    - done: true
       text: Testes passando com cobertura Infra.Http (TokenManager) >= 70%
 deps:
     - TASK-029
@@ -28,14 +28,14 @@ n45_version: 0.2.0
 persona: backend
 phase: Phase 5 — Agente Desktop
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
-    green: false
-    red: false
-    refactor: false
+    green: true
+    red: true
+    refactor: true
 tests: cd apps/agent && dotnet test Timesheet.Agent.sln -c Debug --filter "FullyQualifiedName~DpapiTokenStoreTests|FullyQualifiedName~TokenManagerTests"
 title: 'Token persistence: DpapiTokenStore (ProtectedData CurrentUser) + TokenManager (refresh automatico via IBackendClient)'
-updated_at: "2026-05-29 10:33:38"
+updated_at: "2026-05-29 11:07:02"
 ---
 ## Contexto
 
