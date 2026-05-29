@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Components.wxs — Timesheet Terceiros MSI (WiX 4+)
+  Componentes:
+  - BackendServiceComponents: timesheet-backend.exe como Windows Service TimesheetBackend
+  - AgentServiceComponents:   TimesheetAgent.exe como Windows Service TimesheetAgent
+  - AgentUiComponents:        TimesheetAgentUi.exe + atalho Startup (autostart por usuario)
+  - DataDirectoryComponents:  C:\ProgramData\TimesheetTerceiros\ + pdfs\ com ACL restrita
+-->
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
+
+  <!-- ============================================================
+       Estrutura de diretórios
+       ============================================================ -->
+  <Fragment>
+    <!-- ProgramFiles64\TimesheetTerceiros\ — binários -->
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="TimesheetTerceiros" />
+    </StandardDirectory>
+
+    <!-- C:\ProgramData\TimesheetTerceiros\ — dados de produção -->
+    <StandardDirectory Id="CommonAppDataFolder">
+      <Directory Id="DATAROOTFOLDER" Name="TimesheetTerceiros">
+        <Directory Id="PDFSFOLDER" Name="pdfs" />
+      </Directory>
+    </StandardDirectory>
+
+    <!-- Pasta Startup do usuário corrente (autostart da UI) -->
+    <StandardDirectory Id="StartupFolder" />
+  </Fragment>
+
+  <!-- ============================================================
+       Backend Service — TimesheetBackend
+       ============================================================ -->
+  <Fragment>
+    <ComponentGroup Id="BackendServiceComponents" Directory="INSTALLFOLDER">
+
+      <Component Id="BackendExe" Guid="A1B2C3D4-E5F6-7890-ABCD-EF1234567890">
+        <File Id="TimesheetBackendExe"
+              Source="apps\api\dist\timesheet-backend.exe"
+              KeyPath="yes" />
+
+        <ServiceInstall
+          Id="TimesheetBackendService"
+          Name="TimesheetBackend"
+          DisplayName="Timesheet Backend"
+          Description="Servidor HTTP local do Timesheet Terceiros (porta [TIMESHEET_PORT])"
+          Type="ownProcess"
+          Start="auto"
+          ErrorControl="normal"
+          Account="LocalSystem"
+          Interactive="no">
+          <!-- Env vars do service — expandidas no momento da instalação -->
+          <util:ServiceConfig
+            ServiceName="TimesheetBackend"
+            FirstFailureActionType="restart"
+            SecondFailureActionType="restart"
+            ThirdFailureActionType="none"
+            ResetPeriodInDays="1"
+            RestartServiceDelayInSeconds="5" />
+        </ServiceInstall>
+
+        <!-- Inicia na instalação, para em ambos os casos, remove na desinstalação -->
+        <ServiceControl
+          Id="StartTimesheetBackend"
+          Name="TimesheetBackend"
+          Start="install"
+          Stop="both"
+          Remove="uninstall"
+          Wait="yes" />
+
+        <!-- Env vars de produção definidas no ambiente do Service -->
+        <RegistryValue
+          Root="HKLM"
+          Key="SYSTEM\CurrentControlSet\Services\TimesheetBackend\Parameters\Environment"
+          Name="TIMESHEET_KEK_PATH"
+          Type="string"
+          Value="[CommonAppDataFolder]TimesheetTerceiros\key.kek"
+          KeyPath="no" />
+        <RegistryValue
+          Root="HKLM"
+          Key="SYSTEM\CurrentControlSet\Services\TimesheetBackend\Parameters\Environment"
+          Name="TIMESHEET_DB_URL"
+          Type="string"
+          Value="sqlite+aiosqlite:///[CommonAppDataFolder]TimesheetTerceiros/timesheet.sqlite"
+          KeyPath="no" />
+        <RegistryValue
+          Root="HKLM"
+          Key="SYSTEM\CurrentControlSet\Services\TimesheetBackend\Parameters\Environment"
+          Name="TIMESHEET_PDF_DIR"
+          Type="string"
+          Value="[CommonAppDataFolder]TimesheetTerceiros\pdfs"
+          KeyPath="no" />
+        <RegistryValue
+          Root="HKLM"
+          Key="SYSTEM\CurrentControlSet\Services\TimesheetBackend\Parameters\Environment"
+          Name="TIMESHEET_SCHEDULER_JOBSTORE"
+          Type="string"
+          Value="[CommonAppDataFolder]TimesheetTerceiros\scheduler.sqlite"
+          KeyPath="no" />
+        <RegistryValue
+          Root="HKLM"
+          Key="SYSTEM\CurrentControlSet\Services\TimesheetBackend\Parameters\Environment"
+          Name="TIMESHEET_PORT"
+          Type="string"
+          Value="[TIMESHEET_PORT]"
+          KeyPath="no" />
+        <RegistryValue
+          Root="HKLM"
+          Key="SYSTEM\CurrentControlSet\Services\TimesheetBackend\Parameters\Environment"
+          Name="TIMESHEET_JWT_SECRET"
+          Type="string"
+          Value="[TIMESHEET_JWT_SECRET]"
+          KeyPath="no" />
+      </Component>
+
+    </ComponentGroup>
+  </Fragment>
+
+  <!-- ============================================================
+       Agent Service — TimesheetAgent
+       ============================================================ -->
+  <Fragment>
+    <ComponentGroup Id="AgentServiceComponents" Directory="INSTALLFOLDER">
+
+      <Component Id="AgentServiceExe" Guid="B2C3D4E5-F6A7-8901-BCDE-F12345678901">
+        <File Id="TimesheetAgentExe"
+              Source="apps\agent\dist\service\TimesheetAgent.exe"
+              KeyPath="yes" />
+
+        <ServiceInstall
+          Id="TimesheetAgentService"
+          Name="TimesheetAgent"
+          DisplayName="Timesheet Agent"
+          Description="Agente de processamento de tarefas do Timesheet Terceiros"
+          Type="ownProcess"
+          Start="auto"
+          ErrorControl="normal"
+          Account="LocalSystem"
+          Interactive="no">
+          <util:ServiceConfig
+            ServiceName="TimesheetAgent"
+            FirstFailureActionType="restart"
+            SecondFailureActionType="restart"
+            ThirdFailureActionType="none"
+            ResetPeriodInDays="1"
+            RestartServiceDelayInSeconds="5" />
+        </ServiceInstall>
+
+        <ServiceControl
+          Id="StartTimesheetAgent"
+          Name="TimesheetAgent"
+          Start="install"
+          Stop="both"
+          Remove="uninstall"
+          Wait="yes" />
+      </Component>
+
+    </ComponentGroup>
+  </Fragment>
+
+  <!-- ============================================================
+       Agent UI — TimesheetAgentUi (autostart via atalho em Startup)
+       ============================================================ -->
+  <Fragment>
+    <ComponentGroup Id="AgentUiComponents" Directory="INSTALLFOLDER">
+
+      <Component Id="AgentUiExe" Guid="C3D4E5F6-A7B8-9012-CDEF-123456789012">
+        <File Id="TimesheetAgentUiExe"
+              Source="apps\agent\dist\ui\TimesheetAgentUi.exe"
+              KeyPath="yes" />
+
+        <!-- Atalho na pasta Startup do usuário para autostart na sessão -->
+        <Shortcut
+          Id="AgentUiStartupShortcut"
+          Directory="StartupFolder"
+          Name="TimesheetAgentUi"
+          Target="[INSTALLFOLDER]TimesheetAgentUi.exe"
+          WorkingDirectory="INSTALLFOLDER"
+          Advertise="no" />
+
+      </Component>
+
+    </ComponentGroup>
+  </Fragment>
+
+  <!-- ============================================================
+       Dados de Produção — C:\ProgramData\TimesheetTerceiros\
+       ============================================================ -->
+  <Fragment>
+    <ComponentGroup Id="DataDirectoryComponents" Directory="DATAROOTFOLDER">
+
+      <!-- Pasta raiz dos dados -->
+      <Component Id="DataRootDir" Guid="D4E5F6A7-B8C9-0123-DEF0-234567890123">
+        <CreateFolder Directory="DATAROOTFOLDER" />
+      </Component>
+
+      <!-- Pasta pdfs\ com ACL restrita à conta LocalSystem (conta do Service backend) -->
+      <Component Id="PdfsDir" Guid="E5F6A7B8-C9D0-1234-EF01-345678901234">
+        <CreateFolder Directory="PDFSFOLDER">
+          <!--
+            ACL: somente SYSTEM (conta LocalSystem do Service) tem controle total.
+            Administradores mantêm acesso para suporte. Usuários normais sem acesso.
+          -->
+          <util:PermissionEx
+            User="SYSTEM"
+            GenericAll="yes" />
+          <util:PermissionEx
+            User="Administrators"
+            GenericAll="yes" />
+        </CreateFolder>
+      </Component>
+
+    </ComponentGroup>
+  </Fragment>
+
+</Wix>

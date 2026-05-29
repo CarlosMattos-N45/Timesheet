@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Product.wxs — Timesheet Terceiros MSI (WiX 4+)
+  Instala TimesheetBackend (Windows Service) + TimesheetAgent (Windows Service)
+  + TimesheetAgentUi (autostart via atalho em Startup)
+  Dados de producao em C:\ProgramData\TimesheetTerceiros\
+-->
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util"
+     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+
+  <Package
+    Name="Timesheet Terceiros"
+    Manufacturer="C&amp;M Tecnologia"
+    Version="1.0.0"
+    UpgradeCode="B7A3E4F1-2C8D-4E56-9F0A-1B2C3D4E5F60"
+    InstallerVersion="500"
+    Scope="perMachine"
+    Language="1046">
+
+    <!-- Upgrade limpo: remove versao anterior antes de instalar nova -->
+    <MajorUpgrade DowngradeErrorMessage="Uma versao mais recente do Timesheet Terceiros ja esta instalada." />
+
+    <!-- Propriedades configuráveis na linha de comando -->
+    <Property Id="TIMESHEET_PORT" Value="8765" />
+
+    <!-- JWT secret gerado concatenando dois GUIDs sem hifens (64 chars hex) -->
+    <SetProperty Id="TIMESHEET_JWT_SECRET"
+                 Value="[GUID][GUID]"
+                 After="AppSearch"
+                 Sequence="both" />
+
+    <!-- Manter JWT secret estável em upgrades (não regenerar se já existe) -->
+    <Property Id="TIMESHEET_JWT_SECRET" Secure="yes" />
+
+    <!-- Custom Action: aguardar backend ficar pronto após inicio do servico -->
+    <Binary Id="WaitReadyScript" SourceFile="apps\installer\WaitForServiceReady.js" />
+
+    <CustomAction
+      Id="WaitForServiceReady"
+      BinaryRef="WaitReadyScript"
+      JScriptCall="WaitForReady"
+      Execute="deferred"
+      Impersonate="no"
+      Return="check" />
+
+    <InstallExecuteSequence>
+      <Custom Action="WaitForServiceReady" After="StartServices" Condition="NOT Installed" />
+    </InstallExecuteSequence>
+
+    <!-- UI mínima (somente progresso + propriedades) -->
+    <ui:WixUI Id="WixUI_Minimal" />
+
+    <!-- Referencia os componentes -->
+    <Feature Id="ProductFeature" Title="Timesheet Terceiros" Level="1">
+      <ComponentGroupRef Id="BackendServiceComponents" />
+      <ComponentGroupRef Id="AgentServiceComponents" />
+      <ComponentGroupRef Id="AgentUiComponents" />
+      <ComponentGroupRef Id="DataDirectoryComponents" />
+    </Feature>
+
+  </Package>
+
+</Wix>

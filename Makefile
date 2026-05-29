@@ -1,8 +1,9 @@
-.PHONY: help smoke api-smoke web-smoke agent-smoke api-dev api-test api-lint web-dev web-build web-test web-lint agent-build agent-test agent-format smtp-up smtp-down smtp-status data-dir
+.PHONY: help smoke api-smoke web-smoke agent-smoke api-dev api-test api-lint web-dev web-build web-test web-lint agent-build agent-test agent-format smtp-up smtp-down smtp-status data-dir build build-backend publish-agent installer-validate release setup
 
 API_DIR := apps/api
 WEB_DIR := apps/web
 AGENT_DIR := apps/agent
+INSTALLER_DIR := apps/installer
 
 help:
 	@echo Comandos disponiveis:
@@ -25,6 +26,12 @@ help:
 	@echo   smtp-down     - derruba Mailhog
 	@echo   smtp-status   - estado do servico Mailhog
 	@echo   data-dir      - cria diretorio data/ local (SQLite + key.kek dev)
+	@echo   build         - compila backend + agente + gera MSI em dist/
+	@echo   build-backend - compila apenas o backend (PyInstaller)
+	@echo   publish-agent - publica apenas o agente .NET (self-contained)
+	@echo   installer-validate - valida o MSI WiX sem subir app (CI)
+	@echo   release       - build + assina MSI com signtool (SIGN_CERT obrigatorio)
+	@echo   setup         - prepara ambiente dev local sem subir app
 
 smoke: api-smoke web-smoke agent-smoke
 	@echo "[SMOKE OK] api + web + agent ok"
@@ -70,6 +77,28 @@ agent-format:
 
 data-dir:
 	@powershell -NoProfile -Command "if (-not (Test-Path data)) { New-Item -ItemType Directory data | Out-Null }"
+
+# -----------------------------------------------------------------------
+# Build de producao
+# -----------------------------------------------------------------------
+
+build-backend:
+	powershell -ExecutionPolicy Bypass -File $(API_DIR)/scripts/build-backend.ps1
+
+publish-agent:
+	powershell -ExecutionPolicy Bypass -File $(AGENT_DIR)/scripts/publish-agent.ps1
+
+installer-validate:
+	@powershell -NoProfile -Command "if (-not (Test-Path dist)) { New-Item -ItemType Directory dist | Out-Null }"
+	wix build $(INSTALLER_DIR)/Product.wxs $(INSTALLER_DIR)/Components.wxs -ext WixToolset.Util.wixext -ext WixToolset.UI.wixext -o dist/TimesheetTerceiros.msi
+
+build: build-backend publish-agent installer-validate
+
+release: build
+	powershell -NoProfile -Command "if ($$env:SIGN_CERT) { signtool sign /f $$env:SIGN_CERT /fd SHA256 /t http://timestamp.digicert.com dist/TimesheetTerceiros.msi; Write-Host '[release] MSI assinado.' } else { Write-Host '[release] SIGN_CERT ausente -- MSI nao assinado (dev).' }"
+
+setup: data-dir
+	@powershell -NoProfile -Command "Write-Host '[setup] Ambiente dev preparado (data/). Producao via MSI.'"
 
 smtp-up:
 	docker compose -f docker-compose.dev.yml up -d mailhog
