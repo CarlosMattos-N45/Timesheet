@@ -3,16 +3,16 @@ checkpoint: null
 complexity: M
 created_at: "2026-05-29 11:46:46"
 criteria:
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet publish src/Timesheet.Agent.Service -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -o dist/service
       text: dotnet publish do Service gera apps/agent/dist/service/TimesheetAgent.exe self-contained single-file win-x64
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet publish src/Timesheet.Agent.Ui -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -o dist/ui
       text: dotnet publish da UI gera apps/agent/dist/ui/TimesheetAgentUi.exe self-contained single-file win-x64
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test Timesheet.Agent.sln -c Release --no-restore
       text: Solution compila em Release com os novos RuntimeIdentifier/AssemblyName e todos os testes existentes continuam passando
-    - done: false
+    - done: true
       text: publish-agent.ps1 falha com exit !=0 se algum dos 2 .exe nao for produzido
 deps:
     - TASK-036
@@ -22,10 +22,10 @@ n45_version: 0.2.0
 persona: devops
 phase: Phase 6 — Empacotamento Windows (PyInstaller + WiX MSI)
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tests: cd apps/agent && dotnet test Timesheet.Agent.sln -c Release --no-restore
 title: Publish .NET self-contained single-file do Agente (Service TimesheetAgent + UI)
-updated_at: "2026-05-29 11:46:46"
+updated_at: "2026-05-29 12:07:02"
 ---
 ## Contexto
 
