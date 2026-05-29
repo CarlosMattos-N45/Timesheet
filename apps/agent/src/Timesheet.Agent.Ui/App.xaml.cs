@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Timesheet.Agent.Infra.Db;
@@ -24,16 +25,24 @@ public partial class App : WpfApp
         base.OnStartup(e);
 
         // Infra: DI simples para este processo
+        var dbPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "TimesheetAgent", "agent.db");
+
         var services = new ServiceCollection();
         services.AddDbContext<AgentDbContext>(o =>
-            o.UseSqlite("Data Source=timesheet-agent.db"));
+            o.UseSqlite($"Data Source={dbPath}"));
         services.AddScoped<ConfiguracaoLocalRepository>();
         services.AddHttpClient<IBackendClient, BackendClient>(c =>
             c.BaseAddress = new Uri("http://127.0.0.1:8765"));
+#pragma warning disable CA1416 // DpapiTokenStore é Windows-only; o agente só é implantado em Windows
+        services.AddSingleton<ITokenStore, DpapiTokenStore>();
+#pragma warning restore CA1416
         var sp = services.BuildServiceProvider();
 
         var repo = sp.GetRequiredService<ConfiguracaoLocalRepository>();
         var backend = sp.GetRequiredService<IBackendClient>();
+        var store = sp.GetRequiredService<ITokenStore>();
 
         // Verifica se o cadastro já foi realizado
         var cfg = await repo.GetAsync();
@@ -57,8 +66,8 @@ public partial class App : WpfApp
                 var novaCfg = new Timesheet.Agent.Domain.ConfiguracaoLocal
                 {
                     BackendBaseUrl = "http://127.0.0.1:8765",
-                    JwtAccessToken = auth.AccessToken,
-                    JwtRefreshToken = auth.RefreshToken,
+                    JwtAccessToken = store.Protect(auth.AccessToken),
+                    JwtRefreshToken = store.Protect(auth.RefreshToken),
                     ExpiraEm = DateTimeOffset.UtcNow.AddSeconds(auth.ExpiresIn).ToString("o"),
                 };
                 await repo.UpsertAsync(novaCfg);
