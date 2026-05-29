@@ -28,7 +28,8 @@ public static class AgentHttpExtensions
 #pragma warning disable CA1416 // DpapiTokenStore é Windows-only; o agente só é implantado em Windows
         services.AddSingleton<ITokenStore, DpapiTokenStore>();
 #pragma warning restore CA1416
-        services.AddScoped<TokenManager>();
+        services.AddScoped<ITokenManager, TokenManager>();
+        services.AddScoped<TokenManager>(sp => (TokenManager)sp.GetRequiredService<ITokenManager>());
 
         return services;
     }

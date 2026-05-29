@@ -3,6 +3,12 @@ using Timesheet.Agent.Infra.Db;
 
 namespace Timesheet.Agent.Infra.Http;
 
+public interface ITokenManager
+{
+    Task SalvarTokensAsync(AuthResult auth, CancellationToken ct = default);
+    Task<string> GetValidAccessTokenAsync(CancellationToken ct = default);
+}
+
 /// <summary>
 /// Persiste tokens JWT cifrados e decide quando refrescar automaticamente.
 /// </summary>
@@ -10,7 +16,7 @@ public sealed class TokenManager(
     ConfiguracaoLocalRepository repo,
     ITokenStore store,
     IBackendClient client,
-    IClock clock)
+    IClock clock) : ITokenManager
 {
     private static readonly TimeSpan MargemExpiracao = TimeSpan.FromSeconds(30);
 
