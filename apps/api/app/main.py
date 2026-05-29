@@ -104,6 +104,32 @@ def create_app() -> FastAPI:
         app.include_router(sistema_router_dev)
         bind_smoke_rate_limit(app)
 
+    # SPA mount — routers /api/* registered above keep precedence.
+    # The catch-all is added LAST so specific routes always win.
+    from fastapi import HTTPException  # noqa: PLC0415
+    from fastapi.responses import FileResponse  # noqa: PLC0415
+    from fastapi.staticfiles import StaticFiles  # noqa: PLC0415
+
+    from app.launcher import static_dir_for_bundle  # noqa: PLC0415
+
+    static_dir = static_dir_for_bundle()
+    assets = static_dir / "assets"
+    if assets.is_dir():
+        app.mount("/assets", StaticFiles(directory=str(assets)), name="assets")
+
+    # Paths that belong to the framework but are disabled in prod (docs/openapi).
+    _RESERVED_PREFIXES = ("api", "docs", "redoc", "openapi.json")
+
+    @app.get("/{full_path:path}", include_in_schema=False)
+    async def _spa_fallback(full_path: str) -> FileResponse:
+        # Paths under /api/ are API territory — if they reach this catch-all it
+        # means no router handled them, so return 404 rather than index.html.
+        # Also preserve 404 behaviour for framework paths (/docs etc.) that are
+        # disabled in production.
+        if any(full_path.startswith(p) for p in _RESERVED_PREFIXES):
+            raise HTTPException(status_code=404)
+        return FileResponse(str(static_dir / "index.html"))
+
     return app
 
 

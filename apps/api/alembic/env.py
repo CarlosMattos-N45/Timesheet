@@ -46,8 +46,11 @@ def run_migrations_online() -> None:
 
     @event.listens_for(connectable, "connect")
     def set_sqlite_pragma(dbapi_conn: object, _: object) -> None:
-        # Ativar FK enforcement por conexao (SQLite ignora FKs por padrao)
         cursor = dbapi_conn.cursor()  # type: ignore[union-attr]
+        # PRAGMA key DEVE ser o primeiro statement em conexão SQLCipher.
+        cipher = os.environ.get("TIMESHEET_DB_CIPHER_KEY")
+        if cipher:
+            cursor.execute(f"PRAGMA key = \"x'{cipher}'\"")
         cursor.execute("PRAGMA foreign_keys=ON")
         cursor.close()
 
