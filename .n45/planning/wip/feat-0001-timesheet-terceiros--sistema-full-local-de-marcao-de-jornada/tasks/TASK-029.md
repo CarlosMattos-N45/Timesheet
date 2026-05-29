@@ -3,28 +3,28 @@ checkpoint: null
 complexity: M
 created_at: "2026-05-29 10:30:54"
 criteria:
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~LoginAsync
       text: LoginAsync parseia tokens em 200 e lanca AuthException(code=UNAUTHORIZED) em 401
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~RefreshAsync_parses_rotated_tokens_on_200
       text: RefreshAsync parseia tokens rotacionados em 200
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~CreateTerceiroAsync_throws_SetupAlreadyDone_on_403
       text: CreateTerceiroAsync lanca AuthException(code=SETUP_ALREADY_DONE) em 403
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~PostMarcacao_returns
       text: PostMarcacaoAsync mapeia 409 AJUSTE_WEB_WINS->DiscardLocal, 409 CONFLICT->AlreadyExists, 422->Rejected
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~PostMarcacao_body_includes_idempotency_key_and_origem
       text: PostMarcacaoAsync envia body com idempotency_key e origem
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~PostMarcacao_retries_on_503_then_succeeds
       text: Polly reabsorve 503 transientes (retorna Created apos 3x503+201) e retorna TransientFailure quando retry esgota
-    - done: false
+    - done: true
       test: cd apps/agent && dotnet test --filter FullyQualifiedName~IsReadyAsync_false_on_503
       text: IsHealthyAsync/IsReadyAsync retornam bool sem lancar (false em 503)
-    - done: false
+    - done: true
       text: Testes passando com cobertura Infra.Http >= 70%
 deps:
     - TASK-028
@@ -34,14 +34,14 @@ n45_version: 0.2.0
 persona: backend
 phase: Phase 5 — Agente Desktop
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tdd:
-    green: false
-    red: false
-    refactor: false
+    green: true
+    red: true
+    refactor: true
 tests: cd apps/agent && dotnet test Timesheet.Agent.sln -c Debug --filter FullyQualifiedName~BackendClientTests
 title: 'Infra HTTP: BackendClient (login/refresh/terceiros/marcacoes/health/ready) + Polly (circuit breaker + retry)'
-updated_at: "2026-05-29 10:30:54"
+updated_at: "2026-05-29 10:50:36"
 ---
 ## Contexto
 
