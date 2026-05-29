@@ -53,7 +53,7 @@ phases:
       status: done
       tasks: []
     - name: Phase 5 — Agente Desktop
-      status: pending
+      status: done
       tasks: []
     - name: Phase 6 — Empacotamento Windows (PyInstaller + WiX MSI)
       status: pending
@@ -65,7 +65,7 @@ phases:
       status: pending
       tasks: []
 status: in-progress
-updated_at: "2026-05-29 11:22:58"
+updated_at: "2026-05-29 11:32:45"
 ---
 
 
