@@ -3,21 +3,21 @@ checkpoint: null
 complexity: G
 created_at: "2026-05-29 11:46:36"
 criteria:
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_launcher.py -k test_derive_db_cipher_key_hex_matches_crypto
       text: derive_db_cipher_key_hex(kek) retorna hex de 64 chars igual a format_db_cipher_key(derive_subkey(kek, b'db')) e e deterministico
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_launcher.py -k test_prepare_runtime_sets_db_cipher_key
       text: prepare_runtime(settings) com db_cipher_key=None passa a derivar a chave da KEK (settings.db_cipher_key vira hex de 64 chars nao-nulo)
-    - done: false
+    - done: true
       test: cd apps/api && pytest tests/test_launcher.py -k test_spa_fallback_serves_index
       text: GET / e GET /jornadas (rota nao-API) servem o index.html da SPA e GET /api/v1/health mantem precedencia retornando status ok
-    - done: false
+    - done: true
       test: grep -E 'pywin32' apps/api/pyproject.toml
       text: pyproject.toml inclui pywin32 (win32) e pyinstaller; alembic/env.py aplica PRAGMA key como primeiro statement quando TIMESHEET_DB_CIPHER_KEY presente
-    - done: false
+    - done: true
       text: build-backend.ps1 copia apps/web/dist para app/static e produz apps/api/dist/timesheet-backend.exe via pyinstaller timesheet-backend.spec
-    - done: false
+    - done: true
       text: ruff e mypy --strict passam na API
 deps: []
 id: TASK-036
@@ -26,10 +26,10 @@ n45_version: 0.2.0
 persona: devops
 phase: Phase 6 — Empacotamento Windows (PyInstaller + WiX MSI)
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tests: cd apps/api && pytest tests/test_launcher.py
 title: Backend launcher de producao + serve SPA estatica + bundle PyInstaller --onefile
-updated_at: "2026-05-29 11:46:36"
+updated_at: "2026-05-29 11:59:22"
 ---
 ## Contexto
 
