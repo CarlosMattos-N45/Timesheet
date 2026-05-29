@@ -1,4 +1,4 @@
-.PHONY: help smoke api-smoke web-smoke agent-smoke api-dev api-test api-lint web-dev web-build web-test web-lint agent-build agent-test agent-format smtp-up smtp-down smtp-status data-dir build build-backend publish-agent installer-validate release setup
+.PHONY: help smoke api-smoke web-smoke agent-smoke api-dev api-test api-lint web-dev web-build web-test web-lint web-e2e web-e2e-install agent-build agent-test agent-format smtp-up smtp-down smtp-status data-dir build build-backend publish-agent installer-validate release setup
 
 API_DIR := apps/api
 WEB_DIR := apps/web
@@ -65,6 +65,14 @@ web-test:
 
 web-lint:
 	cd $(WEB_DIR) && npm run lint && npm run typecheck
+
+web-e2e-install:
+	cd $(WEB_DIR) && npm ci && npx playwright install --with-deps chromium
+
+web-e2e:
+	@powershell -NoProfile -Command "if (Test-Path apps/api/data/e2e.sqlite) { Remove-Item apps/api/data/e2e.sqlite -Force }"
+	docker compose -f docker-compose.dev.yml up -d mailhog
+	cd $(WEB_DIR) && npm run e2e
 
 agent-build:
 	cd $(AGENT_DIR) && dotnet build Timesheet.Agent.sln -c Debug

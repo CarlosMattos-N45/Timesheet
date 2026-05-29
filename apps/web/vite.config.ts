@@ -23,6 +23,7 @@ export default defineConfig({
     setupFiles: ["./src/test/setup.ts"],
     css: false,
     testTimeout: 15000,
+    exclude: ["**/node_modules/**", "**/e2e/**"],
     coverage: {
       provider: "v8",
       include: ["src/**/*.{ts,tsx}"],
