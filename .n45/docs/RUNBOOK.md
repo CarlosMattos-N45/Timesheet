@@ -30,7 +30,7 @@ start: docker compose -f docker-compose.dev.yml up -d
 stop: docker compose -f docker-compose.dev.yml down
 test:
     all: make smoke
-    e2e: null
+    e2e: cd apps/web && npx playwright test
     unit: cd apps/api && pytest
 url: http://localhost:8765
 ---
@@ -170,3 +170,104 @@ msiexec /x TimesheetTerceiros.msi /qn
 # - Atalho de autostart da UI na pasta Startup
 # Dados em C:\ProgramData\TimesheetTerceiros\ sao preservados (convencao MSI)
 ```
+
+## Pre-requisitos (desenvolvimento)
+
+- Docker Desktop (para Mailhog)
+- Python 3.12+ com pip
+- Node.js 20+
+- .NET 8 SDK
+- WiX Toolset (para gerar MSI)
+- PyInstaller (`pip install pyinstaller`)
+
+## Variaveis de Ambiente
+
+| Variavel                  | Descricao                                        | Exemplo                     | Obrigatorio | Secret |
+| ------------------------- | ------------------------------------------------ | --------------------------- | ----------- | ------ |
+| TIMESHEET_DEV             | Habilita OpenAPI docs e modo desenvolvimento     | true                        | nao         | nao    |
+| TIMESHEET_PORT            | Porta do servidor HTTP                           | 8765                        | nao         | nao    |
+| TIMESHEET_DB_CIPHER_KEY   | Chave de cifragem SQLCipher (dev apenas)         | hex-32-bytes                | sim (dev)   | sim    |
+| TIMESHEET_SECRET_KEY      | Chave secreta JWT                                | hex-32-bytes                | sim         | sim    |
+| TIMESHEET_HOST            | Host de bind do servidor                         | 127.0.0.1                   | nao         | nao    |
+
+## Setup (primeira execucao — dev)
+
+```bash
+# 1. Criar diretorio de dados local
+make data-dir
+
+# 2. Subir Mailhog
+make smtp-up
+
+# 3. Copiar .env.example para .env e preencher as variaveis secret
+cp .env.example .env
+# Editar .env com os valores reais
+
+# 4. Instalar dependencias backend
+cd apps/api && pip install -e ".[dev]"
+
+# 5. Rodar migrations
+cd apps/api && alembic upgrade head
+
+# 6. Instalar dependencias frontend
+cd apps/web && npm install
+
+# 7. Instalar dependencias do agente .NET
+cd apps/agent && dotnet restore
+
+# 8. Validar smoke completo
+make smoke
+```
+
+## Health Checks
+
+| Servico               | Endpoint                           | Metodo | Resposta esperada |
+| --------------------- | ---------------------------------- | ------ | ----------------- |
+| Backend (vivo)        | /api/v1/health                     | GET    | 200 OK            |
+| Backend (pronto)      | /api/v1/ready                      | GET    | 200 OK {"status":"ready"} |
+| Mailhog UI (dev)      | http://localhost:8025              | GET    | 200 OK            |
+
+## Comandos Uteis
+
+```bash
+# Rodar backend em modo dev (OpenAPI habilitado)
+cd apps/api && TIMESHEET_DEV=true uvicorn app.main:app --reload --port 8765
+
+# Rodar frontend em modo dev
+cd apps/web && npm run dev
+
+# Rodar testes backend
+cd apps/api && pytest
+
+# Rodar testes agente
+cd apps/agent && dotnet test Timesheet.Agent.sln
+
+# Rodar E2E Playwright
+cd apps/web && npx playwright test
+
+# Build completo (backend PyInstaller + agente .NET + MSI)
+make build
+
+# Smoke (valida api/health + web dev + agent build)
+make smoke
+
+# Logs do Mailhog (docker)
+docker compose -f docker-compose.dev.yml logs -f mailhog
+```
+
+## Integracoes Externas
+
+| Servico | Finalidade                                     | Autenticacao                         |
+| ------- | ---------------------------------------------- | ------------------------------------ |
+| SMTP    | Envio de relatorio mensal PDF ao destinatario  | Usuario + senha configurados pelo Terceiro via /api/v1/smtp |
+
+## Troubleshooting
+
+| Sintoma                                   | Causa provavel                           | Solucao                                                     |
+| ----------------------------------------- | ---------------------------------------- | ------------------------------------------------------------ |
+| `curl` para /health falha                 | Backend nao esta rodando                 | Verificar processo uvicorn ou Windows Service TimesheetBackend |
+| Mailhog nao acessivel em :8025           | Container nao subiu                      | `make smtp-up` e verificar Docker Desktop                    |
+| SQLCipher: file is not a database        | TIMESHEET_DB_CIPHER_KEY incorreta        | Verificar .env e recriar banco com `make data-dir`           |
+| E2E Playwright falha ao conectar         | Backend ou frontend nao esta rodando     | Rodar `make smtp-up` e verificar webServer config no playwright.config.ts |
+| Windows Service nao inicia               | Binario nao publicado ou MSI corrompido  | `make build` e reinstalar MSI                                |
+| PDF nao gerado: WeasyPrint erro           | DLLs libpango/libcairo ausentes no bundle| Verificar PyInstaller spec para incluir DLLs necessarias     |
