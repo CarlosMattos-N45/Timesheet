@@ -1,0 +1,150 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: "release-${{ github.ref }}"
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        run: pip install -e ".[dev,build]"
+        working-directory: apps/api
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Node dependencies
+        run: npm ci
+        working-directory: apps/web
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Install WiX CLI
+        run: |
+          dotnet tool install --global wix
+          wix extension add -g WixToolset.Util.wixext
+          wix extension add -g WixToolset.UI.wixext
+
+      - name: Build backend + agent + MSI
+        run: make build
+
+      - name: MSI smoke (install / health / ready / uninstall)
+        shell: pwsh
+        run: |
+          # Install silencioso
+          $log = 'dist/install.log'
+          $proc = Start-Process msiexec -ArgumentList '/i', 'dist/TimesheetTerceiros.msi', '/qn', 'TIMESHEET_PORT=8765', "/l*v", $log -Wait -PassThru
+          if ($proc.ExitCode -ne 0) {
+            Write-Error "msiexec install falhou com exit code $($proc.ExitCode)"
+            exit 1
+          }
+
+          # Verificar services RUNNING
+          $services = @('TimesheetBackend', 'TimesheetAgent')
+          foreach ($svc in $services) {
+            $query = sc.exe query $svc 2>&1
+            if ($query -notmatch 'RUNNING') {
+              Write-Error "Service $svc nao esta RUNNING:`n$query"
+              exit 1
+            }
+            Write-Host "[smoke] $svc RUNNING"
+          }
+
+          # Aguardar /health com timeout
+          $port = 8765
+          $maxAttempts = 60
+          $healthOk = $false
+          for ($i = 1; $i -le $maxAttempts; $i++) {
+            try {
+              $resp = Invoke-WebRequest -Uri "http://127.0.0.1:$port/api/v1/health" -UseBasicParsing -TimeoutSec 2 -ErrorAction Stop
+              if ($resp.StatusCode -eq 200) { $healthOk = $true; break }
+            } catch {}
+            Start-Sleep -Seconds 1
+          }
+          if (-not $healthOk) {
+            Write-Error "/api/v1/health nao respondeu 200 em ${maxAttempts}s"
+            exit 1
+          }
+          Write-Host "[smoke] /api/v1/health 200 OK"
+
+          # Verificar /ready
+          $readyOk = $false
+          for ($i = 1; $i -le $maxAttempts; $i++) {
+            try {
+              $resp = Invoke-WebRequest -Uri "http://127.0.0.1:$port/api/v1/ready" -UseBasicParsing -TimeoutSec 2 -ErrorAction Stop
+              if ($resp.StatusCode -eq 200) { $readyOk = $true; break }
+            } catch {}
+            Start-Sleep -Seconds 1
+          }
+          if (-not $readyOk) {
+            Write-Error "/api/v1/ready nao respondeu 200 em ${maxAttempts}s"
+            exit 1
+          }
+          Write-Host "[smoke] /api/v1/ready 200 OK"
+
+          # Uninstall silencioso
+          $uproc = Start-Process msiexec -ArgumentList '/x', 'dist/TimesheetTerceiros.msi', '/qn' -Wait -PassThru
+          if ($uproc.ExitCode -ne 0) {
+            Write-Error "msiexec uninstall falhou com exit code $($uproc.ExitCode)"
+            exit 1
+          }
+
+          # Confirmar remocao dos services (exit code 1060 = service does not exist)
+          foreach ($svc in $services) {
+            sc.exe query $svc 2>&1 | Out-Null
+            if ($LASTEXITCODE -ne 1060) {
+              Write-Error "Service $svc ainda existe apos uninstall (esperado exit 1060, obtido $LASTEXITCODE)"
+              exit 1
+            }
+            Write-Host "[smoke] $svc removido com sucesso"
+          }
+
+          Write-Host "[smoke] MSI install/health/ready/uninstall OK"
+
+      - name: Sign MSI (conditional)
+        shell: pwsh
+        env:
+          SIGN_CERT_PFX_BASE64: ${{ secrets.SIGN_CERT_PFX_BASE64 }}
+          SIGN_CERT_PASSWORD: ${{ secrets.SIGN_CERT_PASSWORD }}
+        run: |
+          if ($env:SIGN_CERT_PFX_BASE64) {
+            [IO.File]::WriteAllBytes('cert.pfx', [Convert]::FromBase64String($env:SIGN_CERT_PFX_BASE64))
+            signtool sign /f cert.pfx /p $env:SIGN_CERT_PASSWORD /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 dist/TimesheetTerceiros.msi
+            Remove-Item cert.pfx -Force
+            Write-Host '[release] MSI assinado.'
+          } else {
+            Write-Host '[release] SIGN_CERT ausente -- MSI nao assinado (dev).'
+          }
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/TimesheetTerceiros.msi
+
+      - name: Upload diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: msi-diagnostics
+          path: |
+            dist/install.log
+            dist/TimesheetTerceiros.msi
