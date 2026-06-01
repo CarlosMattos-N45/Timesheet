@@ -211,3 +211,5 @@
 {"ts":"2026-05-29T19:32:06Z","event":"decide","feature":"feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada","decision":"Corrigir a suite (QA)"}
 {"ts":"2026-05-29T19:32:12Z","event":"spawn","feature":"feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada","agent":"fullstack-review","attempt":2}
 {"ts":"2026-05-29T19:41:39Z","event":"return","feature":"feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada","agent":"fullstack-review","status":"done","summary":"Specs E2E isolados por data deterministica; suite completa passa verde 2x seguidas"}
+{"ts":"2026-06-01T11:55:41Z","event":"spawn","feature":"feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada","phase":"Phase 8 — CI/CD","agent":"architect-continue-roadmap","attempt":1}
+{"ts":"2026-06-01T12:09:08Z","event":"return","feature":"feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada","phase":"Phase 8 — CI/CD","agent":"architect-continue-roadmap","status":"done","summary":"Phase 8 — CI/CD planejada. Criei 3 task files (persona devops), uma por arquivo de workflow para permitir paralelismo sem conflito de merge"}
