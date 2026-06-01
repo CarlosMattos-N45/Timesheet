@@ -3,22 +3,22 @@ checkpoint: null
 complexity: M
 created_at: "2026-06-01 09:08:00"
 criteria:
-    - done: false
+    - done: true
       test: actionlint .github/workflows/release.yml
       text: actionlint valida release.yml sem erros de schema
-    - done: false
+    - done: true
       test: grep -F windows-latest .github/workflows/release.yml
       text: Workflow dispara em tag v*.*.* e roda em windows-latest
-    - done: false
+    - done: true
       test: grep -F make build .github/workflows/release.yml
       text: Workflow builda backend agente e MSI via make build
-    - done: false
+    - done: true
       test: grep -F api/v1/ready .github/workflows/release.yml
       text: Smoke do MSI faz install silencioso checa health e ready e uninstall
-    - done: false
+    - done: true
       test: grep -F SIGN_CERT_PFX_BASE64 .github/workflows/release.yml
       text: Assinatura via signtool so ocorre quando o secret existe nunca com cert placeholder
-    - done: false
+    - done: true
       test: grep -F TimesheetTerceiros.msi .github/workflows/release.yml
       text: Publica o MSI como asset do GitHub Release
 deps:
@@ -31,10 +31,10 @@ n45_version: 0.2.0
 persona: devops
 phase: Phase 8 — CI/CD
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tests: actionlint .github/workflows/release.yml
 title: 'Release no CI: workflow GitHub Actions em tag vX.Y.Z (windows-latest) com build do MSI, smoke install/health/ready/uninstall, assinatura condicional e publish do Release'
-updated_at: "2026-06-01 09:08:00"
+updated_at: "2026-06-01 09:17:59"
 ---
 ## Contexto
 

@@ -3,22 +3,22 @@ checkpoint: null
 complexity: M
 created_at: "2026-06-01 09:05:39"
 criteria:
-    - done: false
+    - done: true
       test: actionlint .github/workflows/ci.yml
       text: actionlint valida ci.yml sem erros de schema
-    - done: false
+    - done: true
       test: grep -F windows-latest .github/workflows/ci.yml
       text: Workflow tem 3 jobs api web agent todos em windows-latest
-    - done: false
+    - done: true
       test: grep -F cov-fail-under=80 .github/workflows/ci.yml
       text: Job api roda pytest com gate de cobertura 80 da Spec 9
-    - done: false
+    - done: true
       test: grep -F typecheck .github/workflows/ci.yml
       text: Job web roda npm run typecheck e vitest --coverage
-    - done: false
+    - done: true
       test: grep -F verify-no-changes .github/workflows/ci.yml
       text: Job agent roda dotnet format --verify-no-changes e dotnet test
-    - done: false
+    - done: true
       test: grep -F pull_request .github/workflows/ci.yml
       text: Workflow dispara em pull_request e push para main
 deps:
@@ -31,10 +31,10 @@ n45_version: 0.2.0
 persona: devops
 phase: Phase 8 — CI/CD
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tests: actionlint .github/workflows/ci.yml
 title: 'CI de PR: workflow GitHub Actions (windows-latest) com lint+tipagem+testes das 3 apps (api/web/agent)'
-updated_at: "2026-06-01 09:05:39"
+updated_at: "2026-06-01 09:17:53"
 ---
 ## Contexto
 

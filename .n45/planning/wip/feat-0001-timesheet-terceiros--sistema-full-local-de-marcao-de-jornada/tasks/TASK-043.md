@@ -3,22 +3,22 @@ checkpoint: null
 complexity: P
 created_at: "2026-06-01 09:06:47"
 criteria:
-    - done: false
+    - done: true
       test: actionlint .github/workflows/e2e.yml
       text: actionlint valida e2e.yml sem erros de schema
-    - done: false
+    - done: true
       test: grep -F windows-latest .github/workflows/e2e.yml
       text: Job e2e roda em windows-latest
-    - done: false
+    - done: true
       test: grep -F docker compose .github/workflows/e2e.yml
       text: Workflow sobe o Mailhog via docker compose antes da suite
-    - done: false
+    - done: true
       test: grep -F run e2e .github/workflows/e2e.yml
       text: Workflow roda a suite Playwright via npm run e2e com CI=true
-    - done: false
+    - done: true
       test: grep -F playwright-report .github/workflows/e2e.yml
       text: Em falha anexa o playwright-report como artefato
-    - done: false
+    - done: true
       test: grep -F playwright install .github/workflows/e2e.yml
       text: Workflow instala o browser chromium do Playwright
 deps:
@@ -30,10 +30,10 @@ n45_version: 0.2.0
 persona: devops
 phase: Phase 8 — CI/CD
 roadmap: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
-status: pending
+status: done
 tests: actionlint .github/workflows/e2e.yml
 title: 'E2E no CI: workflow GitHub Actions (windows-latest) rodando a suite Playwright (4 jornadas) com Mailhog via docker compose'
-updated_at: "2026-06-01 09:06:47"
+updated_at: "2026-06-01 09:17:56"
 ---
 ## Contexto
 
