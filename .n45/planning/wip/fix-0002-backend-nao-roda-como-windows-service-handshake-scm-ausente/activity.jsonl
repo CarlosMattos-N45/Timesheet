@@ -1,0 +1,12 @@
+{"ts":"2026-06-02T19:47:46Z","event":"spawn","feature":"fix-0002-backend-nao-roda-como-windows-service-handshake-scm-ausente","phase":"Phase 1 — Handshake SCM do Backend","agent":"backend","task":"TASK-001","attempt":1}
+{"ts":"2026-06-02T19:47:50Z","event":"spawn","feature":"fix-0002-backend-nao-roda-como-windows-service-handshake-scm-ausente","phase":"Phase 1 — Handshake SCM do Backend","agent":"backend","task":"TASK-002","attempt":1}
+{"ts":"2026-06-02T19:47:57Z","event":"spawn","feature":"fix-0002-backend-nao-roda-como-windows-service-handshake-scm-ausente","phase":"Phase 1 — Handshake SCM do Backend","agent":"devops","task":"TASK-003","attempt":1}
+{"ts":"2026-06-02T20:08:52Z","event":"return","feature":"fix-0002-backend-nao-roda-como-windows-service-handshake-scm-ausente","agent":"backend","task":"TASK-001","status":"done","summary":"Status done"}
+{"ts":"2026-06-02T20:08:53Z","event":"return","feature":"fix-0002-backend-nao-roda-como-windows-service-handshake-scm-ausente","agent":"backend","task":"TASK-002","status":"done","summary":"Status done"}
+{"ts":"2026-06-02T20:08:55Z","event":"return","feature":"fix-0002-backend-nao-roda-como-windows-service-handshake-scm-ausente","agent":"devops","task":"TASK-003","status":"done","summary":"Status done"}
+{"ts":"2026-06-02T20:09:14Z","event":"spawn","feature":"fix-0002-backend-nao-roda-como-windows-service-handshake-scm-ausente","agent":"architect-review-task","task":"TASK-001","attempt":1}
+{"ts":"2026-06-02T20:09:14Z","event":"spawn","feature":"fix-0002-backend-nao-roda-como-windows-service-handshake-scm-ausente","agent":"architect-review-task","task":"TASK-002","attempt":1}
+{"ts":"2026-06-02T20:09:15Z","event":"spawn","feature":"fix-0002-backend-nao-roda-como-windows-service-handshake-scm-ausente","agent":"architect-review-task","task":"TASK-003","attempt":1}
+{"ts":"2026-06-02T20:11:59Z","event":"return","feature":"fix-0002-backend-nao-roda-como-windows-service-handshake-scm-ausente","agent":"architect-review-task","task":"TASK-001","status":"approved","summary":"approved"}
+{"ts":"2026-06-02T20:12:06Z","event":"return","feature":"fix-0002-backend-nao-roda-como-windows-service-handshake-scm-ausente","agent":"architect-review-task","task":"TASK-002","status":"approved","summary":"approved"}
+{"ts":"2026-06-02T20:12:12Z","event":"return","feature":"fix-0002-backend-nao-roda-como-windows-service-handshake-scm-ausente","agent":"architect-review-task","task":"TASK-003","status":"approved","summary":"approved"}

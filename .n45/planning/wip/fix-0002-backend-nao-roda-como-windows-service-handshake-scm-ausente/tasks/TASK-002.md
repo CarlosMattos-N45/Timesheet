@@ -3,16 +3,16 @@ checkpoint: null
 complexity: P
 created_at: "2026-06-02 16:45:05"
 criteria:
-    - done: false
+    - done: true
       test: grep -E "win32serviceutil|win32service|win32event|servicemanager|win32api" apps/api/timesheet-backend.spec
       text: timesheet-backend.spec lista win32serviceutil, win32service, win32event, servicemanager e win32api em hiddenimports
-    - done: false
+    - done: true
       test: grep -E "aiosqlite|app.models|passlib.handlers.argon2" apps/api/timesheet-backend.spec
       text: 'Nenhum import preexistente removido: aiosqlite, app.models, passlib.handlers.argon2 ainda presentes'
-    - done: false
+    - done: true
       test: '! grep -E "win32gui|win32con|pythoncom" apps/api/timesheet-backend.spec'
       text: 'Nenhum modulo pywin32 alem dos 5 adicionado: win32gui/win32con/pythoncom ausentes'
-    - done: false
+    - done: true
       test: python -c "import ast; ast.parse(open(apps/api/timesheet-backend.spec).read())"
       text: O spec continua sendo Python valido (parseia sem erro)
 deps: []
@@ -21,10 +21,10 @@ n45_version: 0.2.0
 persona: devops
 phase: Phase 1 — Handshake SCM do Backend
 roadmap: fix-0002-backend-nao-roda-como-windows-service-handshake-scm-ausente
-status: pending
+status: done
 tests: python -c "import ast; ast.parse(open('apps/api/timesheet-backend.spec').read())"
 title: Hidden imports do pywin32 service no timesheet-backend.spec
-updated_at: "2026-06-02 16:45:05"
+updated_at: "2026-06-02 17:12:12"
 ---
 ## Contexto
 

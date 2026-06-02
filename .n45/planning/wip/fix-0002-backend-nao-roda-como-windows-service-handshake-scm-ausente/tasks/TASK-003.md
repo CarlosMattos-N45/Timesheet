@@ -3,15 +3,15 @@ checkpoint: null
 complexity: P
 created_at: "2026-06-02 16:45:41"
 criteria:
-    - done: false
+    - done: true
       test: grep -E "Arguments=\" service\"" apps/installer/Components.wxs
       text: O ServiceInstall Id=TimesheetBackendService inclui Arguments com valor espaco+service
-    - done: false
+    - done: true
       text: O ServiceInstall do TimesheetAgent permanece sem atributo Arguments (inalterado)
-    - done: false
+    - done: true
       test: python -c "import xml.dom.minidom as m; m.parse(open(apps/installer/Components.wxs))"
       text: Components.wxs permanece XML bem-formado
-    - done: false
+    - done: true
       text: Demais atributos e filhos (ServiceConfig, ServiceControl, RegistryValue) do TimesheetBackendService inalterados
 deps: []
 id: TASK-003
@@ -19,10 +19,10 @@ n45_version: 0.2.0
 persona: devops
 phase: Phase 1 — Handshake SCM do Backend
 roadmap: fix-0002-backend-nao-roda-como-windows-service-handshake-scm-ausente
-status: pending
+status: done
 tests: make installer-validate
 title: Argumento service no binPath do ServiceInstall do TimesheetBackend (Components.wxs)
-updated_at: "2026-06-02 16:45:41"
+updated_at: "2026-06-02 17:12:18"
 ---
 ## Contexto
 

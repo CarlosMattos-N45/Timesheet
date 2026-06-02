@@ -11,20 +11,20 @@ phases:
           deps: []
           id: TASK-001
           persona: backend
-          status: pending
+          status: done
           title: Modo Windows Service no launcher.py (handshake SCM) + seleção de modo console/serviço + testes
         - complexity: P
           deps: []
           id: TASK-002
           persona: backend
-          status: pending
+          status: done
           title: Hidden imports do pywin32 service no timesheet-backend.spec
         - complexity: P
           deps: []
           id: TASK-003
           persona: devops
-          status: pending
+          status: done
           title: Argumento 'service' no binPath do ServiceInstall do TimesheetBackend (Components.wxs)
 status: in-progress
-updated_at: "2026-06-02 16:42:28"
+updated_at: "2026-06-02 17:12:13"
 ---

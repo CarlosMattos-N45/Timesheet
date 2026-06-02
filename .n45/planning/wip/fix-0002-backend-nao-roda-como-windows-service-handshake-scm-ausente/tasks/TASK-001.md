@@ -3,35 +3,35 @@ checkpoint: null
 complexity: M
 created_at: "2026-06-02 16:44:23"
 criteria:
-    - done: false
+    - done: true
       test: cd apps/api && pytest -k test_build_server_quando_chamado_deve_usar_settings_host_port_single_worker
       text: serve() sobe uvicorn com host=settings.host, port=settings.port, workers=1, log_config=None (modo console inalterado)
-    - done: false
+    - done: true
       test: cd apps/api && pytest -k test_build_server_quando_should_exit_setado_deve_permitir_shutdown_programatico
       text: Existe caminho para encerrar o servidor programaticamente via server.should_exit=True sem sinais do SO
-    - done: false
+    - done: true
       text: Em win32 existe TimesheetBackendService derivada de win32serviceutil.ServiceFramework com _svc_name_=TimesheetBackend e _svc_display_name_=Timesheet Backend
-    - done: false
+    - done: true
       text: SvcDoRun loga event=service_start_pending e reporta SERVICE_START_PENDING antes do bootstrap; loga event=service_running e reporta SERVICE_RUNNING somente apos server.started confirmado (timeout 30s)
-    - done: false
+    - done: true
       text: SvcStop loga event=service_stop_pending, seta server.should_exit=True, faz join com timeout 10s; loga event=service_stop_timeout (WARNING) se expira; loga event=service_stopped se completa; servico termina em SERVICE_STOPPED
-    - done: false
+    - done: true
       text: Excecao no bootstrap dentro de SvcDoRun loga event=service_bootstrap_error sem expor secrets (PRAGMA key, connection strings, DPAPI blobs), passa a LogErrorMsg apenas tipo da excecao e camada (nunca str(exc)), e nao trava em START_PENDING
-    - done: false
+    - done: true
       test: cd apps/api && pytest -k test_main_quando_argv_service_deve_rotear_para_dispatcher
       text: Nenhum codigo privilegiado (DPAPI, migrations, uvicorn, secrets) executado antes de servicemanager.StartServiceCtrlDispatcher() no path de modo servico
-    - done: false
+    - done: true
       test: cd apps/api && pytest -k test_main_quando_argv_service_deve_rotear_para_dispatcher
       text: main() roteia para modo servico quando sys.argv[1]==service em win32
-    - done: false
+    - done: true
       test: cd apps/api && pytest -k test_main_quando_sem_argumento_deve_rotear_para_console
       text: main() roteia para modo console quando nao ha argumento service
-    - done: false
+    - done: true
       test: cd apps/api && pytest -k test_main_quando_argv_service_em_nao_windows_deve_cair_em_console
       text: Em plataforma nao-Windows main() nunca tenta o caminho de servico
-    - done: false
+    - done: true
       text: Os 3 testes preexistentes de test_launcher.py continuam passando e o suite passa em CI nao-Windows (skip/mocked) com cobertura >= 80%
-    - done: false
+    - done: true
       text: 'Imports do pywin32 sao lazy/guardados por sys.platform==win32: import app.launcher e a coleta do pytest nao falham fora de win32'
 deps: []
 id: TASK-001
@@ -40,14 +40,14 @@ n45_version: 0.2.0
 persona: backend
 phase: Phase 1 — Handshake SCM do Backend
 roadmap: fix-0002-backend-nao-roda-como-windows-service-handshake-scm-ausente
-status: pending
+status: done
 tdd:
-    green: false
-    red: false
-    refactor: false
+    green: true
+    red: true
+    refactor: true
 tests: cd apps/api && pytest tests/test_launcher.py
 title: Modo Windows Service no launcher.py (handshake SCM) + selecao de modo console/servico + testes
-updated_at: "2026-06-02 16:44:23"
+updated_at: "2026-06-02 17:12:06"
 ---
 ## Contexto
 
