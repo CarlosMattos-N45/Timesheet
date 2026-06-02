@@ -5,7 +5,8 @@
 
 function WaitForReady() {
     var session = Session;
-    var port = session.Property("TIMESHEET_PORT");
+    // Em custom actions deferred, a porta chega via CustomActionData (injetada por SetProperty)
+    var port = session.Property("CustomActionData");
     if (!port || port === "") {
         port = "8765";
     }
@@ -13,13 +14,15 @@ function WaitForReady() {
     var maxAttempts = 60;
     var delayMs = 1000;
 
-    var xhr = new ActiveXObject("MSXML2.XMLHTTP");
     var ready = false;
 
     for (var i = 0; i < maxAttempts; i++) {
         try {
+            // MSXML2.ServerXMLHTTP.6.0 funciona em contexto de serviço (sem WinInet/proxy)
+            var xhr = new ActiveXObject("MSXML2.ServerXMLHTTP.6.0");
             xhr.open("GET", url, false);
-            xhr.setRequestTimeout(2000);
+            // setTimeouts(resolveTimeout, connectTimeout, sendTimeout, receiveTimeout) em ms
+            xhr.setTimeouts(2000, 2000, 2000, 2000);
             xhr.send();
             if (xhr.status === 200) {
                 ready = true;
@@ -28,8 +31,9 @@ function WaitForReady() {
         } catch (e) {
             // Serviço ainda não está pronto — aguardar
         }
-        // Delay de 1 segundo entre tentativas
-        WScript.Sleep(delayMs);
+        // Busy-wait: WScript.Sleep não existe em custom actions JScript do msiexec
+        var end = new Date().getTime() + delayMs;
+        while (new Date().getTime() < end) { /* aguardar */ }
     }
 
     if (!ready) {

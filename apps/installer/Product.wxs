@@ -36,6 +36,12 @@
     <!-- Custom Action: aguardar backend ficar pronto após inicio do servico -->
     <Binary Id="WaitReadyScript" SourceFile="apps\installer\WaitForServiceReady.js" />
 
+    <!-- Injeta porta em CustomActionData (unique para o Id da deferred action) -->
+    <SetProperty Id="WaitForServiceReady"
+                 Value="[TIMESHEET_PORT]"
+                 Before="WaitForServiceReady"
+                 Sequence="execute" />
+
     <CustomAction
       Id="WaitForServiceReady"
       BinaryRef="WaitReadyScript"
