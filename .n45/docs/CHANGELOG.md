@@ -1,6 +1,13 @@
 ---
 entries:
     - date: "2026-06-02"
+      feature: hot-fix/spec-pdf-templates-path
+      summary: |
+        ### Corrigido
+
+        - Build de produção do backend falhava no PyInstaller: o `timesheet-backend.spec` empacotava `app/pdf/templates` (inexistente). Corrigido para `app/modules/relatorios/templates`, que é onde os templates de PDF realmente vivem e o caminho que `pdf.py` resolve em runtime.
+      version: Unreleased
+    - date: "2026-06-02"
       feature: hot-fix/backend-boot-204-email-validator
       summary: |
         ### Corrigido
