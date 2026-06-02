@@ -50,7 +50,9 @@
           Start="auto"
           ErrorControl="normal"
           Account="LocalSystem"
-          Interactive="no">
+          Interactive="no"
+          Arguments=" service">
+          <!-- espaço inicial obrigatório: WiX concatena Arguments ao caminho do exe no binPath -->
           <!-- Env vars do service — expandidas no momento da instalação -->
           <util:ServiceConfig
             ServiceName="TimesheetBackend"
