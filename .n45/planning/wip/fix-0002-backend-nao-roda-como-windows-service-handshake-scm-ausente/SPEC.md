@@ -2,10 +2,10 @@
 created_at: "2026-06-02 12:40:29"
 id: fix-0002-backend-nao-roda-como-windows-service-handshake-scm-ausente
 n45_version: 0.2.0
-status: proposed
+status: accepted
 title: Backend faz handshake SCM como Windows Service
 type: fix
-updated_at: "2026-06-02 12:45:02"
+updated_at: "2026-06-02 16:46:09"
 ---
 ## 1. Problema
 
