@@ -1,5 +1,13 @@
 ---
 entries:
+    - date: "2026-06-02"
+      feature: hot-fix/backend-boot-204-email-validator
+      summary: |
+        ### Corrigido
+
+        - Backend não subia em instalação limpa: declarada a dependência `email-validator` (via `pydantic[email]`), antes ausente apesar do uso de `EmailStr`.
+        - Corrigidas 4 rotas `204 No Content` que quebravam o registro de rotas na FastAPI 0.115.x. Com `from __future__ import annotations` (PEP 563), o retorno `-> None`/`-> FileResponse` era inferido como `response_model`, disparando o assert de "status 204 não pode ter corpo". Adicionado `response_model=None` explícito em `/auth/logout`, `/privacidade/aceitar`, `/terceiros/me/senha` e no catch-all SPA. Incluído teste de regressão de import/startup.
+      version: Unreleased
     - date: "2026-06-01"
       feature: feat-0001-timesheet-terceiros--sistema-full-local-de-marcao-de-jornada
       summary: |
