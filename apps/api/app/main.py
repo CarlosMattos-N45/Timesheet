@@ -120,7 +120,7 @@ def create_app() -> FastAPI:
     # Paths that belong to the framework but are disabled in prod (docs/openapi).
     _RESERVED_PREFIXES = ("api", "docs", "redoc", "openapi.json")
 
-    @app.get("/{full_path:path}", include_in_schema=False)
+    @app.get("/{full_path:path}", include_in_schema=False, response_model=None)
     async def _spa_fallback(full_path: str) -> FileResponse:
         # Paths under /api/ are API territory — if they reach this catch-all it
         # means no router handled them, so return 404 rather than index.html.

@@ -31,7 +31,7 @@ async def refresh_endpoint(
     return RefreshResponse(**data)
 
 
-@router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
+@router.post("/logout", status_code=status.HTTP_204_NO_CONTENT, response_model=None)
 async def logout_endpoint(
     body: LogoutRequest,
     t: CurrentTerceiroDep,  # noqa: ARG001

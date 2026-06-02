@@ -53,7 +53,7 @@ async def put_me(
     return _to_response(updated)
 
 
-@router.put("/me/senha", status_code=status.HTTP_204_NO_CONTENT)
+@router.put("/me/senha", status_code=status.HTTP_204_NO_CONTENT, response_model=None)
 async def put_me_senha(
     body: ChangePasswordRequest, t: CurrentTerceiroDep, session: SessionDep
 ) -> None:

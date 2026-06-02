@@ -14,6 +14,6 @@ async def get_status(_t: CurrentTerceiroDep, session: SessionDep) -> PrivacyStat
     return await service.get_status(session)
 
 
-@router.post("/aceitar", status_code=status.HTTP_204_NO_CONTENT)
+@router.post("/aceitar", status_code=status.HTTP_204_NO_CONTENT, response_model=None)
 async def aceitar(_t: CurrentTerceiroDep, session: SessionDep) -> None:
     await service.aceitar(session)
