@@ -37,10 +37,10 @@ function WaitForReady() {
     }
 
     if (!ready) {
-        session.Log("WaitForServiceReady: backend nao ficou pronto em " + maxAttempts + "s na porta " + port);
+        // backend não ficou pronto em maxAttempts segundos na porta port
         return 1603; // ERROR_INSTALL_FAILURE
     }
 
-    session.Log("WaitForServiceReady: backend pronto em " + url);
+    // backend pronto em url
     return 1; // success
 }
