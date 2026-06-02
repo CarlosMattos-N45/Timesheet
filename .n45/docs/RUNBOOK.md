@@ -263,11 +263,12 @@ docker compose -f docker-compose.dev.yml logs -f mailhog
 
 ## Troubleshooting
 
-| Sintoma                                   | Causa provavel                           | Solucao                                                     |
-| ----------------------------------------- | ---------------------------------------- | ------------------------------------------------------------ |
-| `curl` para /health falha                 | Backend nao esta rodando                 | Verificar processo uvicorn ou Windows Service TimesheetBackend |
-| Mailhog nao acessivel em :8025           | Container nao subiu                      | `make smtp-up` e verificar Docker Desktop                    |
-| SQLCipher: file is not a database        | TIMESHEET_DB_CIPHER_KEY incorreta        | Verificar .env e recriar banco com `make data-dir`           |
-| E2E Playwright falha ao conectar         | Backend ou frontend nao esta rodando     | Rodar `make smtp-up` e verificar webServer config no playwright.config.ts |
-| Windows Service nao inicia               | Binario nao publicado ou MSI corrompido  | `make build` e reinstalar MSI                                |
-| PDF nao gerado: WeasyPrint erro           | DLLs libpango/libcairo ausentes no bundle| Verificar PyInstaller spec para incluir DLLs necessarias     |
+| Sintoma                                            | Causa provavel                                               | Solucao                                                                     |
+| -------------------------------------------------- | ------------------------------------------------------------ | --------------------------------------------------------------------------- |
+| `curl` para /health falha                          | Backend nao esta rodando                                     | Verificar processo uvicorn ou Windows Service TimesheetBackend              |
+| Mailhog nao acessivel em :8025                     | Container nao subiu                                          | `make smtp-up` e verificar Docker Desktop                                   |
+| SQLCipher: file is not a database                  | TIMESHEET_DB_CIPHER_KEY incorreta                            | Verificar .env e recriar banco com `make data-dir`                          |
+| E2E Playwright falha ao conectar                   | Backend ou frontend nao esta rodando                         | Rodar `make smtp-up` e verificar webServer config no playwright.config.ts   |
+| Windows Service nao inicia (trava em START_PENDING) | Handshake SCM ausente ou binario sem hiddenimports pywin32  | Rebuild com `make build` (requer PyInstaller spec atualizado com pywin32 hiddenimports e launcher.py com TimesheetBackendService) |
+| Windows Service nao inicia (MSI instala mas servico nao responde) | Argumento `service` ausente no binPath do ServiceInstall | Verificar `Components.wxs`: `ServiceInstall` do TimesheetBackend deve ter `Arguments=" service"` |
+| PDF nao gerado: WeasyPrint erro                    | DLLs libpango/libcairo ausentes no bundle                    | Verificar PyInstaller spec para incluir DLLs necessarias                    |

@@ -13,6 +13,7 @@ layers:
         pdf: WeasyPrint + Jinja2
         rate_limiting: slowapi + limits
         scheduler: APScheduler in-process (SQLite jobstore)
+        service_mode: Windows Service via pywin32 (servicemanager + win32serviceutil) — handshake SCM START_PENDING→RUNNING→STOPPED
       name: backend
       technology: Python 3.12 (PyInstaller onefile)
     - items:
@@ -79,6 +80,7 @@ layers:
         polly: latest — agente — resiliência HTTP
         pyinstaller: latest — backend — empacotamento Python
         python_jose: latest — backend — JWT
+        pywin32: latest — backend — handshake SCM Windows Service (win32serviceutil, win32service, win32event, servicemanager, win32api)
         react: 18 — frontend — UI framework
         react_hook_form: latest — frontend — formulários
         serilog: latest — agente — logging
@@ -114,3 +116,4 @@ updated_at: YYYY-MM-DD hh:mm:ss
 <!-- Sistema full-local: sem dependências de cloud ou banco externo em produção. -->
 <!-- Backend Python embarcado via PyInstaller; Agente .NET publicado como single-file self-contained. -->
 <!-- Em desenvolvimento, apenas Mailhog (Docker) é necessário como dependência externa. -->
+<!-- fix-0002: pywin32 explicitado em deps após implementação do handshake SCM do Windows Service. -->

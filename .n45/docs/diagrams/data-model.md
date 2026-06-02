@@ -9,103 +9,89 @@ Entidades, campos-chave e relações.
 erDiagram
   TERCEIRO ||--o{ JORNADA : possui
   TERCEIRO ||--o{ REFRESH_TOKEN : tem
-  TERCEIRO ||--|| SMTP_CONFIG : configura
   JORNADA ||--o{ MARCACAO : contem
   JORNADA ||--o| ATIVIDADE : descreve
   JORNADA ||--o{ JUSTIFICATIVA : justifica
-  JORNADA ||--o{ LOG_AUDITORIA : audita
-  JORNADA ||--o| RELATORIO_GERADO : gera
-  RELATORIO_GERADO ||--o{ HISTORICO_ENVIO_RELATORIO : registra
-
+  JORNADA ||--o{ LOG_AUDITORIA : auditado_em
   TERCEIRO {
     uuid id
     string nome
     string empresa_cnpj
     string email_contato
     string senha_hash
-    time horario_inicio_jornada
-    time horario_fim_jornada
-    bool trabalha_fim_de_semana
+    string horario_inicio_jornada
+    string horario_fim_jornada
   }
-
   JORNADA {
     uuid id
     uuid terceiro_id
-    date data
+    string data
     string status
-    int total_horas_apuradas_s
-    text fechada_em
+    integer total_horas_apuradas_s
   }
-
   MARCACAO {
     uuid id
     uuid jornada_id
     string tipo
-    text horario_registrado
-    text horario_efetivo
+    string horario_registrado
+    string horario_efetivo
     string origem
     string status
-    uuid idempotency_key
+    string idempotency_key
   }
-
   ATIVIDADE {
     uuid id
     uuid jornada_id
     string descricao
-    text registrada_em
   }
-
   JUSTIFICATIVA {
     uuid id
     uuid jornada_id
     string motivo
     string usuario_responsavel
   }
-
   LOG_AUDITORIA {
     uuid id
     string entidade
     uuid entidade_id
     string autor
-    text antes_json
-    text depois_json
-    text expira_em
+    string antes_json
+    string depois_json
   }
-
   REFRESH_TOKEN {
     uuid id
     uuid terceiro_id
     string token_hash
-    text expira_em
-    text revogado_em
+    string expira_em
+    string revogado_em
   }
-
-  RELATORIO_GERADO {
-    uuid id
-    string mes_referencia
-    string caminho_arquivo
-    text gerado_em
-    text invalidado_em
-  }
-
   HISTORICO_ENVIO_RELATORIO {
     uuid id
     string mes_referencia
     string email_destinatario
     string status
-    text enviado_em
+    string erro_mensagem
   }
-
+  RELATORIO_GERADO {
+    uuid id
+    string mes_referencia
+    string caminho_arquivo
+    string invalidado_em
+  }
   SMTP_CONFIG {
-    int id
+    integer id
     string host
-    int port
+    integer port
     string username_enc
     string password_enc
-    bool use_starttls
+  }
+  PRIVACY_ACCEPTANCE {
+    integer id
+    string aceito_em
+    string versao_aviso
   }
 ```
 
 ---
 
-_Criado em: 2026-06-01 00:00_
+_Criado em: 2026-06-02 18:40:00_

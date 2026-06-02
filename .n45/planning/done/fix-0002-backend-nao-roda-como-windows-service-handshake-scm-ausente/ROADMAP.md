@@ -25,6 +25,6 @@ phases:
           persona: devops
           status: done
           title: Argumento 'service' no binPath do ServiceInstall do TimesheetBackend (Components.wxs)
-status: validating
-updated_at: "2026-06-02 17:13:56"
+status: archived
+updated_at: "2026-06-02 18:33:48"
 ---

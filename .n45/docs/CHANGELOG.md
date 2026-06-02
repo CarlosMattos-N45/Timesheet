@@ -1,6 +1,15 @@
 ---
 entries:
     - date: "2026-06-02"
+      feature: fix-0002-backend-nao-roda-como-windows-service-handshake-scm-ausente
+      summary: |
+        ### Corrigido
+
+        - Handshake SCM do Windows Service: `TimesheetBackendService` derivada de `win32serviceutil.ServiceFramework` implementa ciclo completo `START_PENDING → RUNNING → STOPPED` — serviço deixou de travar no estado `START_PENDING` após instalação via MSI (TASK-001)
+        - Hidden imports do pywin32 (`win32serviceutil`, `win32service`, `win32event`, `servicemanager`, `win32api`) adicionados ao `timesheet-backend.spec` do PyInstaller — binário empacotado passa a incluir os módulos obrigatórios para o handshake com o SCM (TASK-002)
+        - Atributo `Arguments=" service"` adicionado ao `ServiceInstall` do `TimesheetBackend` em `Components.wxs` — MSI agora passa o argumento correto ao binário na inicialização do serviço, ativando o caminho de handshake SCM em vez do modo console (TASK-003)
+      version: 0.1.1
+    - date: "2026-06-02"
       feature: hot-fix/spec-pdf-templates-path
       summary: |
         ### Corrigido

@@ -4,80 +4,65 @@ Sequência de interações para os principais fluxos da aplicação.
 
 ---
 
-### Registro Automático de Marcação (Agente)
-
-```mermaid
-%%{init: {'theme': 'neutral'} }%%
-sequenceDiagram
-  actor W as Windows
-  participant A as Agente Service
-  participant D as Domain\nState Machine
-  participant UI as WPF UI\nTray
-  participant B as Backend API
-
-  W->>A: SessionLogon event
-  A->>D: ProcessLoginEvent()
-  D->>UI: TOAST saudação contextual
-  D->>D: Cria MarcacaoLocal(INICIO_JORNADA)
-  D->>B: POST /api/v1/marcacoes (idempotency_key)
-  B-->>D: 201 Created
-  D->>D: sincronizada = true
-
-  Note over D: Polling 30s GetLastInputInfo
-  D->>D: Detecta inatividade >= 10min\n(janela saida_almoco +/- 30min)
-  D->>D: Cria MarcacaoLocal(SAIDA_ALMOCO)
-  D->>B: POST /api/v1/marcacoes
-  B-->>D: 201 Created
-
-  D->>D: Detecta primeiro input pós-almoço
-  alt dentro da janela
-    D->>D: Cria MarcacaoLocal(RETORNO_ALMOCO)
-  else fora da janela
-    D->>UI: DIALOG_REQUEST CONFIRM_RETORNO_FORA_JANELA
-    UI-->>D: SIM / NAO / TIMEOUT
-    D->>D: Cria MarcacaoLocal(status conforme resposta)
-  end
-  D->>B: POST /api/v1/marcacoes
-  B-->>D: 201 Created
-
-  D->>UI: DIALOG_REQUEST PROMPT_FIM_JORNADA (timeout 60s)
-  UI-->>D: SIM + atividade
-  D->>D: Cria MarcacaoLocal(FIM_JORNADA)
-  D->>B: POST /api/v1/marcacoes
-  B-->>D: 201 Created
-```
-
-### Login Web e Acesso ao Dashboard
+### Onboarding
 
 ```mermaid
 %%{init: {'theme': 'neutral'} }%%
 sequenceDiagram
   actor U as Terceiro
-  participant F as Frontend SPA
+  participant A as Agente WPF
+  participant B as Backend API
+  participant W as Web SPA
+
+  U->>A: Instala MSI + faz login Windows
+  A->>A: Detecta cadastro pendente
+  A->>U: Abre wizard Cadastro Inicial (3 passos)
+  U->>A: Preenche dados (nome, empresa, CNPJ, horários, email, senha)
+  A->>B: POST /api/v1/terceiros
+  B-->>A: 201 Created
+  A->>U: Abre browser em http://127.0.0.1:8765/login
+  U->>W: Login com credenciais cadastradas
+  W->>B: POST /api/v1/auth/login
+  B-->>W: 200 access_token + refresh_token
+  W->>U: Redireciona para /privacidade
+  U->>W: Aceita aviso de privacidade
+  W->>B: POST /api/v1/privacidade/aceite
+  B-->>W: 200 ok
+  W->>U: Redireciona para /jornadas (vazio)
+```
+
+### Dia Normal (marcações automáticas)
+
+```mermaid
+%%{init: {'theme': 'neutral'} }%%
+sequenceDiagram
+  actor U as Terceiro
+  participant OS as Windows OS
+  participant A as Agente WPF
   participant B as Backend API
 
-  U->>F: Acessa /login
-  F->>F: Exibe saudação contextual\n(Bom dia/tarde/noite)
-  U->>F: Preenche e-mail + senha
-  F->>B: POST /api/v1/auth/login
-  alt credenciais válidas
-    B-->>F: 200 access_token + refresh_token
-    F->>B: GET /api/v1/privacidade
-    alt aceite pendente
-      B-->>F: aceito_em null
-      F->>U: Redireciona /privacidade
-      U->>F: Aceita termos
-      F->>B: POST /api/v1/privacidade/aceitar
-      B-->>F: 204
-    end
-    F->>U: Redireciona /jornadas
-    F->>B: GET /api/v1/jornadas?mes=YYYY-MM
-    B-->>F: 200 lista jornadas
-    F->>U: Exibe tabela mensal
-  else credenciais inválidas
-    B-->>F: 401
-    F->>U: Alert "E-mail ou senha inválidos"
-  end
+  OS->>A: Evento login Windows
+  A->>A: Calcula horario_efetivo (tolerância ±30 min)
+  A->>B: POST /api/v1/marcacoes (INICIO_JORNADA)
+  B-->>A: 201 Created
+  A->>U: Toast "Bom dia, [nome]. Início registrado às [H]."
+
+  Note over A: Polling inatividade (30s) detecta saída almoço
+  A->>A: Inatividade ≥10 min dentro da janela almoço
+  A->>B: POST /api/v1/marcacoes (SAIDA_ALMOCO)
+  B-->>A: 201 Created
+
+  Note over A: Input detectado = retorno almoço
+  A->>B: POST /api/v1/marcacoes (RETORNO_ALMOCO)
+  B-->>A: 201 Created
+
+  Note over A: Horário fim jornada atingido
+  A->>U: Diálogo "Encerrar jornada agora?"
+  U->>A: Confirma + preenche atividade
+  A->>B: POST /api/v1/marcacoes (FIM_JORNADA)
+  B-->>A: 201 Created
+  A->>B: POST /api/v1/atividades (descricao)
+  B-->>A: 201 Created
 ```
 
 ### Ajuste Manual de Jornada (Web)
@@ -86,50 +71,58 @@ sequenceDiagram
 %%{init: {'theme': 'neutral'} }%%
 sequenceDiagram
   actor U as Terceiro
-  participant F as Frontend SPA
+  participant W as Web SPA
   participant B as Backend API
 
-  U->>F: Clica linha na tabela /jornadas
-  F->>B: GET /api/v1/jornadas/{id}
-  B-->>F: 200 detalhe + marcacoes + auditoria
-  F->>U: Exibe detalhe com horários editáveis
-  U->>F: Edita horários
-  F->>F: Recalcula total diário em tempo real
-  U->>F: Clica "Salvar alterações"
-  F->>U: Modal de justificativa (>= 5 chars)
-  U->>F: Preenche motivo e confirma
-  F->>B: PUT /api/v1/jornadas/{id}
-  B->>B: Atualiza marcacoes (origem=AJUSTE_WEB)\nCria LogAuditoria + Justificativa\nInvalida relatorio_gerado do mês
-  B-->>F: 200 jornada atualizada
-  F->>U: Toast "Jornada atualizada com sucesso"\nBadge atualiza para AJUSTADA_MANUALMENTE
+  U->>W: Acessa /jornadas
+  W->>B: GET /api/v1/jornadas?mes=YYYY-MM
+  B-->>W: 200 lista de jornadas
+  W->>U: Exibe tabela mensal
+  U->>W: Clica em jornada com status FECHADA
+  W->>B: GET /api/v1/jornadas/:id
+  B-->>W: 200 detalhe com marcações
+  W->>U: Exibe 4 horários editáveis
+  U->>W: Edita horário + clica Salvar
+  W->>U: Modal de justificativa (mínimo 5 chars)
+  U->>W: Preenche justificativa + Confirma
+  W->>B: PUT /api/v1/marcacoes/:id (horario_efetivo + motivo)
+  B-->>W: 200 marcação atualizada
+  B->>B: Grava log_auditoria
+  W->>U: Toast "Jornada atualizada com sucesso." Badge AJUSTADA_MANUALMENTE
 ```
 
-### Geração e Envio de Relatório Mensal
+### Envio de Relatório Mensal
 
 ```mermaid
 %%{init: {'theme': 'neutral'} }%%
 sequenceDiagram
-  participant S as APScheduler\n(dia 1 00:00 BRT)
-  participant B as Backend Service
-  participant DB as SQLite
-  participant PDF as WeasyPrint
+  actor U as Terceiro
+  participant W as Web SPA
+  participant B as Backend API
   participant SMTP as Servidor SMTP
 
-  S->>B: trigger job relatorio_mensal
-  B->>DB: SELECT jornadas mês anterior
-  DB-->>B: dados consolidados
-  B->>PDF: Renderiza HTML -> PDF (timeout 120s)
-  PDF-->>B: bytes PDF
-  B->>DB: INSERT relatorio_gerado
-  B->>SMTP: Envia e-mail (3x retry backoff 5s, timeout 30s)
-  alt envio bem-sucedido
-    SMTP-->>B: OK
-    B->>DB: INSERT historico_envio(SUCESSO)
-  else falha após 3 tentativas
-    B->>DB: INSERT historico_envio(FALHA, erro_mensagem)
+  U->>W: Acessa /relatorios, seleciona mês
+  W->>B: GET /api/v1/relatorios/:mes
+  B-->>W: 200 PDF (ou gera sob demanda)
+  W->>U: Exibe prévia iframe + histórico de envios
+  U->>W: Clica "Enviar por e-mail"
+  W->>U: Modal de confirmação com e-mail preenchido
+  U->>W: Confirma envio
+  W->>B: POST /api/v1/relatorios/:mes/enviar
+  B->>SMTP: SMTP send PDF attachment
+  alt Envio OK
+    SMTP-->>B: 250 OK
+    B->>B: Grava historico_envio_relatorio (SUCESSO)
+    B-->>W: 200 ok
+    W->>U: Toast "Relatório enviado para [email]."
+  else Falha SMTP
+    SMTP-->>B: Erro conexão/autenticação
+    B->>B: Grava historico_envio_relatorio (FALHA)
+    B-->>W: 500 erro_mensagem
+    W->>U: Alert vermelho com mensagem de erro
   end
 ```
 
 ---
 
-_Criado em: 2026-06-01 00:00_
+_Criado em: 2026-06-02 18:40:00_
