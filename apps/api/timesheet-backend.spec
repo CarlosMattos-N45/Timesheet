@@ -25,7 +25,7 @@ datas = [
     # React SPA build output (copied by build-backend.ps1 before pyinstaller)
     ("app/static", "static"),
     # Jinja2 PDF templates
-    ("app/pdf/templates", "app/pdf/templates"),
+    ("app/modules/relatorios/templates", "app/modules/relatorios/templates"),
     # Alembic migration scripts + ini
     ("alembic", "alembic"),
     ("alembic.ini", "."),
