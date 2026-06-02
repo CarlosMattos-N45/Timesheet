@@ -63,6 +63,14 @@ hiddenimports = [
     "app.core.base",
     # SQLAlchemy dialects used at runtime
     "sqlalchemy.dialects.sqlite",
+    # pywin32 service modules — imported lazily in launcher.py (Windows Service mode),
+    # invisible to PyInstaller's static analysis; declared here so the frozen bundle
+    # ships them. Scope limited to the 5 modules strictly required for the SCM handshake.
+    "win32serviceutil",
+    "win32service",
+    "win32event",
+    "servicemanager",
+    "win32api",
 ]
 hiddenimports += collect_submodules("sqlalchemy")
 
