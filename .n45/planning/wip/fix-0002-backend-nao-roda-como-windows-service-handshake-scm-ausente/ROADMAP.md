@@ -5,7 +5,7 @@ id: fix-0002-backend-nao-roda-como-windows-service-handshake-scm-ausente
 n45_version: 0.2.0
 phases:
     - name: Phase 1 — Handshake SCM do Backend
-      status: pending
+      status: done
       tasks:
         - complexity: M
           deps: []
@@ -25,6 +25,6 @@ phases:
           persona: devops
           status: done
           title: Argumento 'service' no binPath do ServiceInstall do TimesheetBackend (Components.wxs)
-status: in-progress
-updated_at: "2026-06-02 17:12:13"
+status: validating
+updated_at: "2026-06-02 17:13:56"
 ---
